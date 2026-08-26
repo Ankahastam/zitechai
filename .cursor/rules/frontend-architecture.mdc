@@ -1,0 +1,14 @@
+---
+description: Next.js architecture, performance, and dependency rules
+globs: "src/**/*.ts, src/**/*.tsx, src/**/*.js, src/**/*.jsx, next.config.*, package.json"
+alwaysApply: false
+---
+
+# Frontend architecture
+
+- Prefer React Server Components. Add `"use client"` only at the smallest boundary that requires browser state, effects, event handlers, or browser-only APIs.
+- Prefer platform features, React, and existing dependencies. Add a dependency only when it measurably reduces complexity and cannot be covered cleanly by what is already installed.
+- Make performance a first-class requirement: minimize client JavaScript, prevent layout shift, optimize fonts and images, and keep critical rendering paths lean.
+- Keep components semantic and focused. Do not add speculative abstractions, wrappers, configuration, or folders.
+- Preserve Persian/RTL behavior across responsive breakpoints. Use logical CSS properties where practical.
+

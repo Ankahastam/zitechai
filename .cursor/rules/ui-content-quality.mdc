@@ -1,0 +1,17 @@
+---
+description: Persian UI, responsive design, accessibility, SEO, and visual quality
+globs: "src/**/*.tsx, src/**/*.jsx, src/**/*.css, src/**/*.scss, public/**/*"
+alwaysApply: false
+---
+
+# UI and content quality
+
+- Design mobile layouts intentionally; do not merely shrink desktop. Verify navigation, reading order, touch targets, line length, and spacing at narrow widths.
+- Treat Persian typography as a core design concern: choose an appropriate Persian font, verify glyph quality and numeral behavior, tune line-height by size, and avoid Latin-centric tracking assumptions.
+- Use semantic HTML, visible focus states, keyboard-operable interactions, sufficient contrast, useful alternative text, and reduced-motion fallbacks. Accessibility is part of completion.
+- Preserve a logical DOM and reading order for RTL users and assistive technology. Do not use visual reordering that breaks navigation order.
+- Build SEO into structure: one clear page topic, meaningful headings, descriptive metadata, crawlable content, canonical URLs, and appropriate structured data only when supported by verified facts.
+- Motion must respond promptly, communicate state, remain interruptible when gesture-driven, favor `transform` and `opacity`, and degrade to restrained fades/static feedback under `prefers-reduced-motion`.
+- Use translucency, shadows, and decorative effects only when they clarify hierarchy and remain legible under reduced-transparency or increased-contrast preferences.
+- Consult `@docs/design-system.md`, `@docs/apple-design-system.md`, and `@docs/content-structure.md` before making visual or content decisions.
+

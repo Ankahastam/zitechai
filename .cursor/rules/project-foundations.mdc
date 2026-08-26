@@ -1,0 +1,17 @@
+---
+description: Z-Tech project sources, language, and non-negotiable constraints
+globs:
+alwaysApply: true
+---
+
+# Project foundations
+
+- Build a Persian-first Z-Tech website. Default document language is Persian (`fa`) and UI direction is RTL (`dir="rtl"`). Treat RTL as a layout concern, not a final mirroring pass.
+- Treat `@docs/design-system.md` as the sole branding and visual source of truth.
+- Treat `@docs/apple-design-system.md` as the reference for interaction quality, motion, layout refinement, and visual polish. Apply its principles selectively; do not copy every technique into every interface.
+- Treat `@docs/content-structure.md` as the approved content and information-architecture source of truth.
+- Never invent company facts, testimonials, statistics, customers, case-study outcomes, certifications, or claims. Keep placeholders clearly marked until verified content is supplied.
+- When sources appear to disagree, preserve approved content, follow the brand design system for visual identity, and use the Apple reference only for interaction/refinement.
+- Avoid generic AI/SaaS visual patterns. Favor deliberate typography, whitespace, hierarchy, and composition over gradients, glow, decorative effects, and repetitive card grids.
+- Do not rewrite source-of-truth documents unless the user explicitly requests it.
+
