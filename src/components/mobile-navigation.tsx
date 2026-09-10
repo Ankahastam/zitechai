@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
-type NavigationLink = Readonly<{ href: string; label: string }>;
+export type NavLink = Readonly<{ href: string; label: string }>;
+export type NavItem = NavLink | Readonly<{ label: string; children: readonly NavLink[] }>;
 
-export function MobileNavigation({ links }: { links: readonly NavigationLink[] }) {
+export function MobileNavigation({ links }: { links: readonly NavItem[] }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeTimerRef = useRef<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -115,12 +116,39 @@ export function MobileNavigation({ links }: { links: readonly NavigationLink[] }
 
           <nav aria-label="ناوبری موبایل">
             <ul className="mobile-nav__links">
-              {links.map((link, index) => (
-                <li key={link.href} style={{ "--item-index": index } as CSSProperties}>
-                  <Link href={link.href} onClick={close}>
-                    <span>{link.label}</span>
-                    <span aria-hidden="true">↙</span>
-                  </Link>
+              {links.map((item, index) => (
+                <li
+                  key={"children" in item ? item.label : item.href}
+                  style={{ "--item-index": index } as CSSProperties}
+                >
+                  {"children" in item ? (
+                    <details className="mobile-nav__group">
+                      <summary>
+                        <span>{item.label}</span>
+                        <span aria-hidden="true" className="mobile-nav__chevron">
+                          <svg viewBox="0 0 12 8">
+                            <path d="m1.5 2 4.5 4 4.5-4" />
+                          </svg>
+                        </span>
+                      </summary>
+
+                      <ul className="mobile-nav__sublinks">
+                        {item.children.map((child) => (
+                          <li key={child.href}>
+                            <Link href={child.href} onClick={close}>
+                              <span>{child.label}</span>
+                              <span aria-hidden="true">↙</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <Link href={item.href} onClick={close}>
+                      <span>{item.label}</span>
+                      <span aria-hidden="true">↙</span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

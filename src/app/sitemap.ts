@@ -8,5 +8,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://zitechai.com",
       changeFrequency: "monthly",
     },
+    {
+      url: "https://zitechai.com/voice-agent",
+      changeFrequency: "monthly",
+    },
+    {
+      url: "https://zitechai.com/chat",
+      changeFrequency: "monthly",
+    },
   ];
 }

@@ -4,9 +4,10 @@ import { LiquidButtonLink } from "@/components/ui/liquid-button-link";
 import { Logo } from "@/components/ui/logo";
 
 const links = [
-  { href: "#approach", label: "رویکرد زی‌تک" },
-  { href: "#services", label: "راهکارها" },
-  { href: "#faq", label: "سؤالات متداول" },
+  { href: "/#approach", label: "رویکرد زی‌تک" },
+  { href: "/#services", label: "راهکارها" },
+  { href: "/voice-agent", label: "منشی تلفنی هوشمند" },
+  { href: "/#faq", label: "سؤالات متداول" },
 ] as const;
 
 export function SiteFooter() {
@@ -32,7 +33,7 @@ export function SiteFooter() {
                 <span>شروع همکاری با زی‌تک</span>
                 <span aria-hidden="true" className="site-footer__arrow">←</span>
               </LiquidButtonLink>
-              <Link className="site-footer__secondary" href="#services">
+              <Link className="site-footer__secondary" href="/#services">
                 مشاهده راهکارها
               </Link>
             </div>

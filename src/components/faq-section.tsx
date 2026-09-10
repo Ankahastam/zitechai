@@ -1,8 +1,16 @@
 import { Container } from "@/components/ui/container";
-import { faqItems } from "./faq-data";
+import { type FaqItem, faqItems } from "./faq-data";
 import { FaqInteractive } from "./faq-interactive";
 
-export function FaqSection() {
+type FaqSectionProps = {
+  items?: readonly FaqItem[];
+  title?: string;
+};
+
+export function FaqSection({
+  items = faqItems,
+  title = "سؤالاتی که قبل از شروع معمولاً می‌پرسند.",
+}: FaqSectionProps = {}) {
   return (
     <section aria-labelledby="faq-title" className="faq" id="faq">
       <Container>
@@ -11,7 +19,7 @@ export function FaqSection() {
             FAQ
           </p>
           <h2 className="faq__heading text-h2" id="faq-title">
-            سؤالاتی که قبل از شروع معمولاً می‌پرسند.
+            {title}
           </h2>
         </header>
 
@@ -19,7 +27,7 @@ export function FaqSection() {
           <div className="faq__desktop">
             <div className="faq__layout">
               <ol aria-label="سؤالات متداول" className="faq__questions">
-                {faqItems.map((item, index) => (
+                {items.map((item, index) => (
                   <li className="faq__question-row" key={item.number}>
                     <button
                       aria-controls={`faq-answer-${item.number}`}
@@ -40,7 +48,7 @@ export function FaqSection() {
               </ol>
 
               <div className="faq__answers">
-                {faqItems.map((item, index) => (
+                {items.map((item, index) => (
                   <article
                     aria-hidden={index !== 0}
                     aria-labelledby={`faq-question-${item.number}`}
@@ -62,7 +70,7 @@ export function FaqSection() {
           </div>
 
           <ol className="faq__mobile">
-            {faqItems.map((item, index) => (
+            {items.map((item, index) => (
               <li className="faq__mobile-item" key={`mobile-${item.number}`}>
                 <h3 className="faq__mobile-heading">
                   <button

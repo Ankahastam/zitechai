@@ -46,3 +46,49 @@ export const faqItems = [
     answer: "هزینه کاملاً وابسته به پیچیدگی معماری، حجم داده و میزان اتصال به نرم‌افزارهاست. ما پس از جلسه تحلیل اولیه، یک پروپوزال شفاف با هزینه ثابت، زمان‌بندی مشخص و تخمین دقیق میزان بازگشت سرمایه ارائه می‌دهیم تا بدون ابهام مالی تصمیم بگیرید.",
   },
 ] as const satisfies readonly FaqItem[];
+
+/* No approved copy exists yet for the chat-specific answers below.
+   Per AGENTS.md nothing is invented: the gap is marked, and the page keeps
+   these items out of its FAQPage structured data. */
+export const PENDING_ANSWER =
+  "[در انتظار تأیید محتوا] متن این پاسخ باید توسط تیم زی‌تک تأیید و جایگزین شود.";
+
+export const chatAgentFaqItems: readonly FaqItem[] = [
+  {
+    number: "01",
+    question: "آیا ایجنت اصطلاحات محاوره‌ای و لحن فارسی مشتریان را درست متوجه می‌شود؟",
+    answer: PENDING_ANSWER,
+  },
+  {
+    number: "02",
+    question: "زمان پاسخ ایجنت در هر کانال چقدر است؟",
+    answer: PENDING_ANSWER,
+  },
+  /* Reused verbatim from the approved homepage answers instead of rewritten. */
+  { number: "03", question: faqItems[3].question, answer: faqItems[3].answer },
+  { number: "04", question: faqItems[2].question, answer: faqItems[2].answer },
+  { number: "05", question: faqItems[5].question, answer: faqItems[5].answer },
+];
+
+export const voiceAgentFaqItems = [
+  {
+    number: "01",
+    question: "آیا برای استفاده از این سیستم نیاز به تعویض خط تلفن داریم؟",
+    answer: "خیر؛ این سیستم به انواع خطوط VoIP و مراکز تلفن استاندارد فعلی شما (مانند ایزابل، گرنداستریم، استریسک و...) متصل می‌شود.",
+  },
+  {
+    number: "02",
+    question: "آیا ایجنت لهجه، لحن عامیانه و اصطلاحات فارسی را متوجه می‌شود؟",
+    answer: "بله؛ سیستم از پیشرفته‌ترین مدل‌های پردازش زبان طبیعی و گفتار استفاده می‌کند و حتی در صورت استفاده از اصطلاحات محاوره‌ای یا پاسخ‌های کوتاه، منظور مخاطب را کاملاً درک می‌کند.",
+  },
+  {
+    number: "03",
+    question: "چگونه اطلاعات کسب‌وکارمان را به ایجنت آموزش دهیم؟",
+    answer: "به سادگی آب خوردن! در بخش «پایگاه دانش» پنل، فایل متنی یا کاتالوگ شرکت را آپلود می‌کنید و ایجنت بلافاصله به تمامی این اطلاعات مسلط می‌شود.",
+  },
+  {
+    number: "04",
+    question: "اگر مشتری اصرار به صحبت با انسان داشته باشد چه می‌شود؟",
+    answer: "سیستم به صورت خودکار تشخیص داده و تماس را به داخلی اپراتور انسانی یا کارشناس مربوطه منتقل (Transfer) می‌کند.",
+  },
+] as const satisfies readonly FaqItem[];

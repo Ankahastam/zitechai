@@ -33,24 +33,24 @@ export function CapabilityStage({ children }: { children: ReactNode }) {
 
     const desktop = window.matchMedia("(min-width: 64rem)");
     const steps = Array.from(stage.querySelectorAll<HTMLElement>("[data-capability-step]"));
-    const triggers = Array.from(stage.querySelectorAll<HTMLElement>("[data-capability]"));
     const visible = new Set<number>();
     let observer: IntersectionObserver | null = null;
-    let mobileLocked = false;
-    let unlockTimer: number | undefined;
     let previousScrollY = window.scrollY;
 
     const disconnect = () => {
       observer?.disconnect();
       observer = null;
       visible.clear();
-      window.clearTimeout(unlockTimer);
-      mobileLocked = false;
     };
 
     const sync = () => {
       disconnect();
-      const targets = desktop.matches ? steps : triggers;
+
+      if (!desktop.matches) {
+        activeRef.current = 1;
+        setActive(1);
+        return;
+      }
 
       observer = new IntersectionObserver(
         (entries) => {
@@ -65,30 +65,13 @@ export function CapabilityStage({ children }: { children: ReactNode }) {
           const scrollingDown = window.scrollY >= previousScrollY;
           previousScrollY = window.scrollY;
           const target = scrollingDown ? Math.max(...visible) : Math.min(...visible);
-
-          if (desktop.matches) {
-            activeRef.current = target;
-            setActive(target);
-            return;
-          }
-
-          if (mobileLocked) return;
-
-          const current = activeRef.current;
-          const next = Math.max(current - 1, Math.min(current + 1, target));
-          if (next === current) return;
-
-          activeRef.current = next;
-          setActive(next);
-          mobileLocked = true;
-          unlockTimer = window.setTimeout(() => {
-            mobileLocked = false;
-          }, 520);
+          activeRef.current = target;
+          setActive(target);
         },
-        { rootMargin: desktop.matches ? "-45% 0px -45% 0px" : "-65% 0px -25% 0px" },
+        { rootMargin: "-45% 0px -45% 0px" },
       );
 
-      for (const target of targets) observer.observe(target);
+      for (const step of steps) observer.observe(step);
     };
 
     sync();
