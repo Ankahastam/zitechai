@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import type { CSSProperties } from "react";
 import { voiceAgentFaqItems } from "@/components/faq-data";
 import { FaqSection } from "@/components/faq-section";
 import { HeroInteractiveBackground } from "@/components/hero-interactive-background";
-import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { LiquidButtonLink } from "@/components/ui/liquid-button-link";
 import { Section } from "@/components/ui/section";
 import { SectionHead } from "@/components/ui/section-head";
+import { VoiceAgentMotion } from "@/components/voice-agent-motion";
 
 const TITLE = "منشی تلفنی هوش مصنوعی";
 const DESCRIPTION =
@@ -42,11 +43,20 @@ const faqJsonLd = {
 
 type HeroFeature = { note?: string; title: string };
 type Pair = { problem: string; solution: string };
-type Entry = { body?: string; latin?: string; number?: string; points?: readonly string[]; title: string };
+type ProcessStep = { icon: IconName; label: string };
+type Entry = {
+  body?: string;
+  latin?: string;
+  number?: string;
+  points?: readonly string[];
+  process?: readonly ProcessStep[];
+  title: string;
+};
 type Feature = { icon: IconName; latin?: string; number: string; points: readonly string[]; title: string };
 type Industry = {
   body: string;
   icon: IconName;
+  image: string;
   solves: string;
   tags: readonly string[];
   title: string;
@@ -131,6 +141,7 @@ const industries: readonly Industry[] = [
   {
     body: "نوبت‌دهی خودکار، پاسخ به سوالات خدمات و قیمت‌ها، آدرس‌دهی و پیگیری وضعیت بیمار.",
     icon: "activity",
+    image: "/images/voice-agent/industry-healthcare.webp",
     solves: "نوبت‌دهی بدون اپراتور",
     tags: ["نوبت‌دهی خودکار", "خدمات و قیمت‌ها", "پیگیری وضعیت بیمار"],
     title: "کلینیک‌ها، بیمارستان‌ها و مراکز زیبایی",
@@ -138,6 +149,7 @@ const industries: readonly Industry[] = [
   {
     body: "ثبت دقیق سفارشات تلفنی در ساعات اوج شلوغی، رزرو میز و ارائه منوی روز.",
     icon: "coffee",
+    image: "/images/voice-agent/industry-restaurant.webp",
     solves: "سفارش‌گیری در ساعات اوج",
     tags: ["ثبت سفارش تلفنی", "رزرو میز", "منوی روز"],
     title: "رستوران‌ها و کافی‌شاپ‌ها",
@@ -145,6 +157,7 @@ const industries: readonly Industry[] = [
   {
     body: "پاسخگویی به وضعیت اتاق‌ها، استعلام بلیط و تورها و پشتیبانی ۲۴ ساعته.",
     icon: "map-pin",
+    image: "/images/voice-agent/industry-travel.webp",
     solves: "پاسخگویی خارج از ساعت کاری",
     tags: ["وضعیت اتاق‌ها", "استعلام تور و بلیط", "پشتیبانی ۲۴ ساعته"],
     title: "هتل‌ها، اقامتگاه‌ها و آژانس‌های مسافرتی",
@@ -152,6 +165,7 @@ const industries: readonly Industry[] = [
   {
     body: "منشی ورودی برای هدایت تماس‌ها، استعلام وضعیت سفارش و پیگیری پیش‌فاکتورها.",
     icon: "shopping-cart",
+    image: "/images/voice-agent/industry-enterprise.webp",
     solves: "حذف صف انتظار تلفنی",
     tags: ["هدایت تماس‌ها", "وضعیت سفارش", "پیگیری پیش‌فاکتور"],
     title: "شرکت‌ها، هلدینگ‌ها و فروشگاه‌های اینترنتی",
@@ -159,6 +173,7 @@ const industries: readonly Industry[] = [
   {
     body: "منشی چندزبانه (فارسی، انگلیسی، عربی و...) برای ارتباط با مشتریان خارجی بدون نیاز به استخدام مترجم.",
     icon: "globe",
+    image: "/images/voice-agent/industry-international.webp",
     solves: "ارتباط چندزبانه بدون مترجم",
     tags: ["فارسی، انگلیسی، عربی", "مشتریان خارجی", "بدون استخدام مترجم"],
     title: "کسب‌وکارهای بین‌المللی و توریستی",
@@ -170,30 +185,55 @@ const useCases: readonly Entry[] = [
     body: "معرفی خدمات، اعتبارسنجی اولیه نیاز مشتری، جمع‌آوری اطلاعات تماس و ارجاع لید داغ به کارشناس فروش.",
     latin: "Sales Agent",
     number: "01",
+    process: [
+      { icon: "phone", label: "تماس جدید" },
+      { icon: "users", label: "اعتبارسنجی" },
+      { icon: "phone-outgoing", label: "ارجاع به فروش" },
+    ],
     title: "ایجنت فروش و لیدجنریشن",
   },
   {
     body: "دریافت اطلاعات دقیق مشتری، آدرس و سفارش و ثبت در سیستم.",
     latin: "Order & Booking Agent",
     number: "02",
+    process: [
+      { icon: "phone", label: "تماس مشتری" },
+      { icon: "map-pin", label: "دریافت سفارش" },
+      { icon: "shopping-cart", label: "ثبت در سیستم" },
+    ],
     title: "ایجنت سفارش‌گیری و رزرو",
   },
   {
     body: "پاسخ دقیق به ده‌ها سوال متداول در لحظه بدون ماندن مشتری در صف انتظار.",
     latin: "Support & FAQ Agent",
     number: "03",
+    process: [
+      { icon: "message-square", label: "پرسش مشتری" },
+      { icon: "book", label: "جست‌وجوی دانش" },
+      { icon: "send", label: "پاسخ فوری" },
+    ],
     title: "ایجنت پشتیبانی فنی و پاسخگویی",
   },
   {
     body: "تماس محترمانه و خودکار با مشتریان جهت یادآوری تاریخ چک، سررسید فاکتور و اقساط معوق.",
     latin: "Debt Collection Agent",
     number: "04",
+    process: [
+      { icon: "chart", label: "سررسید مالی" },
+      { icon: "phone-outgoing", label: "تماس خودکار" },
+      { icon: "monitor", label: "ثبت نتیجه" },
+    ],
     title: "ایجنت وصول مطالبات و یادآوری مالی",
   },
   {
     body: "تماس پس از خرید یا دریافت خدمت جهت سنجش کیفیت و ثبت بازخوردها در پنل.",
     latin: "Customer Satisfaction Agent",
     number: "05",
+    process: [
+      { icon: "phone-outgoing", label: "تماس پس از خرید" },
+      { icon: "message-square", label: "ثبت بازخورد" },
+      { icon: "chart", label: "گزارش در پنل" },
+    ],
     title: "ایجنت نظرسنجی و رضایت‌سنجی",
   },
 ];
@@ -223,8 +263,12 @@ function EntryList({
   label: string;
 }) {
   const ordered = items.every((item) => item.number);
-  const content = items.map((item) => (
-    <li key={item.title}>
+  const content = items.map((item, index) => (
+    <li
+      className="va-list__item"
+      key={item.title}
+      style={{ "--item": index } as CSSProperties}
+    >
       {item.number ? (
         <p className="va-list__index" dir="ltr">
           {item.number}
@@ -238,6 +282,23 @@ function EntryList({
           </span>
         ) : null}
       </h3>
+      {item.process ? (
+        <figure aria-hidden="true" className="va-process">
+          {item.process.map((step, stepIndex) => (
+            <span className="va-process__step" key={step.label}>
+              <span className="va-process__icon">
+                <Icon name={step.icon} />
+              </span>
+              <span className="va-process__label">{step.label}</span>
+              {stepIndex < item.process!.length - 1 ? (
+                <span className="va-process__route">
+                  <span />
+                </span>
+              ) : null}
+            </span>
+          ))}
+        </figure>
+      ) : null}
       {item.body ? <p className="va-list__body">{item.body}</p> : null}
       {item.points ? (
         <ul className="pg-points">
@@ -263,7 +324,9 @@ function EntryList({
 
 export default function VoiceAgentPage() {
   return (
-    <main>
+    <main className="va-page">
+      <VoiceAgentMotion />
+
       <section aria-labelledby="va-hero-title" className="hero va-hero">
         <div aria-hidden="true" className="hero__field">
           <HeroInteractiveBackground />
@@ -271,13 +334,31 @@ export default function VoiceAgentPage() {
 
         <Container>
           <div className="hero__content">
-            <Badge className="va-hero__badge">
+            <p className="va-hero__eyebrow">
               نسل جدید دستیار صوتی هوش مصنوعی متصل به VoIP
-            </Badge>
+            </p>
 
             <h1 className="text-h2 hero__title va-hero__title" id="va-hero-title">
-              هیچ تماسی بی‌پاسخ نمی‌ماند؛ منشی تلفنی هوش مصنوعی ۲۴ ساعته با قابلیت مکالمه طبیعی
+              هیچ تماسی بی‌پاسخ نمی‌ماند.
             </h1>
+
+            <p className="va-hero__promise">
+              منشی تلفنی هوش مصنوعی ۲۴ ساعته با قابلیت مکالمه طبیعی
+            </p>
+
+            <div aria-hidden="true" className="va-signal">
+              <span className="va-signal__halo" />
+              <span className="va-signal__ring" />
+              <span className="va-signal__core">
+                <Icon name="waveform" />
+              </span>
+              <span className="va-signal__wave">
+                {Array.from({ length: 15 }, (_, index) => (
+                  <span key={index} style={{ "--bar": index } as CSSProperties} />
+                ))}
+              </span>
+              <span className="va-signal__status">در حال پاسخگویی</span>
+            </div>
 
             <p className="text-body-lg hero__lede">
               ایجنت صوتی هوشمند اختصاصی شما که مستقیماً به خط ویپ سازمان متصل می‌شود، تماس‌های
@@ -285,22 +366,24 @@ export default function VoiceAgentPage() {
               فروش و وصول مطالبات تماس خروجی می‌گیرد.
             </p>
 
-            <ul aria-label="ویژگی‌های کلیدی" className="va-hero__features">
-              {heroFeatures.map((feature) => (
-                <li key={feature.title}>
-                  <span className="va-hero__feature-title">{feature.title}</span>
-                  {feature.note ? (
-                    <span className="va-hero__feature-note">{feature.note}</span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-
             <p className="hero__actions">
               <LiquidButtonLink filterId="va-hero-cta-goo" href="#contact">
                 {CTA_LABEL}
               </LiquidButtonLink>
             </p>
+
+            <div className="va-hero__marquee">
+              <ul aria-label="ویژگی‌های کلیدی" className="va-hero__features">
+                {[...heroFeatures, ...heroFeatures].map((feature, index) => (
+                  <li aria-hidden={index >= heroFeatures.length || undefined} key={`${feature.title}-${index}`}>
+                    <span className="va-hero__feature-title">{feature.title}</span>
+                    {feature.note ? (
+                      <span className="va-hero__feature-note">{feature.note}</span>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <figure className="va-window">
               <div className="va-window__chrome">
@@ -359,7 +442,11 @@ export default function VoiceAgentPage() {
       </Section>
 
       <div className="pg-band">
-        <Section aria-labelledby="va-features-title" className="pg-section" id="va-features">
+        <Section
+          aria-labelledby="va-features-title"
+          className="pg-section va-features-section"
+          id="va-features"
+        >
           <SectionHead
             id="va-features-title"
             kicker="Core Features"
@@ -428,35 +515,59 @@ export default function VoiceAgentPage() {
             title="این محصول مناسب کدام صنف‌ها و کسب‌وکارها است؟"
           />
 
-          <ul aria-label="صنف‌ها و کسب‌وکارهای هدف" className="pg-grid va-industries">
-            {industries.map((industry) => (
-              <li className="pg-card pg-card--industry" key={industry.title}>
-                <span className="pg-card__badge">
-                  <Icon name={industry.icon} />
-                </span>
+          <div aria-label="صنف‌ها و کسب‌وکارهای هدف" className="va-industries">
+            {industries.map((industry, index) => (
+              <details className="pg-card pg-card--industry" key={industry.title} open={index === 0}>
+                <summary>
+                  <span className="va-industry__media">
+                    <Image
+                      alt=""
+                      className="va-industry__image"
+                      fill
+                      sizes="(max-width: 47.99rem) 82vw, (max-width: 79.99rem) 42vw, 24vw"
+                      src={industry.image}
+                      unoptimized
+                    />
+                  </span>
+                  <span className="va-industry__caption">
+                    <span className="pg-card__badge">
+                      <Icon name={industry.icon} />
+                    </span>
+                    <span className="pg-card__title">{industry.title}</span>
+                    <span aria-hidden="true" className="va-industry__toggle">+</span>
+                  </span>
+                </summary>
 
-                <h3 className="pg-card__title">{industry.title}</h3>
-                <p className="pg-card__body">{industry.body}</p>
+                <div className="va-industry__body">
+                  <p className="pg-card__body">{industry.body}</p>
 
-                <ul className="pg-tags">
-                  {industry.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
-                  ))}
-                </ul>
+                  <ul className="pg-tags">
+                    {industry.tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
+                    ))}
+                  </ul>
 
-                <p className="va-solves">
-                  <span className="va-solves__label">حل می‌کند</span>
-                  <span>{industry.solves}</span>
-                </p>
-              </li>
+                  <p className="va-solves">
+                    <span className="va-solves__label">حل می‌کند</span>
+                    <span>{industry.solves}</span>
+                  </p>
+                </div>
+              </details>
             ))}
-          </ul>
+          </div>
         </Section>
       </div>
 
-      <Section aria-labelledby="va-usecases-title" className="pg-section" id="va-use-cases">
-        <SectionHead id="va-usecases-title" kicker="Use Cases" title="سناریوهای کاربردی ایجنت" />
-        <EntryList items={useCases} label="سناریوهای کاربردی ایجنت" />
+      <Section
+        aria-labelledby="va-usecases-title"
+        className="pg-section va-usecases-section"
+        data-surface="light"
+        id="va-use-cases"
+      >
+        <div className="va-usecases-stage">
+          <SectionHead id="va-usecases-title" kicker="Use Cases" title="سناریوهای کاربردی ایجنت" />
+          <EntryList className="va-usecase-deck" items={useCases} label="سناریوهای کاربردی ایجنت" />
+        </div>
       </Section>
 
       <Section aria-labelledby="va-pricing-title" className="pg-section" id="va-pricing">
@@ -470,7 +581,7 @@ export default function VoiceAgentPage() {
         <div className="va-price">
           <div className="va-price__card">
             <h3 className="va-price__title">لایسنس پایه و استقرار</h3>
-            <p className="va-price__amount">۲۰,۰۰۰,۰۰۰ تومان</p>
+            <p className="va-price__amount">۲۳,۰۰۰,۰۰۰ تومان</p>
             <p className="va-price__note">(یک‌بار برای همیشه)</p>
 
             <ul aria-label="موارد شامل لایسنس پایه" className="pg-checks">
