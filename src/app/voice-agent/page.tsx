@@ -246,11 +246,27 @@ const priceIncludes: readonly string[] = [
   "آموزش و پشتیبانی اولیه راه‌اندازی",
 ];
 
-const customActions: readonly string[] = [
-  "اتصال به CRM اختصاصی شما (ثبت مستقیم فاکتور یا لید)",
-  "خواندن موجودی انبار یا وضعیت سفارش از پایگاه داده/ERP",
-  "ارسال پیامک‌های اعتبارسنجی (OTP) و لینک پرداخت در حین تماس",
-  "اجرای وب‌هوک‌های اختصاصی بر اساس مکالمه مشتری",
+const customActions: readonly { icon: IconName; system: string; text: string }[] = [
+  {
+    icon: "users",
+    system: "CRM",
+    text: "اتصال به CRM اختصاصی شما (ثبت مستقیم فاکتور یا لید)",
+  },
+  {
+    icon: "shopping-cart",
+    system: "ERP",
+    text: "خواندن موجودی انبار یا وضعیت سفارش از پایگاه داده/ERP",
+  },
+  {
+    icon: "message-square",
+    system: "OTP",
+    text: "ارسال پیامک‌های اعتبارسنجی (OTP) و لینک پرداخت در حین تماس",
+  },
+  {
+    icon: "link",
+    system: "WEBHOOK",
+    text: "اجرای وب‌هوک‌های اختصاصی بر اساس مکالمه مشتری",
+  },
 ];
 
 function EntryList({
@@ -627,27 +643,86 @@ export default function VoiceAgentPage() {
 
       <Section
         aria-labelledby="va-integrations-title"
-        className="pg-section"
+        className="pg-section va-integrations-section"
         id="va-integrations"
       >
-        <SectionHead
-          id="va-integrations-title"
-          kicker="Custom Actions & Integrations"
-          lede="آیا نیاز دارید ایجنت صوتی کارهای پیشرفته‌تری انجام دهد؟"
-          title="سفارشی‌سازی و اتصال به نرم‌افزارهای داخلی"
-        />
+        <div className="va-integrations-layout">
+          <div className="va-integrations-copy">
+            <SectionHead
+              id="va-integrations-title"
+              kicker="Custom Actions & Integrations"
+              lede="آیا نیاز دارید ایجنت صوتی کارهای پیشرفته‌تری انجام دهد؟"
+              title="سفارشی‌سازی و اتصال به نرم‌افزارهای داخلی"
+            />
 
-        <ul aria-label="امکانات سفارشی" className="pg-points pg-points--standalone">
-          {customActions.map((action) => (
-            <li key={action}>{action}</li>
-          ))}
-        </ul>
+            <ul aria-label="امکانات سفارشی" className="va-integration-actions">
+              {customActions.map((action) => (
+                <li key={action.system}>
+                  <span className="va-integration-actions__system" dir="ltr" lang="en">
+                    {action.system}
+                  </span>
+                  <span>{action.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <p className="pg-note">
-          جهت بررسی سیستم‌های داخلی سازمان شما و برآورد هزینه توسعه امکانات سفارشی، با کارشناسان فنی
-          ما جلسه مشاوره داشته باشید.{" "}
-          <a href="#contact">{CTA_LABEL}</a>
-        </p>
+          <div aria-label="نقشه اتصال ایجنت صوتی به نرم‌افزارهای سازمان" className="va-integration-map">
+            <svg aria-hidden="true" className="va-integration-routes" viewBox="0 0 600 480">
+              <path d="M300 240 C230 190 190 130 130 95" pathLength="1" />
+              <path d="M300 240 C370 190 410 130 470 95" pathLength="1" />
+              <path d="M300 240 C230 290 190 350 130 385" pathLength="1" />
+              <path d="M300 240 C370 290 410 350 470 385" pathLength="1" />
+            </svg>
+
+            <div className="va-integration-core" data-integration-core="voice-agent">
+              <span className="va-integration-core__pulse" />
+              <span className="va-integration-core__icon">
+                <Icon name="waveform" />
+              </span>
+              <strong>ایجنت صوتی</strong>
+              <span dir="ltr" lang="en">Voice Agent</span>
+            </div>
+
+            <ul aria-label="سیستم‌های متصل" className="va-integration-nodes">
+              {customActions.map((action, index) => (
+                <li
+                  className="va-integration-node"
+                  key={action.system}
+                  style={{ "--node": index } as CSSProperties}
+                >
+                  <span className="va-integration-node__icon">
+                    <Icon name={action.icon} />
+                  </span>
+                  <strong dir="ltr" lang="en">{action.system}</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div aria-hidden="true" className="va-integration-marquee">
+          <div className="va-integration-marquee__track">
+            {[...customActions, ...customActions].map((action, index) => (
+              <span key={`${action.system}-${index}`} dir="ltr" lang="en">
+                {action.system}<i />
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="va-integration-cta">
+          <span aria-hidden="true" className="va-integration-cta__refract" />
+          <span aria-hidden="true" className="va-integration-cta__tint" />
+          <span aria-hidden="true" className="va-integration-cta__specular" />
+          <div className="va-integration-cta__content">
+            <p>
+              جهت بررسی سیستم‌های داخلی سازمان شما و برآورد هزینه توسعه امکانات سفارشی، با
+              کارشناسان فنی ما جلسه مشاوره داشته باشید.
+            </p>
+            <a href="#contact">{CTA_LABEL}</a>
+          </div>
+        </div>
       </Section>
 
       <FaqSection items={voiceAgentFaqItems} title="سوالات متداول" />

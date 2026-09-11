@@ -76,6 +76,43 @@ export function VoiceAgentMotion() {
           },
         });
       });
+
+      gsap.from(".va-integration-map", {
+        autoAlpha: 0.45,
+        ease: "power2.out",
+        scale: 0.86,
+        scrollTrigger: {
+          end: "center 55%",
+          scrub: 0.6,
+          start: "top 92%",
+          trigger: ".va-integrations-section",
+        },
+      });
+
+      gsap.from(".va-integration-node", {
+        autoAlpha: 0,
+        ease: "power3.out",
+        scale: 0.72,
+        stagger: 0.08,
+        scrollTrigger: {
+          end: "center 58%",
+          scrub: 0.55,
+          start: "top 82%",
+          trigger: ".va-integration-map",
+        },
+      });
+
+      gsap.from(".va-integration-routes path", {
+        ease: "none",
+        strokeDashoffset: 1,
+        stagger: 0.06,
+        scrollTrigger: {
+          end: "center 58%",
+          scrub: 0.55,
+          start: "top 82%",
+          trigger: ".va-integration-map",
+        },
+      });
     });
 
     media.add(

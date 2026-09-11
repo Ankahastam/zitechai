@@ -12,6 +12,11 @@ assert.match(useCaseSection, /data-surface="light"/, "use-case section must use 
 const useCaseVisuals = html.match(/<figure[^>]*class="va-process"[^>]*>/g) ?? [];
 assert.equal(useCaseVisuals.length, 5, "each use-case card must render a process visual");
 
+const integrationNodes = html.match(/<li[^>]*class="va-integration-node[^\"]*"[^>]*>/g) ?? [];
+assert.equal(integrationNodes.length, 4, "the integration map must render four connected systems");
+assert.match(html, /data-integration-core="voice-agent"/, "the integration map must center the voice agent");
+assert.match(html, /class="va-integration-cta"/, "the integration section must render its consultation CTA");
+
 const industryImages = html.match(/<img[^>]*va-industry__image[^>]*>/g) ?? [];
 assert.equal(industryImages.length, 5, "each industry card must render an illustration");
 
