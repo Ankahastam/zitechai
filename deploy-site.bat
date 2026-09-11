@@ -13,17 +13,24 @@ if errorlevel 1 goto :failed
 
 git add -A
 git diff --cached --quiet
-if not errorlevel 1 goto :push
+if not errorlevel 1 goto :check_push
 
 git commit -m "Update website"
 if errorlevel 1 goto :failed
 
+:check_push
+for /f "delims=" %%A in ('git rev-list --count origin/main..HEAD') do set "AHEAD=%%A"
+if "%AHEAD%"=="0" (
+  echo No new changes to deploy.
+  goto :done
+)
+
 :push
-git push origin main
+git -c http.proxy=http://127.0.0.1:10808 push origin main
 if not errorlevel 1 goto :pushed
 
-echo Direct push failed. Retrying through the local proxy...
-git -c http.proxy=http://127.0.0.1:10808 push origin main
+echo Proxy push failed. Retrying directly...
+git push origin main
 if errorlevel 1 goto :failed
 
 :pushed
