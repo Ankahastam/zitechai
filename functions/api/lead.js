@@ -48,11 +48,11 @@ async function callTelegramApi(botToken, chatId, text) {
 }
 
 export async function onRequestPost({ env, request }) {
-  if (!env.SMS_API_KEY || !env.SMS_ADMIN_MOBILE || !env.TELEGRAM_BOT_TOKEN
-    || !env.TELEGRAM_CHAT_ID || !env.TURNSTILE_SECRET_KEY) {
+  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID || !env.TURNSTILE_SECRET_KEY) {
     console.error(JSON.stringify({ event: "lead_configuration_missing" }));
     return json({ message: "فرم در حال حاضر در دسترس نیست.", ok: false }, 503);
   }
+  const smsConfigured = Boolean(env.SMS_API_KEY && env.SMS_ADMIN_MOBILE);
 
   const origin = request.headers.get("Origin");
   if (origin !== new URL(request.url).origin) {
@@ -80,7 +80,7 @@ export async function onRequestPost({ env, request }) {
   const channels = clean(form.getAll("channels").join("، "));
   const note = clean(form.get("note"));
   const mobile = normalizeMobile(form.get("mobile"));
-  const adminMobile = normalizeMobile(env.SMS_ADMIN_MOBILE);
+  const adminMobile = smsConfigured ? normalizeMobile(env.SMS_ADMIN_MOBILE) : null;
   const turnstileToken = String(form.get("cf-turnstile-response") || "");
 
   if (!name || name.length > 80 || !profile || profile.length > 100 || !mobile) {
@@ -89,7 +89,7 @@ export async function onRequestPost({ env, request }) {
   if (channels.length > 200 || note.length > 600) {
     return json({ message: "توضیحات یا کانال‌های انتخابی بیش از حد بلند است.", ok: false }, 400);
   }
-  if (!adminMobile) {
+  if (smsConfigured && !adminMobile) {
     console.error(JSON.stringify({ event: "lead_admin_mobile_invalid" }));
     return json({ message: "فرم در حال حاضر در دسترس نیست.", ok: false }, 503);
   }
@@ -100,36 +100,38 @@ export async function onRequestPost({ env, request }) {
     }
 
     const adminMessage = buildAdminSms({ channels, mobile, name, note, profile });
-    const [contact, visitorSms, adminSms, telegram] = await Promise.all([
-      callSmsApi(env.SMS_API_KEY, {
-        action: "newContact",
-        cFields: { [NAME_FIELD_ID]: name, [JOB_FIELD_ID]: profile },
-        cNumber: mobile,
-        phoneId: PHONEBOOK_ID,
-      }),
-      callSmsApi(env.SMS_API_KEY, {
-        action: "send",
-        from: "auto",
-        receivers: mobile,
-        text: "درخواست همکاری شما در زی‌تک ثبت شد. برای ادامه گفتگو با شما در تماس خواهیم بود.",
-        trySend: 2,
-        type: 1,
-      }),
-      callSmsApi(env.SMS_API_KEY, {
-        action: "send",
-        from: "auto",
-        receivers: adminMobile,
-        text: adminMessage,
-        trySend: 2,
-        type: 1,
-      }),
+    const [telegram, contact, visitorSms, adminSms] = await Promise.all([
       callTelegramApi(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, adminMessage),
+      ...(smsConfigured ? [
+        callSmsApi(env.SMS_API_KEY, {
+          action: "newContact",
+          cFields: { [NAME_FIELD_ID]: name, [JOB_FIELD_ID]: profile },
+          cNumber: mobile,
+          phoneId: PHONEBOOK_ID,
+        }),
+        callSmsApi(env.SMS_API_KEY, {
+          action: "send",
+          from: "auto",
+          receivers: mobile,
+          text: "درخواست همکاری شما در زی‌تک ثبت شد. برای ادامه گفتگو با شما در تماس خواهیم بود.",
+          trySend: 2,
+          type: 1,
+        }),
+        callSmsApi(env.SMS_API_KEY, {
+          action: "send",
+          from: "auto",
+          receivers: adminMobile,
+          text: adminMessage,
+          trySend: 2,
+          type: 1,
+        }),
+      ] : []),
     ]);
 
-    if (!contact.ok) {
+    if (smsConfigured && !contact.ok) {
       console.error(JSON.stringify({ event: "lead_contact_save_failed", result: contact.result }));
     }
-    if (!visitorSms.ok || !adminSms.ok) {
+    if (smsConfigured && (!visitorSms.ok || !adminSms.ok)) {
       // ponytail: provider has no idempotency key; add durable storage if duplicate retries become measurable.
       console.error(JSON.stringify({
         adminResult: adminSms.result,

@@ -65,6 +65,25 @@ try {
     chat_id: "12345",
     text: "لید جدید سایت زی‌تک\nنام: سارا\nشماره: 09123456789\nشغل/کسب‌وکار: کلینیک",
   });
+
+  const telegramOnlyForm = new FormData();
+  telegramOnlyForm.set("name", "سارا");
+  telegramOnlyForm.set("mobile", "09123456789");
+  telegramOnlyForm.set("job", "کلینیک");
+  telegramOnlyForm.set("cf-turnstile-response", "verified-token");
+  const telegramOnlyResponse = await onRequestPost({
+    env: {
+      TELEGRAM_BOT_TOKEN: "telegram-test-token",
+      TELEGRAM_CHAT_ID: "12345",
+      TURNSTILE_SECRET_KEY: "turnstile-test-key",
+    },
+    request: new Request("https://zitech.example/api/lead", {
+      body: telegramOnlyForm,
+      headers: { Origin: "https://zitech.example" },
+      method: "POST",
+    }),
+  });
+  assert.equal(telegramOnlyResponse.status, 200, "Telegram must work when optional SMS settings are absent");
 } finally {
   globalThis.fetch = realFetch;
 }
