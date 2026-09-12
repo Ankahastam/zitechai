@@ -5,13 +5,11 @@ import { Button } from "./ui/button";
 import { TurnstileWidget, resetTurnstile, turnstileSiteKey } from "./turnstile";
 
 type FormState = "idle" | "pending" | "success" | "error";
+type ChatLeadFormCopy = (typeof import("../../content/chat.json"))["leadForm"];
 
 const TURNSTILE_ID = "ca-turnstile";
 
-/* Each checked box posts its own `channels` entry; the Pages Function joins them. */
-const CHANNELS = ["وب‌سایت", "تلگرام", "بله", "ایتا", "واتساپ", "اینستاگرام"] as const;
-
-export function ChatLeadForm() {
+export function ChatLeadForm({ content }: { content: ChatLeadFormCopy }) {
   const [state, setState] = useState<FormState>("idle");
   const [message, setMessage] = useState("");
 
@@ -43,10 +41,8 @@ export function ChatLeadForm() {
         <span aria-hidden="true" className="ca-form__mark">
           ✓
         </span>
-        <h3 className="ca-form__done-title">درخواست شما ثبت شد.</h3>
-        <p className="ca-form__done-body">
-          برای بررسی کانال‌ها و سیستم‌های فعلی کسب‌وکارتان با شما تماس می‌گیریم.
-        </p>
+        <h3 className="ca-form__done-title">{content.successTitle}</h3>
+        <p className="ca-form__done-body">{content.successBody}</p>
       </div>
     );
   }
@@ -55,15 +51,15 @@ export function ChatLeadForm() {
     <form action="/api/lead" className="ca-form" method="post" onSubmit={submit}>
       <div className="ca-form__grid">
         <label>
-          <span>نام و نام خانوادگی</span>
+          <span>{content.nameLabel}</span>
           <input autoComplete="name" maxLength={80} name="name" required type="text" />
         </label>
         <label>
-          <span>نام کسب‌وکار</span>
+          <span>{content.businessLabel}</span>
           <input autoComplete="organization" maxLength={100} name="business" required type="text" />
         </label>
         <label>
-          <span>شماره موبایل</span>
+          <span>{content.mobileLabel}</span>
           <input
             autoComplete="tel"
             dir="ltr"
@@ -78,9 +74,9 @@ export function ChatLeadForm() {
       </div>
 
       <fieldset className="ca-form__channels">
-        <legend>کانال‌های مورد نیاز</legend>
+        <legend>{content.channelsLabel}</legend>
         <div className="ca-form__chips">
-          {CHANNELS.map((channel) => (
+          {content.channels.map((channel) => (
             <label className="ca-chip" key={channel}>
               <input name="channels" type="checkbox" value={channel} />
               <span>{channel}</span>
@@ -90,11 +86,11 @@ export function ChatLeadForm() {
       </fieldset>
 
       <label className="ca-form__note">
-        <span>توضیح نیاز یا سیستم‌هایی که باید متصل شوند</span>
+        <span>{content.noteLabel}</span>
         <textarea
           maxLength={600}
           name="note"
-          placeholder="مثلاً: اتصال به CRM فعلی و خواندن موجودی از انبار"
+          placeholder={content.notePlaceholder}
           rows={4}
         />
       </label>
@@ -108,7 +104,7 @@ export function ChatLeadForm() {
         <TurnstileWidget id={TURNSTILE_ID} />
       ) : (
         <p className="ca-form__message" role="alert">
-          فرم هنوز برای ارسال نهایی پیکربندی نشده است.
+          {content.unconfiguredMessage}
         </p>
       )}
 
@@ -117,7 +113,7 @@ export function ChatLeadForm() {
         disabled={state === "pending" || !turnstileSiteKey}
         type="submit"
       >
-        {state === "pending" ? "در حال ثبت…" : "ثبت درخواست استقرار"}
+        {state === "pending" ? content.pendingLabel : content.submitLabel}
       </Button>
 
       <p aria-live="polite" className="ca-form__message">

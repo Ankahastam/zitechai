@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { siteContent } from "@/content";
 
 export const dynamic = "force-static";
 
@@ -8,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://zitechai.com/sitemap.xml",
-    host: "https://zitechai.com",
+    sitemap: `${siteContent.seo.siteUrl}/sitemap.xml`,
+    host: siteContent.seo.siteUrl,
   };
 }

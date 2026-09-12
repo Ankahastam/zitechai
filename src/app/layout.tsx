@@ -4,15 +4,16 @@ import { ContactDialog } from "@/components/contact-dialog";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { iranYekanX } from "@/fonts/iran-yekan-x";
+import { siteContent } from "@/content";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://zitechai.com"),
+  metadataBase: new URL(siteContent.seo.siteUrl),
   title: {
-    default: "زی‌تک",
-    template: "%s | زی‌تک",
+    default: siteContent.seo.titleDefault,
+    template: siteContent.seo.titleTemplate,
   },
-  description: "راهکارهای هوش مصنوعی برای عملیات واقعی کسب‌وکار",
+  description: siteContent.seo.description,
   alternates: {
     canonical: "/",
   },
@@ -30,7 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <SiteHeader />
         {children}
         <SiteFooter />
-        <ContactDialog />
+        <ContactDialog content={siteContent.contactDialog} />
       </body>
     </html>
   );

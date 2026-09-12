@@ -4,6 +4,8 @@
 # Next.js
 /.next/
 /out/
+/public/admin/
+/tina/__generated__/
 
 # Production and test output
 /build/

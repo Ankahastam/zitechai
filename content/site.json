@@ -1,0 +1,65 @@
+{
+  "seo": {
+    "siteUrl": "https://zitechai.com",
+    "siteName": "زی‌تک",
+    "titleDefault": "زی‌تک",
+    "titleTemplate": "%s | زی‌تک",
+    "description": "راهکارهای هوش مصنوعی برای عملیات واقعی کسب‌وکار",
+    "locale": "fa_IR",
+    "ogImage": {
+      "url": "/brand/logo-dark.png",
+      "alt": "زی‌تک",
+      "width": 192,
+      "height": 192
+    }
+  },
+  "navigation": {
+    "mobileTitle": "زی‌تک",
+    "cta": "شروع همکاری با زی‌تک",
+    "primary": [
+      {
+        "label": "سرویس‌های هوش مصنوعی",
+        "href": "",
+        "children": [
+          { "href": "/voice-agent", "label": "ویس ایجنت منشی تلفنی" },
+          { "href": "/chat", "label": "چت ایجنت اختصاصی" },
+          { "href": "/#marketing", "label": "مارکتینگ آتومیشن" },
+          { "href": "/#erp", "label": "سامانه‌های یکپارچه ERP" }
+        ]
+      },
+      { "href": "/#faq", "label": "پرسش‌های متداول", "children": [] },
+      { "href": "/#about", "label": "درباره ما", "children": [] },
+      { "href": "/#contact", "label": "تماس با ما", "children": [] }
+    ]
+  },
+  "footer": {
+    "headline": "آماده‌اید AI را وارد کار واقعی کسب‌وکارتان کنید؟",
+    "lede": "از یک مسئله واقعی شروع می‌کنیم؛ نه از یک ابزار.",
+    "cta": "شروع همکاری با زی‌تک",
+    "secondaryCta": "مشاهده راهکارها",
+    "secondaryHref": "/#services",
+    "links": [
+      { "href": "/#approach", "label": "رویکرد زی‌تک" },
+      { "href": "/#services", "label": "راهکارها" },
+      { "href": "/voice-agent", "label": "منشی تلفنی هوشمند" },
+      { "href": "/#faq", "label": "سؤالات متداول" }
+    ],
+    "copyrightLatin": "© 2026 Z-Tech.",
+    "copyrightPersian": "تمامی حقوق محفوظ است."
+  },
+  "contactDialog": {
+    "closeLabel": "بستن فرم همکاری",
+    "successTitle": "درخواست شما ثبت شد.",
+    "successBody": "برای ادامه گفتگو با شما در تماس خواهیم بود.",
+    "successButton": "متوجه شدم",
+    "kicker": "START A PROJECT",
+    "title": "از یک مسئله واقعی شروع کنیم.",
+    "description": "اطلاعات تماس‌تان را بگذارید تا گفت‌وگو را از نیاز واقعی کسب‌وکارتان شروع کنیم.",
+    "nameLabel": "نام و نام خانوادگی",
+    "mobileLabel": "شماره موبایل",
+    "jobLabel": "شغل یا صنف کاری",
+    "submitLabel": "ثبت درخواست همکاری",
+    "pendingLabel": "در حال ثبت…",
+    "unconfiguredMessage": "فرم هنوز برای ارسال نهایی پیکربندی نشده است."
+  }
+}

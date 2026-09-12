@@ -1,19 +1,20 @@
 import type { MetadataRoute } from "next";
+import { siteContent } from "@/content";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://zitechai.com",
+      url: siteContent.seo.siteUrl,
       changeFrequency: "monthly",
     },
     {
-      url: "https://zitechai.com/voice-agent",
+      url: `${siteContent.seo.siteUrl}/voice-agent`,
       changeFrequency: "monthly",
     },
     {
-      url: "https://zitechai.com/chat",
+      url: `${siteContent.seo.siteUrl}/chat`,
       changeFrequency: "monthly",
     },
   ];

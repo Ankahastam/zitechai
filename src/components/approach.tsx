@@ -1,37 +1,17 @@
 import { Container } from "@/components/ui/container";
+import { homeContent } from "@/content";
 import { ApproachDiagram } from "./approach-diagram";
 import { ApproachStage } from "./approach-stage";
 
-const steps = [
-  {
-    index: 1,
-    number: "01",
-    latin: "Discover",
-    persian: "کشف",
-    statement: "اول مشخص می‌کنیم چه چیزی ارزش ساختن دارد.",
-    body: "فرایندهای واقعی کسب‌وکار، ابزارها، داده‌ها و گلوگاه‌ها را بررسی می‌کنیم. هدف این نیست که برای هر مسئله‌ای AI پیشنهاد بدهیم؛ هدف پیدا کردن چند فرصتی است که بیشترین اثر را روی فروش، هزینه، سرعت یا تصمیم‌گیری دارند.",
-  },
-  {
-    index: 2,
-    number: "02",
-    latin: "Build",
-    persian: "ساخت",
-    statement: "بعد، آن را می‌سازیم.",
-    body: "از AI Agent و اتوماسیون تا CRM هوشمند، BI، Voice AI و نرم‌افزار اختصاصی؛ راهکار را متناسب با فرایند واقعی کسب‌وکار طراحی می‌کنیم و به CRM، ERP، حسابداری، سایت و ابزارهای فعلی متصل می‌کنیم.",
-  },
-  {
-    index: 3,
-    number: "03",
-    latin: "Embed",
-    persian: "استقرار",
-    statement: "در نهایت، AI باید بخشی از کار روزمره شود.",
-    body: "سیستم را در محیط واقعی مستقر می‌کنیم، همراه تیم شما تست و اصلاحش می‌کنیم و کاری می‌کنیم که راهکار تحویل‌شده تبدیل به یک پروژه نمایشی دیگر نشود؛ بلکه واقعاً بخشی از نحوه کار سازمان باشد.",
-  },
-] as const;
+const steps = homeContent.approach.steps.map((step, index) => ({
+  ...step,
+  index: index + 1,
+  number: String(index + 1).padStart(2, "0"),
+}));
 
 export function Approach() {
   return (
-    <section aria-label="کشف، ساخت و استقرار" className="approach" id="approach">
+    <section aria-label={homeContent.approach.ariaLabel} className="approach" id="approach">
       <Container>
         <ApproachStage>
           <div aria-hidden="true" className="approach__rail">

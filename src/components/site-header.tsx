@@ -8,21 +8,13 @@ import {
   NavigationList,
 } from "@/components/ui/navigation";
 import { MobileNavigation, type NavItem } from "./mobile-navigation";
+import { siteContent } from "@/content";
 
-const links: readonly NavItem[] = [
-  {
-    label: "سرویس‌های هوش مصنوعی",
-    children: [
-      { href: "/voice-agent", label: "ویس ایجنت منشی تلفنی" },
-      { href: "/chat", label: "چت ایجنت اختصاصی" },
-      { href: "/#marketing", label: "مارکتینگ آتومیشن" },
-      { href: "/#erp", label: "سامانه‌های یکپارچه ERP" },
-    ],
-  },
-  { href: "/#faq", label: "پرسش‌های متداول" },
-  { href: "/#about", label: "درباره ما" },
-  { href: "/#contact", label: "تماس با ما" },
-];
+const links: readonly NavItem[] = siteContent.navigation.primary.map((item) =>
+  item.children.length
+    ? { children: item.children, label: item.label }
+    : { href: item.href, label: item.label },
+);
 
 export function SiteHeader() {
   return (
@@ -65,10 +57,14 @@ export function SiteHeader() {
           </Navigation>
 
           <ButtonLink className="site-header__cta" href="#contact">
-            شروع همکاری با زی‌تک
+            {siteContent.navigation.cta}
           </ButtonLink>
 
-          <MobileNavigation links={links} />
+          <MobileNavigation
+            cta={siteContent.navigation.cta}
+            links={links}
+            title={siteContent.navigation.mobileTitle}
+          />
         </div>
       </Container>
     </header>

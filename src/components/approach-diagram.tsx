@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { homeContent } from "@/content";
 
 type NodeRole = "source" | "relay" | "core" | "fanout" | "operation";
 
@@ -24,7 +25,7 @@ const LAYERS: readonly LayerSpec[] = [
     count: 6,
     compactCount: 3,
     dot: 0.92,
-    labels: ["CRM", "ERP", "حسابداری", "سایت", "داده", "ابزارها"],
+    labels: homeContent.approach.diagram.sourceLabels,
   },
   { role: "relay", x: 276, count: 5, compactCount: 2, dot: 0.55 },
   { role: "core", x: 188, count: 4, compactCount: 3, dot: 1.15 },
@@ -427,7 +428,7 @@ export function ApproachDiagram({ stage, compact = false }: ApproachDiagramProps
         )}
 
         <text className="apx-label apx-label--core apx-label--fa" textAnchor="middle" x={LAYERS[2].x} y={VIEW_HEIGHT - 22}>
-          لایهٔ هوش مصنوعی
+          {homeContent.approach.diagram.coreLabel}
         </text>
 
         <text
@@ -436,7 +437,7 @@ export function ApproachDiagram({ stage, compact = false }: ApproachDiagramProps
           x={LOOP_CENTER[0]}
           y={LOOP_CENTER[1] + 4}
         >
-          کار روزمره
+          {homeContent.approach.diagram.loopLabel}
         </text>
       </g>
     </svg>

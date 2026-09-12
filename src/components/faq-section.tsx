@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { homeContent } from "@/content";
 import { type FaqItem, faqItems } from "./faq-data";
 import { FaqInteractive } from "./faq-interactive";
 
@@ -9,7 +10,7 @@ type FaqSectionProps = {
 
 export function FaqSection({
   items = faqItems,
-  title = "سؤالاتی که قبل از شروع معمولاً می‌پرسند.",
+  title = homeContent.faq.title,
 }: FaqSectionProps = {}) {
   return (
     <section aria-labelledby="faq-title" className="faq" id="faq">

@@ -7,7 +7,15 @@ import type { CSSProperties } from "react";
 export type NavLink = Readonly<{ href: string; label: string }>;
 export type NavItem = NavLink | Readonly<{ label: string; children: readonly NavLink[] }>;
 
-export function MobileNavigation({ links }: { links: readonly NavItem[] }) {
+export function MobileNavigation({
+  cta,
+  links,
+  title,
+}: {
+  cta: string;
+  links: readonly NavItem[];
+  title: string;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeTimerRef = useRef<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +108,7 @@ export function MobileNavigation({ links }: { links: readonly NavItem[] }) {
       >
         <div className="mobile-nav__panel">
           <div className="mobile-nav__topline">
-            <p className="mobile-nav__title" id="mobile-menu-title">زی‌تک</p>
+            <p className="mobile-nav__title" id="mobile-menu-title">{title}</p>
             <button
               aria-label="بستن منو"
               autoFocus
@@ -155,7 +163,7 @@ export function MobileNavigation({ links }: { links: readonly NavItem[] }) {
           </nav>
 
           <Link className="mobile-nav__cta" href="#contact" onClick={close}>
-            شروع همکاری با زی‌تک
+            {cta}
           </Link>
         </div>
       </dialog>

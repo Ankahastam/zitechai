@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { LiquidButtonLink } from "@/components/ui/liquid-button-link";
+import { homeContent } from "@/content";
 import { HeroInteractiveBackground } from "./hero-interactive-background";
 
 export function Hero() {
@@ -12,16 +13,16 @@ export function Hero() {
       <Container>
         <div className="hero__content">
           <h1 className="text-h1 hero__title" id="hero-title">
-            آژانس اتوماسیون و هوش مصنوعی زیتک
+            {homeContent.hero.title}
           </h1>
 
           <p className="text-body-lg hero__lede">
-            متخصص تجهیز کسب و کار شما به قدرت هوش مصنوعی
+            {homeContent.hero.lede}
           </p>
 
           <p className="hero__actions">
             <LiquidButtonLink filterId="hero-cta-goo" href="#contact">
-              شروع همکاری با زی‌تک
+              {homeContent.hero.cta}
             </LiquidButtonLink>
           </p>
         </div>

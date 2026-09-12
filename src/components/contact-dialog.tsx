@@ -7,7 +7,9 @@ type FormState = "idle" | "pending" | "success" | "error";
 
 const TURNSTILE_ID = "contact-turnstile";
 
-export function ContactDialog() {
+type ContactDialogCopy = (typeof import("../../content/site.json"))["contactDialog"];
+
+export function ContactDialog({ content }: { content: ContactDialogCopy }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const closeTimerRef = useRef<number | null>(null);
@@ -110,7 +112,7 @@ export function ContactDialog() {
     >
       <div className="contact-dialog__surface">
         <button
-          aria-label="بستن فرم همکاری"
+          aria-label={content.closeLabel}
           className="contact-dialog__close"
           onClick={close}
           type="button"
@@ -121,29 +123,29 @@ export function ContactDialog() {
         {state === "success" ? (
           <div className="contact-dialog__success" role="status">
             <span aria-hidden="true" className="contact-dialog__success-mark">✓</span>
-            <h2 id="contact-dialog-title">درخواست شما ثبت شد.</h2>
-            <p id="contact-dialog-description">برای ادامه گفتگو با شما در تماس خواهیم بود.</p>
-            <button className="contact-dialog__submit" onClick={close} type="button">متوجه شدم</button>
+            <h2 id="contact-dialog-title">{content.successTitle}</h2>
+            <p id="contact-dialog-description">{content.successBody}</p>
+            <button className="contact-dialog__submit" onClick={close} type="button">{content.successButton}</button>
           </div>
         ) : (
           <>
             <div className="contact-dialog__intro">
-              <p className="contact-dialog__kicker" dir="ltr">START A PROJECT</p>
-              <h2 id="contact-dialog-title">از یک مسئله واقعی شروع کنیم.</h2>
-              <p id="contact-dialog-description">اطلاعات تماس‌تان را بگذارید تا گفت‌وگو را از نیاز واقعی کسب‌وکارتان شروع کنیم.</p>
+              <p className="contact-dialog__kicker" dir="ltr">{content.kicker}</p>
+              <h2 id="contact-dialog-title">{content.title}</h2>
+              <p id="contact-dialog-description">{content.description}</p>
             </div>
 
             <form action="/api/lead" className="contact-dialog__form" onSubmit={submit} ref={formRef}>
               <label>
-                <span>نام و نام خانوادگی</span>
+                <span>{content.nameLabel}</span>
                 <input autoComplete="name" maxLength={80} name="name" required type="text" />
               </label>
               <label>
-                <span>شماره موبایل</span>
+                <span>{content.mobileLabel}</span>
                 <input autoComplete="tel" dir="ltr" inputMode="tel" maxLength={16} name="mobile" placeholder="0912 000 0000" required type="tel" />
               </label>
               <label>
-                <span>شغل یا صنف کاری</span>
+                <span>{content.jobLabel}</span>
                 <input autoComplete="organization-title" maxLength={100} name="job" required type="text" />
               </label>
 
@@ -155,11 +157,11 @@ export function ContactDialog() {
               {turnstileSiteKey ? (
                 <TurnstileWidget id={TURNSTILE_ID} />
               ) : (
-                <p className="contact-dialog__notice" role="alert">فرم هنوز برای ارسال نهایی پیکربندی نشده است.</p>
+                <p className="contact-dialog__notice" role="alert">{content.unconfiguredMessage}</p>
               )}
 
               <button className="contact-dialog__submit" disabled={state === "pending" || !turnstileSiteKey} type="submit">
-                {state === "pending" ? "در حال ثبت…" : "ثبت درخواست همکاری"}
+                {state === "pending" ? content.pendingLabel : content.submitLabel}
               </button>
               <p aria-live="polite" className="contact-dialog__message">{state === "error" ? message : ""}</p>
             </form>

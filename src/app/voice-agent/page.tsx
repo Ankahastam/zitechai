@@ -10,39 +10,36 @@ import { LiquidButtonLink } from "@/components/ui/liquid-button-link";
 import { Section } from "@/components/ui/section";
 import { SectionHead } from "@/components/ui/section-head";
 import { VoiceAgentMotion } from "@/components/voice-agent-motion";
+import { siteContent, voiceAgentContent } from "@/content";
 
-const TITLE = "منشی تلفنی هوش مصنوعی";
-const DESCRIPTION =
-  "ایجنت صوتی هوشمند متصل به خط ویپ سازمان؛ تماس‌های ورودی را پاسخ می‌دهد، سفارش‌ها و نوبت‌ها را ثبت می‌کند و برای پیگیری فروش و وصول مطالبات تماس خروجی می‌گیرد.";
-const CTA_LABEL = "رزرو جلسه دمو";
+const TITLE = voiceAgentContent.seo.title;
+const DESCRIPTION = voiceAgentContent.seo.description;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/voice-agent" },
+  alternates: { canonical: voiceAgentContent.seo.canonical },
   openGraph: {
     description: DESCRIPTION,
-    images: [{ alt: "زی‌تک", height: 192, url: "/brand/logo-dark.png", width: 192 }],
-    locale: "fa_IR",
-    siteName: "زی‌تک",
-    title: `${TITLE} | زی‌تک`,
+    images: [siteContent.seo.ogImage],
+    locale: siteContent.seo.locale,
+    siteName: siteContent.seo.siteName,
+    title: `${TITLE} | ${siteContent.seo.siteName}`,
     type: "website",
-    url: "/voice-agent",
+    url: voiceAgentContent.seo.canonical,
   },
 };
 
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: voiceAgentFaqItems.map((item) => ({
+  mainEntity: voiceAgentContent.faq.items.map((item) => ({
     "@type": "Question",
     acceptedAnswer: { "@type": "Answer", text: item.answer },
     name: item.question,
   })),
 };
 
-type HeroFeature = { note?: string; title: string };
-type Pair = { problem: string; solution: string };
 type ProcessStep = { icon: IconName; label: string };
 type Entry = {
   body?: string;
@@ -52,222 +49,42 @@ type Entry = {
   process?: readonly ProcessStep[];
   title: string;
 };
-type Feature = { icon: IconName; latin?: string; number: string; points: readonly string[]; title: string };
-type Industry = {
-  body: string;
-  icon: IconName;
-  image: string;
-  solves: string;
-  tags: readonly string[];
-  title: string;
+const featureIcons: Record<string, IconName> = {
+  crm: "users",
+  knowledge: "book",
+  outbound: "phone-outgoing",
+  reporting: "chart",
+  voip: "phone",
 };
-
-const heroFeatures: readonly HeroFeature[] = [
-  { note: "(پاسخ آنی و طبیعی مشابه انسان)", title: "تاخیر پاسخگویی کمتر از ۲ ثانیه" },
-  { note: "بدون نیاز به پرداخت اشتراک ماهانه نرم‌افزار", title: "لایسنس مادام‌العمر" },
-  { note: "بدون خستگی و اشغال خط", title: "پشتیبانی چندزبانه و ۲۴/۷" },
-  { title: "اتصال بومی به خطوط VoIP / سیپ‌ترانک" },
-];
-
-const pairs: readonly Pair[] = [
-  {
-    problem: "از دست رفتن تماس‌ها در ساعات غیرکاری و شلوغی خطوط",
-    solution: "پاسخگویی همزمان به بی‌نهایت تماس در ۷ روز هفته و ۲۴ ساعت شبانه‌روز",
-  },
-  {
-    problem: "هزینه‌های سنگین استخدام، آموزش و جابجایی نیروی انسانی",
-    solution: "استقرار مادام‌العمر یک دستیار خستگی‌ناپذیر با قیمت ثابت و بسیار اقتصادی",
-  },
-  {
-    problem: "فراموشی ثبت مشخصات، آدرس و سرنخ‌های مشتری در CRM",
-    solution: "استخراج خودکار خلاصه مکالمه، نیاز مشتری، آدرس و نکات کلیدی پس از هر تماس",
-  },
-  {
-    problem: "تماس‌های تکراری و وقت‌گیر پیگیری و وصول مطالبات",
-    solution: "تماس خروجی هوشمند، خودکار و زمان‌بندی‌شده با لحن محترمانه و دقیق",
-  },
-];
-
-const features: readonly Feature[] = [
-  {
-    icon: "phone",
-    latin: "VoIP Bridge",
-    number: "01",
-    points: [
-      "بدون نیاز به سخت‌افزار اضافه؛ اتصال سریع و مستقیم به استریسک، ایزابل، ۳CX و انواع سیپ‌ترانک‌ها.",
-      "امکان انتقال هوشمند تماس به اپراتور انسانی در صورت درخواست مشتری یا موارد پیچیده.",
-    ],
-    title: "اتصال مستقیم به شبکه ویپ",
-  },
-  {
-    icon: "book",
-    latin: "Knowledge Base RAG",
-    number: "02",
-    points: [
-      "تنها با بارگذاری فایل‌های متنی و مستندات (.md / متنی)، کل اطلاعات کسب‌وکار، کاتالوگ محصولات، تورها، قیمت‌ها و سوالات متداول را به ایجنت آموزش دهید.",
-      "به‌روزرسانی آنی دانش بدون نیاز به دانش برنامه‌نویسی.",
-    ],
-    title: "پایگاه دانش هوشمند سازمانی",
-  },
-  {
-    icon: "users",
-    number: "03",
-    points: [
-      "ثبت دقیق تمام مکالمات همراه با مدت زمان، فایل صوتی و دلیل قطع تماس (caller_hangup یا agent_ended).",
-      "استخراج خودکار نکات و علایق مشتری (مانند استخراج آدرس، علاقه به محصول خاص، ترجیح نوع پرداخت و...). و حافظه مند بودن نسبت به هر مشتری.",
-    ],
-    title: "پروفایل هوشمند مشتری و CRM خودکار",
-  },
-  {
-    icon: "phone-outgoing",
-    latin: "Outbound Calling",
-    number: "04",
-    points: [
-      "گرفتن تماس خروجی هوشمند با لیست مشتریان برای پیگیری سرنخ‌ها، یادآوری چک و اقساط، نظرسنجی و اطلاع‌رسانی.",
-    ],
-    title: "ماژول تماس‌های خروجی هدفمند",
-  },
-  {
-    icon: "chart",
-    number: "05",
-    points: [
-      "داشبورد مانیتورینگ زنده هزینه‌ها، تفکیک دقیق توکن‌های ورودی/خروجی صدا و متن، و محاسبه هزینه به ازای هر دقیقه مکالمه.",
-    ],
-    title: "شفافیت کامل در گزارش‌گیری و کنترل هزینه‌ها",
-  },
-];
-
-const industries: readonly Industry[] = [
-  {
-    body: "نوبت‌دهی خودکار، پاسخ به سوالات خدمات و قیمت‌ها، آدرس‌دهی و پیگیری وضعیت بیمار.",
-    icon: "activity",
-    image: "/images/voice-agent/industry-healthcare.webp",
-    solves: "نوبت‌دهی بدون اپراتور",
-    tags: ["نوبت‌دهی خودکار", "خدمات و قیمت‌ها", "پیگیری وضعیت بیمار"],
-    title: "کلینیک‌ها، بیمارستان‌ها و مراکز زیبایی",
-  },
-  {
-    body: "ثبت دقیق سفارشات تلفنی در ساعات اوج شلوغی، رزرو میز و ارائه منوی روز.",
-    icon: "coffee",
-    image: "/images/voice-agent/industry-restaurant.webp",
-    solves: "سفارش‌گیری در ساعات اوج",
-    tags: ["ثبت سفارش تلفنی", "رزرو میز", "منوی روز"],
-    title: "رستوران‌ها و کافی‌شاپ‌ها",
-  },
-  {
-    body: "پاسخگویی به وضعیت اتاق‌ها، استعلام بلیط و تورها و پشتیبانی ۲۴ ساعته.",
-    icon: "map-pin",
-    image: "/images/voice-agent/industry-travel.webp",
-    solves: "پاسخگویی خارج از ساعت کاری",
-    tags: ["وضعیت اتاق‌ها", "استعلام تور و بلیط", "پشتیبانی ۲۴ ساعته"],
-    title: "هتل‌ها، اقامتگاه‌ها و آژانس‌های مسافرتی",
-  },
-  {
-    body: "منشی ورودی برای هدایت تماس‌ها، استعلام وضعیت سفارش و پیگیری پیش‌فاکتورها.",
-    icon: "shopping-cart",
-    image: "/images/voice-agent/industry-enterprise.webp",
-    solves: "حذف صف انتظار تلفنی",
-    tags: ["هدایت تماس‌ها", "وضعیت سفارش", "پیگیری پیش‌فاکتور"],
-    title: "شرکت‌ها، هلدینگ‌ها و فروشگاه‌های اینترنتی",
-  },
-  {
-    body: "منشی چندزبانه (فارسی، انگلیسی، عربی و...) برای ارتباط با مشتریان خارجی بدون نیاز به استخدام مترجم.",
-    icon: "globe",
-    image: "/images/voice-agent/industry-international.webp",
-    solves: "ارتباط چندزبانه بدون مترجم",
-    tags: ["فارسی، انگلیسی، عربی", "مشتریان خارجی", "بدون استخدام مترجم"],
-    title: "کسب‌وکارهای بین‌المللی و توریستی",
-  },
-];
-
-const useCases: readonly Entry[] = [
-  {
-    body: "معرفی خدمات، اعتبارسنجی اولیه نیاز مشتری، جمع‌آوری اطلاعات تماس و ارجاع لید داغ به کارشناس فروش.",
-    latin: "Sales Agent",
-    number: "01",
-    process: [
-      { icon: "phone", label: "تماس جدید" },
-      { icon: "users", label: "اعتبارسنجی" },
-      { icon: "phone-outgoing", label: "ارجاع به فروش" },
-    ],
-    title: "ایجنت فروش و لیدجنریشن",
-  },
-  {
-    body: "دریافت اطلاعات دقیق مشتری، آدرس و سفارش و ثبت در سیستم.",
-    latin: "Order & Booking Agent",
-    number: "02",
-    process: [
-      { icon: "phone", label: "تماس مشتری" },
-      { icon: "map-pin", label: "دریافت سفارش" },
-      { icon: "shopping-cart", label: "ثبت در سیستم" },
-    ],
-    title: "ایجنت سفارش‌گیری و رزرو",
-  },
-  {
-    body: "پاسخ دقیق به ده‌ها سوال متداول در لحظه بدون ماندن مشتری در صف انتظار.",
-    latin: "Support & FAQ Agent",
-    number: "03",
-    process: [
-      { icon: "message-square", label: "پرسش مشتری" },
-      { icon: "book", label: "جست‌وجوی دانش" },
-      { icon: "send", label: "پاسخ فوری" },
-    ],
-    title: "ایجنت پشتیبانی فنی و پاسخگویی",
-  },
-  {
-    body: "تماس محترمانه و خودکار با مشتریان جهت یادآوری تاریخ چک، سررسید فاکتور و اقساط معوق.",
-    latin: "Debt Collection Agent",
-    number: "04",
-    process: [
-      { icon: "chart", label: "سررسید مالی" },
-      { icon: "phone-outgoing", label: "تماس خودکار" },
-      { icon: "monitor", label: "ثبت نتیجه" },
-    ],
-    title: "ایجنت وصول مطالبات و یادآوری مالی",
-  },
-  {
-    body: "تماس پس از خرید یا دریافت خدمت جهت سنجش کیفیت و ثبت بازخوردها در پنل.",
-    latin: "Customer Satisfaction Agent",
-    number: "05",
-    process: [
-      { icon: "phone-outgoing", label: "تماس پس از خرید" },
-      { icon: "message-square", label: "ثبت بازخورد" },
-      { icon: "chart", label: "گزارش در پنل" },
-    ],
-    title: "ایجنت نظرسنجی و رضایت‌سنجی",
-  },
-];
-
-const priceIncludes: readonly string[] = [
-  "استقرار کامل روی سرور اختصاصی شرکت شما",
-  "لایسنس مادام‌العمر (بدون آبونمان و شارژ ماهانه نرم‌افزار)",
-  "پنل مدیریت کامل (پایگاه دانش، CRM و تماس‌های خروجی)",
-  "اتصال به خط تلفن و مرکز تماس VoIP",
-  "آموزش و پشتیبانی اولیه راه‌اندازی",
-];
-
-const customActions: readonly { icon: IconName; system: string; text: string }[] = [
-  {
-    icon: "users",
-    system: "CRM",
-    text: "اتصال به CRM اختصاصی شما (ثبت مستقیم فاکتور یا لید)",
-  },
-  {
-    icon: "shopping-cart",
-    system: "ERP",
-    text: "خواندن موجودی انبار یا وضعیت سفارش از پایگاه داده/ERP",
-  },
-  {
-    icon: "message-square",
-    system: "OTP",
-    text: "ارسال پیامک‌های اعتبارسنجی (OTP) و لینک پرداخت در حین تماس",
-  },
-  {
-    icon: "link",
-    system: "WEBHOOK",
-    text: "اجرای وب‌هوک‌های اختصاصی بر اساس مکالمه مشتری",
-  },
-];
+const industryIcons: Record<string, IconName> = {
+  enterprise: "shopping-cart",
+  healthcare: "activity",
+  international: "globe",
+  restaurant: "coffee",
+  travel: "map-pin",
+};
+const integrationIcons: Record<string, IconName> = {
+  crm: "users",
+  erp: "shopping-cart",
+  otp: "message-square",
+  webhook: "link",
+};
+const processIcons: Record<string, readonly IconName[]> = {
+  debt: ["chart", "phone-outgoing", "monitor"],
+  order: ["phone", "map-pin", "shopping-cart"],
+  sales: ["phone", "users", "phone-outgoing"],
+  support: ["message-square", "book", "send"],
+  survey: ["phone-outgoing", "message-square", "chart"],
+};
+const useCases: readonly Entry[] = voiceAgentContent.useCases.items.map((item, index) => ({
+  ...item,
+  number: String(index + 1).padStart(2, "0"),
+  process: item.process.map((label, step) => ({ icon: processIcons[item.id][step], label })),
+}));
+const customActions = voiceAgentContent.integrations.actions.map((action) => ({
+  ...action,
+  icon: integrationIcons[action.id],
+}));
 
 function EntryList({
   className,
@@ -350,17 +167,13 @@ export default function VoiceAgentPage() {
 
         <Container>
           <div className="hero__content">
-            <p className="va-hero__eyebrow">
-              نسل جدید دستیار صوتی هوش مصنوعی متصل به VoIP
-            </p>
+            <p className="va-hero__eyebrow">{voiceAgentContent.hero.eyebrow}</p>
 
             <h1 className="text-h2 hero__title va-hero__title" id="va-hero-title">
-              هیچ تماسی بی‌پاسخ نمی‌ماند.
+              {voiceAgentContent.hero.title}
             </h1>
 
-            <p className="va-hero__promise">
-              منشی تلفنی هوش مصنوعی ۲۴ ساعته با قابلیت مکالمه طبیعی
-            </p>
+            <p className="va-hero__promise">{voiceAgentContent.hero.promise}</p>
 
             <div aria-hidden="true" className="va-signal">
               <span className="va-signal__halo" />
@@ -373,25 +186,21 @@ export default function VoiceAgentPage() {
                   <span key={index} style={{ "--bar": index } as CSSProperties} />
                 ))}
               </span>
-              <span className="va-signal__status">در حال پاسخگویی</span>
+              <span className="va-signal__status">{voiceAgentContent.hero.signalStatus}</span>
             </div>
 
-            <p className="text-body-lg hero__lede">
-              ایجنت صوتی هوشمند اختصاصی شما که مستقیماً به خط ویپ سازمان متصل می‌شود، تماس‌های
-              ورودی را با تسلط کامل پاسخ می‌دهد، سفارش‌ها و نوبت‌ها را ثبت می‌کند و برای پیگیری
-              فروش و وصول مطالبات تماس خروجی می‌گیرد.
-            </p>
+            <p className="text-body-lg hero__lede">{voiceAgentContent.hero.lede}</p>
 
             <p className="hero__actions">
               <LiquidButtonLink filterId="va-hero-cta-goo" href="#contact">
-                {CTA_LABEL}
+                {voiceAgentContent.hero.cta}
               </LiquidButtonLink>
             </p>
 
             <div className="va-hero__marquee">
               <ul aria-label="ویژگی‌های کلیدی" className="va-hero__features">
-                {[...heroFeatures, ...heroFeatures].map((feature, index) => (
-                  <li aria-hidden={index >= heroFeatures.length || undefined} key={`${feature.title}-${index}`}>
+                {[...voiceAgentContent.hero.features, ...voiceAgentContent.hero.features].map((feature, index) => (
+                  <li aria-hidden={index >= voiceAgentContent.hero.features.length || undefined} key={`${feature.title}-${index}`}>
                     <span className="va-hero__feature-title">{feature.title}</span>
                     {feature.note ? (
                       <span className="va-hero__feature-note">{feature.note}</span>
@@ -409,7 +218,7 @@ export default function VoiceAgentPage() {
                   <span />
                 </span>
                 <span className="va-window__tag" dir="ltr" lang="en">
-                  Voice Agent — Demo
+                  {voiceAgentContent.hero.demoTag}
                 </span>
               </div>
 
@@ -418,8 +227,8 @@ export default function VoiceAgentPage() {
                   allowFullScreen
                   className="va-window__player"
                   loading="lazy"
-                  src="https://www.aparat.com/video/video/embed/videohash/qyz2749/vt/frame"
-                  title="ویدئوی معرفی منشی تلفنی هوش مصنوعی زی‌تک"
+                  src={voiceAgentContent.hero.videoUrl}
+                  title={voiceAgentContent.hero.videoTitle}
                 />
               </div>
             </figure>
@@ -430,25 +239,25 @@ export default function VoiceAgentPage() {
       <Section aria-labelledby="va-pairs-title" className="pg-section" id="va-challenges">
         <SectionHead
           id="va-pairs-title"
-          kicker="Pain Points vs. Solution"
-          title="چالش‌ها و راه‌حل"
+          kicker={voiceAgentContent.pairs.kicker}
+          title={voiceAgentContent.pairs.title}
         />
 
         <div className="va-pairs">
           <div className="va-pairs__row va-pairs__row--head">
-            <p className="va-pairs__head">مشکل کسب‌وکار شما</p>
-            <p className="va-pairs__head">راه‌حل ایجنت هوشمند ما</p>
+            <p className="va-pairs__head">{voiceAgentContent.pairs.problemLabel}</p>
+            <p className="va-pairs__head">{voiceAgentContent.pairs.solutionLabel}</p>
           </div>
 
           <dl className="va-pairs__list">
-            {pairs.map((pair) => (
+            {voiceAgentContent.pairs.items.map((pair) => (
               <div className="va-pairs__row" key={pair.problem}>
                 <dt>
-                  <span className="va-pairs__eyebrow">مشکل کسب‌وکار شما</span>
+                  <span className="va-pairs__eyebrow">{voiceAgentContent.pairs.problemLabel}</span>
                   {pair.problem}
                 </dt>
                 <dd>
-                  <span className="va-pairs__eyebrow">راه‌حل ایجنت هوشمند ما</span>
+                  <span className="va-pairs__eyebrow">{voiceAgentContent.pairs.solutionLabel}</span>
                   {pair.solution}
                 </dd>
               </div>
@@ -465,19 +274,19 @@ export default function VoiceAgentPage() {
         >
           <SectionHead
             id="va-features-title"
-            kicker="Core Features"
-            title="ویژگی‌ها و امکانات فنی پنل مدیریت"
+            kicker={voiceAgentContent.features.kicker}
+            title={voiceAgentContent.features.title}
           />
 
           <ul aria-label="امکانات پنل مدیریت" className="pg-grid va-bento">
-            {features.map((feature) => (
+            {voiceAgentContent.features.items.map((feature, index) => (
               <li className="pg-card" key={feature.title}>
                 <div className="pg-card__top">
                   <span className="pg-card__badge">
-                    <Icon name={feature.icon} />
+                    <Icon name={featureIcons[feature.id]} />
                   </span>
                   <span aria-hidden="true" className="pg-card__index" dir="ltr">
-                    {feature.number}
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
 
@@ -509,7 +318,7 @@ export default function VoiceAgentPage() {
                 </span>
               </div>
 
-              <h3 className="pg-card__title">پایش زنده پل صوتی</h3>
+              <h3 className="pg-card__title">{voiceAgentContent.features.liveTitle}</h3>
 
               <span aria-hidden="true" className="va-wave">
                 {Array.from({ length: 11 }, (_, index) => (
@@ -517,9 +326,7 @@ export default function VoiceAgentPage() {
                 ))}
               </span>
 
-              <p className="pg-card__body">
-                وضعیت تماس، تاخیر پاسخ و مصرف توکن در داشبورد به‌صورت زنده نمایش داده می‌شود.
-              </p>
+              <p className="pg-card__body">{voiceAgentContent.features.liveBody}</p>
             </li>
           </ul>
         </Section>
@@ -531,12 +338,12 @@ export default function VoiceAgentPage() {
         >
           <SectionHead
             id="va-industries-title"
-            kicker="Target Industries"
-            title="این محصول مناسب کدام صنف‌ها و کسب‌وکارها است؟"
+            kicker={voiceAgentContent.industries.kicker}
+            title={voiceAgentContent.industries.title}
           />
 
           <ul aria-label="صنف‌ها و کسب‌وکارهای هدف" className="va-industries">
-            {industries.map((industry, index) => (
+            {voiceAgentContent.industries.items.map((industry, index) => (
               <li className="pg-card pg-card--industry" key={industry.title}>
                 <input
                   className="va-industry__control"
@@ -558,7 +365,7 @@ export default function VoiceAgentPage() {
                   </span>
                   <span className="va-industry__caption">
                     <span className="pg-card__badge">
-                      <Icon name={industry.icon} />
+                      <Icon name={industryIcons[industry.id]} />
                     </span>
                     <span className="pg-card__title">{industry.title}</span>
                     <span aria-hidden="true" className="va-industry__toggle">+</span>
@@ -575,7 +382,7 @@ export default function VoiceAgentPage() {
                   </ul>
 
                   <p className="va-solves">
-                    <span className="va-solves__label">حل می‌کند</span>
+                    <span className="va-solves__label">{voiceAgentContent.industries.solvesLabel}</span>
                     <span>{industry.solves}</span>
                   </p>
                 </div>
@@ -592,27 +399,27 @@ export default function VoiceAgentPage() {
         id="va-use-cases"
       >
         <div className="va-usecases-stage">
-          <SectionHead id="va-usecases-title" kicker="Use Cases" title="سناریوهای کاربردی ایجنت" />
-          <EntryList className="va-usecase-deck" items={useCases} label="سناریوهای کاربردی ایجنت" />
+          <SectionHead id="va-usecases-title" kicker={voiceAgentContent.useCases.kicker} title={voiceAgentContent.useCases.title} />
+          <EntryList className="va-usecase-deck" items={useCases} label={voiceAgentContent.useCases.title} />
         </div>
       </Section>
 
       <Section aria-labelledby="va-pricing-title" className="pg-section" id="va-pricing">
         <SectionHead
           id="va-pricing-title"
-          kicker="Transparent Pricing"
-          lede="ما به شفافیت کامل در هزینه‌ها معتقدیم. هیچ هزینه پنهان یا اشتراک اجباری وجود ندارد."
-          title="مدل قیمت‌گذاری شفاف و اقتصادی"
+          kicker={voiceAgentContent.pricing.kicker}
+          lede={voiceAgentContent.pricing.lede}
+          title={voiceAgentContent.pricing.title}
         />
 
         <div className="va-price">
           <div className="va-price__card">
-            <h3 className="va-price__title">لایسنس پایه و استقرار</h3>
-            <p className="va-price__amount">۲۳,۰۰۰,۰۰۰ تومان</p>
-            <p className="va-price__note">(یک‌بار برای همیشه)</p>
+            <h3 className="va-price__title">{voiceAgentContent.pricing.licenseTitle}</h3>
+            <p className="va-price__amount">{voiceAgentContent.pricing.amount}</p>
+            <p className="va-price__note">{voiceAgentContent.pricing.amountNote}</p>
 
             <ul aria-label="موارد شامل لایسنس پایه" className="pg-checks">
-              {priceIncludes.map((item) => (
+              {voiceAgentContent.pricing.includes.map((item) => (
                 <li key={item}>
                   <span aria-hidden="true" className="pg-checks__mark">
                     ✔
@@ -625,28 +432,19 @@ export default function VoiceAgentPage() {
 
           <div className="va-price__api">
             <h3 className="text-h3">
-              نحوه محاسبه هزینه پردازش هوش مصنوعی{" "}
+              {voiceAgentContent.pricing.apiTitle}{" "}
               <span dir="ltr" lang="en">
-                (API Cost)
+                {voiceAgentContent.pricing.apiTitleLatin}
               </span>
             </h3>
 
             <ul className="va-price__api-points">
-              <li>
-                <strong>۰٪ کارمزد اضافی:</strong> هزینه API مدل زبانی مستقیماً از طریق اکانت و حساب
-                اختصاصی خودتان شارژ می‌شود و ما هیچ‌گونه کارمزد یا درصدی روی مصرف شما دریافت
-                نمی‌کنیم.
-              </li>
-              <li>
-                <strong>اقتصادی و شفاف:</strong> میانگین هزینه مکالمه{" "}
-                <strong>تنها حدود ۰.۰۴ دلار (حدود ۴ سنت) به ازای هر دقیقه مکالمه زنده</strong> است
-                (یعنی برای یک مکالمه کامل ۲ دقیقه‌ای، هزینه هوش مصنوعی کمتر از ۹ سنت خواهد بود).
-              </li>
-              <li>
-                <strong>تعهد به کاهش مستمر هزینه‌ها:</strong> تیم فنی ما به‌طور مداوم در حال
-                بهینه‌سازی ساختار توکن‌ها، متدهای کَشینگ و فشرده‌سازی پرامپت‌ها است تا هزینه هر
-                دقیقه مکالمه و تاخیر پاسخگویی را باز هم کمتر کند.
-              </li>
+              {voiceAgentContent.pricing.apiPoints.map((point) => (
+                <li key={point.label}>
+                  <strong>{point.label}</strong> {point.text}{" "}
+                  {point.emphasis ? <strong>{point.emphasis}</strong> : null}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -661,9 +459,9 @@ export default function VoiceAgentPage() {
           <div className="va-integrations-copy">
             <SectionHead
               id="va-integrations-title"
-              kicker="Custom Actions & Integrations"
-              lede="آیا نیاز دارید ایجنت صوتی کارهای پیشرفته‌تری انجام دهد؟"
-              title="سفارشی‌سازی و اتصال به نرم‌افزارهای داخلی"
+              kicker={voiceAgentContent.integrations.kicker}
+              lede={voiceAgentContent.integrations.lede}
+              title={voiceAgentContent.integrations.title}
             />
 
             <ul aria-label="امکانات سفارشی" className="va-integration-actions">
@@ -678,7 +476,7 @@ export default function VoiceAgentPage() {
             </ul>
           </div>
 
-          <div aria-label="نقشه اتصال ایجنت صوتی به نرم‌افزارهای سازمان" className="va-integration-map">
+          <div aria-label={voiceAgentContent.integrations.mapLabel} className="va-integration-map">
             <svg aria-hidden="true" className="va-integration-routes" viewBox="0 0 600 480">
               <path d="M300 240 C230 190 190 130 130 95" pathLength="1" />
               <path d="M300 240 C370 190 410 130 470 95" pathLength="1" />
@@ -691,8 +489,8 @@ export default function VoiceAgentPage() {
               <span className="va-integration-core__icon">
                 <Icon name="waveform" />
               </span>
-              <strong>ایجنت صوتی</strong>
-              <span dir="ltr" lang="en">Voice Agent</span>
+              <strong>{voiceAgentContent.integrations.coreTitle}</strong>
+              <span dir="ltr" lang="en">{voiceAgentContent.integrations.coreLatin}</span>
             </div>
 
             <ul aria-label="سیستم‌های متصل" className="va-integration-nodes">
@@ -727,29 +525,23 @@ export default function VoiceAgentPage() {
           <span aria-hidden="true" className="va-integration-cta__tint" />
           <span aria-hidden="true" className="va-integration-cta__specular" />
           <div className="va-integration-cta__content">
-            <p>
-              جهت بررسی سیستم‌های داخلی سازمان شما و برآورد هزینه توسعه امکانات سفارشی، با
-              کارشناسان فنی ما جلسه مشاوره داشته باشید.
-            </p>
-            <a href="#contact">{CTA_LABEL}</a>
+            <p>{voiceAgentContent.integrations.ctaBody}</p>
+            <a href="#contact">{voiceAgentContent.integrations.cta}</a>
           </div>
         </div>
       </Section>
 
-      <FaqSection items={voiceAgentFaqItems} title="سوالات متداول" />
+      <FaqSection items={voiceAgentFaqItems} title={voiceAgentContent.faq.title} />
 
       <Section aria-labelledby="va-cta-title" className="pg-section va-cta-section" id="va-cta">
         <div className="va-cta">
           <h2 className="text-h2 va-cta__title" id="va-cta-title">
-            آماده‌اید پاسخگویی تلفنی کسب‌وکارتان را متحول کنید؟
+            {voiceAgentContent.finalCta.title}
           </h2>
-          <p className="va-cta__lede">
-            همین حالا فرم درخواست را پر کنید تا با شما تماس بگیریم و نمونه صدای زنده ایجنت را برای
-            صنف خودتان تست کنید.
-          </p>
+          <p className="va-cta__lede">{voiceAgentContent.finalCta.lede}</p>
           <p className="va-cta__action">
             <LiquidButtonLink filterId="va-final-cta-goo" href="#contact">
-              {CTA_LABEL}
+              {voiceAgentContent.finalCta.cta}
             </LiquidButtonLink>
           </p>
         </div>
