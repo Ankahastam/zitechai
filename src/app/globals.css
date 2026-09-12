@@ -2715,20 +2715,6 @@ html.contact-open body {
   .va-bento {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
-  /* Five cards on a six-track grid: 2+2+2 then 3+3, so no row ends ragged. */
-  .va-industries {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-
-  .va-industries > li {
-    grid-column: span 2;
-  }
-
-  .va-industries > li:nth-child(4),
-  .va-industries > li:nth-child(5) {
-    grid-column: span 3;
-  }
 }
 
 .va-price {
@@ -3123,34 +3109,33 @@ html.contact-open body {
   display: flex;
   gap: var(--space-3);
   margin-block-start: clamp(var(--space-6), 3vw, var(--space-10));
-}
-
-.va-industries > details {
-  min-inline-size: 0;
-  flex: 1;
-  transition: flex 600ms var(--ease-out), background-color 300ms var(--ease-out);
-}
-
-.va-industries > details[open] {
-  flex: 2.2;
-  background:
-    radial-gradient(circle at 90% 0%, rgb(122 64 237 / 18%), transparent 18rem),
-    rgb(255 255 255 / 9%);
-}
-
-.pg-card--industry summary {
-  display: block;
-  min-block-size: 3.5rem;
-  cursor: pointer;
+  padding: 0;
   list-style: none;
 }
 
-.pg-card--industry summary::-webkit-details-marker {
-  display: none;
+.va-industries > .pg-card--industry {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  min-inline-size: 0;
+  background: rgb(255 255 255 / 6%);
 }
 
-.pg-card--industry summary:focus-visible {
-  border-radius: var(--radius-control);
+.va-industry__control {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.va-industry__label {
+  display: block;
+  min-block-size: 3.5rem;
+}
+
+.pg-card--industry:has(.va-industry__control:focus-visible) {
   outline: 3px solid var(--color-accent);
   outline-offset: 0.35rem;
 }
@@ -3180,7 +3165,7 @@ html.contact-open body {
   transition: transform 700ms var(--ease-out), opacity 300ms var(--ease-out);
 }
 
-.pg-card--industry:is(:hover, [open]) .va-industry__image {
+.pg-card--industry:is(:hover, :has(.va-industry__control:checked)) .va-industry__image {
   transform: scale(1.045);
 }
 
@@ -3200,7 +3185,7 @@ html.contact-open body {
   transition: transform 300ms var(--ease-out);
 }
 
-details[open] .va-industry__toggle {
+.pg-card--industry:has(.va-industry__control:checked) .va-industry__toggle {
   transform: rotate(45deg);
 }
 
@@ -3208,6 +3193,151 @@ details[open] .va-industry__toggle {
   display: grid;
   gap: var(--space-4);
   margin-block-start: var(--space-6);
+}
+
+@media (width < 64rem) {
+  .va-industries {
+    inline-size: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: var(--page-gutter);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: var(--page-gutter);
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: none;
+  }
+
+  .va-industries::-webkit-scrollbar {
+    display: none;
+  }
+
+  .va-industries > .pg-card--industry {
+    inline-size: min(82vw, 22rem);
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+  }
+
+  .va-industry__label {
+    pointer-events: none;
+  }
+
+  .va-industry__toggle {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  .va-industries-section .pg-head {
+    max-inline-size: none;
+  }
+
+  .va-industries-section .pg-head__title {
+    max-inline-size: none;
+    font-size: clamp(1.9rem, 3vw, 3.25rem);
+    white-space: nowrap;
+  }
+
+  .va-industries {
+    min-block-size: clamp(32rem, 42vw, 38rem);
+    align-items: stretch;
+  }
+
+  .va-industries > .pg-card--industry {
+    min-block-size: clamp(32rem, 42vw, 38rem);
+    flex: 0.42;
+    padding: 0;
+    border-radius: clamp(1.5rem, 2.3vw, 2.25rem);
+    cursor: pointer;
+    transition: flex 650ms var(--ease-out), border-color 300ms var(--ease-out);
+  }
+
+  .va-industries > .pg-card--industry:has(.va-industry__control:checked) {
+    flex: 2.45;
+    border-color: rgb(255 255 255 / 24%);
+  }
+
+  .va-industry__label,
+  .va-industry__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .va-industry__label {
+    z-index: 1;
+    min-block-size: 100%;
+    cursor: pointer;
+  }
+
+  .va-industry__media {
+    aspect-ratio: auto;
+    border-radius: inherit;
+  }
+
+  .va-industry__media::after {
+    background:
+      linear-gradient(to top, rgb(11 10 12 / 94%) 0%, rgb(11 10 12 / 20%) 62%),
+      linear-gradient(to bottom, rgb(11 10 12 / 58%), transparent 35%);
+  }
+
+  .pg-card--industry:not(:has(.va-industry__control:checked)) .va-industry__media::after {
+    background: rgb(11 10 12 / 58%);
+  }
+
+  .va-industry__caption {
+    position: absolute;
+    z-index: 2;
+    inset: var(--space-5);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+  }
+
+  .va-industry__caption .pg-card__title {
+    color: #fff;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+
+  .pg-card--industry:has(.va-industry__control:checked) .va-industry__caption {
+    inset-block-end: auto;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-3);
+  }
+
+  .pg-card--industry:has(.va-industry__control:checked) .va-industry__caption .pg-card__title {
+    transform: none;
+    white-space: normal;
+    writing-mode: horizontal-tb;
+  }
+
+  .va-industry__body {
+    position: absolute;
+    z-index: 3;
+    inset-inline: var(--space-5);
+    inset-block-end: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: var(--radius-control);
+    margin: 0;
+    background: rgb(11 10 12 / 68%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1rem);
+    transition: opacity 250ms var(--ease-out), transform 450ms var(--ease-out), visibility 250ms;
+    visibility: hidden;
+    -webkit-backdrop-filter: blur(1rem) saturate(125%);
+    backdrop-filter: blur(1rem) saturate(125%);
+  }
+
+  .pg-card--industry:has(.va-industry__control:checked) .va-industry__body {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
 }
 
 .va-usecases-section {
@@ -3731,8 +3861,7 @@ details[open] .va-industry__toggle {
     padding: 0.65rem 0.85rem;
   }
 
-  .va-bento,
-  .va-industries {
+  .va-bento {
     inline-size: 100vw;
     margin-inline: calc(50% - 50vw);
     padding-inline: var(--page-gutter);
@@ -3743,8 +3872,7 @@ details[open] .va-industry__toggle {
     scrollbar-width: none;
   }
 
-  .va-bento::-webkit-scrollbar,
-  .va-industries::-webkit-scrollbar {
+  .va-bento::-webkit-scrollbar {
     display: none;
   }
 
@@ -3754,20 +3882,8 @@ details[open] .va-industry__toggle {
     grid-auto-flow: column;
   }
 
-  .va-bento > li,
-  .va-industries > details {
+  .va-bento > li {
     scroll-snap-align: center;
-  }
-
-  .va-industries > details,
-  .va-industries > details[open] {
-    inline-size: min(82vw, 21rem);
-    min-block-size: 23rem;
-    flex: 0 0 auto;
-  }
-
-  .va-industries > details:not([open]) {
-    background: rgb(255 255 255 / 6%);
   }
 
   .va-usecase-deck > li,
@@ -3856,7 +3972,10 @@ details[open] .va-industry__toggle {
 @media (prefers-reduced-motion: reduce) {
   .va-hero__features,
   .va-signal__wave > span,
+  .va-industries > .pg-card--industry,
   .va-industry__image,
+  .va-industry__body,
+  .va-industry__toggle,
   .va-process__route > span,
   .va-integration-core__pulse,
   .va-integration-marquee__track {

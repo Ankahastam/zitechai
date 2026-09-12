@@ -524,23 +524,34 @@ export default function VoiceAgentPage() {
           </ul>
         </Section>
 
-        <Section aria-labelledby="va-industries-title" className="pg-section" id="va-industries">
+        <Section
+          aria-labelledby="va-industries-title"
+          className="pg-section va-industries-section"
+          id="va-industries"
+        >
           <SectionHead
             id="va-industries-title"
             kicker="Target Industries"
             title="این محصول مناسب کدام صنف‌ها و کسب‌وکارها است؟"
           />
 
-          <div aria-label="صنف‌ها و کسب‌وکارهای هدف" className="va-industries">
+          <ul aria-label="صنف‌ها و کسب‌وکارهای هدف" className="va-industries">
             {industries.map((industry, index) => (
-              <details className="pg-card pg-card--industry" key={industry.title} open={index === 0}>
-                <summary>
+              <li className="pg-card pg-card--industry" key={industry.title}>
+                <input
+                  className="va-industry__control"
+                  defaultChecked={index === 0}
+                  id={`va-industry-${index + 1}`}
+                  name="va-industry"
+                  type="radio"
+                />
+                <label className="va-industry__label" htmlFor={`va-industry-${index + 1}`}>
                   <span className="va-industry__media">
                     <Image
                       alt=""
                       className="va-industry__image"
                       fill
-                      sizes="(max-width: 47.99rem) 82vw, (max-width: 79.99rem) 42vw, 24vw"
+                      sizes="(max-width: 63.99rem) 82vw, 58vw"
                       src={industry.image}
                       unoptimized
                     />
@@ -552,7 +563,7 @@ export default function VoiceAgentPage() {
                     <span className="pg-card__title">{industry.title}</span>
                     <span aria-hidden="true" className="va-industry__toggle">+</span>
                   </span>
-                </summary>
+                </label>
 
                 <div className="va-industry__body">
                   <p className="pg-card__body">{industry.body}</p>
@@ -568,9 +579,9 @@ export default function VoiceAgentPage() {
                     <span>{industry.solves}</span>
                   </p>
                 </div>
-              </details>
+              </li>
             ))}
-          </div>
+          </ul>
         </Section>
       </div>
 

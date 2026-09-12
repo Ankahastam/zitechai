@@ -20,6 +20,21 @@ assert.match(html, /class="va-integration-cta"/, "the integration section must r
 const industryImages = html.match(/<img[^>]*va-industry__image[^>]*>/g) ?? [];
 assert.equal(industryImages.length, 5, "each industry card must render an illustration");
 
+const industryControls = html.match(/<input[^>]*class="va-industry__control"[^>]*>/g) ?? [];
+assert.equal(industryControls.length, 5, "each industry card must have a desktop accordion control");
+assert.ok(
+  industryControls.every((control) => /name="va-industry"/.test(control)),
+  "industry cards must share one mutually exclusive control group",
+);
+assert.equal(
+  industryControls.filter((control) => /checked=""/.test(control)).length,
+  1,
+  "the desktop industry accordion must start with exactly one open card",
+);
+
+const industryBodies = html.match(/<div[^>]*class="va-industry__body"[^>]*>/g) ?? [];
+assert.equal(industryBodies.length, 5, "mobile must render every industry detail without interaction");
+
 for (const image of industryImages) {
   const source = image.match(/src="([^"]+\.webp)"/)?.[1];
   assert.ok(source, "industry illustrations must use WebP");
@@ -29,4 +44,4 @@ for (const image of industryImages) {
   assert.ok((await imageResponse.arrayBuffer()).byteLength <= 150_000, `${source} must stay under 150KB`);
 }
 
-console.log("voice-agent page renders motion, 23m pricing, and five optimized industry images");
+console.log("voice-agent page renders motion, 23m pricing, and the responsive industry accordion");

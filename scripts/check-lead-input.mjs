@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { onRequestPost } from "../functions/api/lead.js";
 import { buildAdminSms } from "../functions/lib/lead-message.mjs";
 import { normalizeMobile } from "../functions/lib/normalize-mobile.mjs";
 
@@ -21,5 +22,51 @@ assert.ok(!buildAdminSms({ ...base, note: "" }).includes("توضیح"));
 const long = buildAdminSms({ ...base, note: "الف".repeat(400) });
 assert.ok(long.includes("…"));
 assert.ok(long.length < 320);
+
+const form = new FormData();
+form.set("name", "سارا");
+form.set("mobile", "09123456789");
+form.set("job", "کلینیک");
+form.set("cf-turnstile-response", "verified-token");
+
+const realFetch = globalThis.fetch;
+let telegramPayload = null;
+globalThis.fetch = async (input, init = {}) => {
+  const url = String(input);
+  if (url.includes("turnstile")) {
+    return Response.json({ action: "lead_form", hostname: "zitech.example", success: true });
+  }
+  if (url.includes("api.telegram.org")) {
+    telegramPayload = JSON.parse(String(init.body));
+    return Response.json({ ok: true, result: { message_id: 1 } });
+  }
+  return Response.json({ result: "1" });
+};
+
+try {
+  const request = new Request("https://zitech.example/api/lead", {
+    body: form,
+    headers: { Origin: "https://zitech.example" },
+    method: "POST",
+  });
+  const response = await onRequestPost({
+    env: {
+      SMS_ADMIN_MOBILE: "09120000000",
+      SMS_API_KEY: "sms-test-key",
+      TELEGRAM_BOT_TOKEN: "telegram-test-token",
+      TELEGRAM_CHAT_ID: "12345",
+      TURNSTILE_SECRET_KEY: "turnstile-test-key",
+    },
+    request,
+  });
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(telegramPayload, {
+    chat_id: "12345",
+    text: "لید جدید سایت زی‌تک\nنام: سارا\nشماره: 09123456789\nشغل/کسب‌وکار: کلینیک",
+  });
+} finally {
+  globalThis.fetch = realFetch;
+}
 
 console.log("lead input check passed");

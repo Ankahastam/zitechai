@@ -37,8 +37,19 @@ async function callSmsApi(apiKey, payload) {
   return { ok: response.ok && String(result?.result) === "1", result: result?.result ?? "invalid-response" };
 }
 
+async function callTelegramApi(botToken, chatId, text) {
+  const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    body: JSON.stringify({ chat_id: chatId, text }),
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+  });
+  const result = await response.json().catch(() => null);
+  return { ok: response.ok && result?.ok === true, result: result?.description ?? "invalid-response" };
+}
+
 export async function onRequestPost({ env, request }) {
-  if (!env.SMS_API_KEY || !env.SMS_ADMIN_MOBILE || !env.TURNSTILE_SECRET_KEY) {
+  if (!env.SMS_API_KEY || !env.SMS_ADMIN_MOBILE || !env.TELEGRAM_BOT_TOKEN
+    || !env.TELEGRAM_CHAT_ID || !env.TURNSTILE_SECRET_KEY) {
     console.error(JSON.stringify({ event: "lead_configuration_missing" }));
     return json({ message: "فرم در حال حاضر در دسترس نیست.", ok: false }, 503);
   }
@@ -88,7 +99,8 @@ export async function onRequestPost({ env, request }) {
       return json({ message: "تأیید امنیتی انجام نشد. لطفاً دوباره تلاش کنید.", ok: false }, 403);
     }
 
-    const [contact, visitorSms, adminSms] = await Promise.all([
+    const adminMessage = buildAdminSms({ channels, mobile, name, note, profile });
+    const [contact, visitorSms, adminSms, telegram] = await Promise.all([
       callSmsApi(env.SMS_API_KEY, {
         action: "newContact",
         cFields: { [NAME_FIELD_ID]: name, [JOB_FIELD_ID]: profile },
@@ -107,10 +119,11 @@ export async function onRequestPost({ env, request }) {
         action: "send",
         from: "auto",
         receivers: adminMobile,
-        text: buildAdminSms({ channels, mobile, name, note, profile }),
+        text: adminMessage,
         trySend: 2,
         type: 1,
       }),
+      callTelegramApi(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, adminMessage),
     ]);
 
     if (!contact.ok) {
@@ -125,11 +138,15 @@ export async function onRequestPost({ env, request }) {
       }));
       return json({ message: "در ارسال پیامک مشکلی پیش آمد. لطفاً دوباره تلاش کنید.", ok: false }, 502);
     }
+    if (!telegram.ok) {
+      console.error(JSON.stringify({ event: "lead_telegram_failed", result: telegram.result }));
+      return json({ message: "در ارسال اعلان مشکلی پیش آمد. لطفاً دوباره تلاش کنید.", ok: false }, 502);
+    }
 
     return json({ ok: true });
   } catch (error) {
     console.error(JSON.stringify({ event: "lead_unexpected_error", message: String(error) }));
-    return json({ message: "ارتباط با سرویس پیامک برقرار نشد. لطفاً دوباره تلاش کنید.", ok: false }, 502);
+    return json({ message: "ارتباط با سرویس ارسال برقرار نشد. لطفاً دوباره تلاش کنید.", ok: false }, 502);
   }
 }
 
