@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     type: "website",
     url: chatContent.seo.canonical,
   },
+  twitter: { card: "summary_large_image", description: DESCRIPTION, images: [siteContent.seo.ogImage.url], title: TITLE },
 };
 
 /* Placeholder answers are kept out of structured data so nothing unapproved is indexed. */

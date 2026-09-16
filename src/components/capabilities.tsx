@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { homeContent } from "@/content";
+import agentNetwork from "../../public/images/home/ai-agent-network.png";
 import { CapabilityFigure, type CapabilityFigureId } from "./capability-figure";
 
 const capabilityIcons: Record<CapabilityFigureId, IconName> = {
@@ -17,12 +19,15 @@ export function Capabilities() {
     <section aria-labelledby="capabilities-title" className="caps" id="services">
       <Container>
         <header className="caps__intro">
-          <p className="caps__kicker text-label">{capabilities.kickerPersian} <span lang="en" dir="ltr">{capabilities.kickerLatin}</span></p>
-          <h2 className="caps__heading text-h2" id="capabilities-title">
-            {capabilities.titleBeforeBreak}<br className="caps__heading-break" /> {capabilities.titleAfterBreak}
-          </h2>
-          <p className="caps__lede">{capabilities.lede} <span>{capabilities.ledeEmphasis}</span></p>
-          <p className="caps__sub">{capabilities.sub}</p>
+          <div className="caps__intro-copy">
+            <p className="caps__kicker text-label">{capabilities.kickerPersian} <span lang="en" dir="ltr">{capabilities.kickerLatin}</span></p>
+            <h2 className="caps__heading text-h2" id="capabilities-title">
+              <span>{capabilities.titleBeforeBreak}</span><br className="caps__heading-break" /> <span>{capabilities.titleAfterBreak}</span>
+            </h2>
+            <p className="caps__lede">{capabilities.lede} <span>{capabilities.ledeEmphasis}</span></p>
+            <p className="caps__sub">{capabilities.sub}</p>
+          </div>
+          <Image className="caps__intro-image" src={agentNetwork} alt="نمایی انتزاعی از یک ایجنت هوشمند با شبکه‌ای از نودهای ارتباطی" sizes="(min-width: 64rem) 38rem, 100vw" />
         </header>
 
         {/* Native controls keep the entire showcase usable without JavaScript. */}

@@ -27,8 +27,9 @@
           { "href": "/#erp", "label": "سامانه‌های یکپارچه ERP" }
         ]
       },
+      { "href": "/blog", "label": "مقالات", "children": [] },
       { "href": "/#faq", "label": "پرسش‌های متداول", "children": [] },
-      { "href": "/#about", "label": "درباره ما", "children": [] },
+      { "href": "/about", "label": "درباره ما", "children": [] },
       { "href": "/#contact", "label": "تماس با ما", "children": [] }
     ]
   },
@@ -41,6 +42,7 @@
     "links": [
       { "href": "/#approach", "label": "رویکرد زی‌تک" },
       { "href": "/#services", "label": "راهکارها" },
+      { "href": "/blog", "label": "مقالات" },
       { "href": "/voice-agent", "label": "منشی تلفنی هوشمند" },
       { "href": "/#faq", "label": "سؤالات متداول" }
     ],

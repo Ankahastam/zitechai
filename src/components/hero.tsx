@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/container";
 import { LiquidButtonLink } from "@/components/ui/liquid-button-link";
 import { homeContent } from "@/content";
+import { HeroChatGptPrompt } from "./hero-chatgpt-prompt";
 import { HeroInteractiveBackground } from "./hero-interactive-background";
 
 export function Hero() {
@@ -26,6 +27,7 @@ export function Hero() {
             </LiquidButtonLink>
           </p>
         </div>
+        <HeroChatGptPrompt />
       </Container>
     </section>
   );

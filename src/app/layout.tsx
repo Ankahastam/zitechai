@@ -17,6 +17,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  openGraph: {
+    description: siteContent.seo.description,
+    images: [siteContent.seo.ogImage],
+    locale: siteContent.seo.locale,
+    siteName: siteContent.seo.siteName,
+    title: siteContent.seo.titleDefault,
+    type: "website",
+    url: "/",
+  },
+  robots: { follow: true, index: true },
+  twitter: {
+    card: "summary_large_image",
+    description: siteContent.seo.description,
+    images: [siteContent.seo.ogImage.url],
+    title: siteContent.seo.titleDefault,
+  },
 };
 
 export const viewport: Viewport = {

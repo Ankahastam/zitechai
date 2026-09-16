@@ -18,6 +18,35 @@ export const metadata: Metadata = {
     type: "website",
     url: homeContent.seo.canonical,
   },
+  twitter: {
+    card: "summary_large_image",
+    description: homeContent.seo.description,
+    images: [siteContent.seo.ogImage.url],
+    title: homeContent.seo.title,
+  },
+};
+
+const identityJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": `${siteContent.seo.siteUrl}/#organization`,
+      "@type": "Organization",
+      alternateName: "Zitech AI",
+      description: siteContent.seo.description,
+      logo: new URL(siteContent.seo.ogImage.url, siteContent.seo.siteUrl).toString(),
+      name: siteContent.seo.siteName,
+      url: siteContent.seo.siteUrl,
+    },
+    {
+      "@id": `${siteContent.seo.siteUrl}/#website`,
+      "@type": "WebSite",
+      inLanguage: "fa-IR",
+      name: siteContent.seo.siteName,
+      publisher: { "@id": `${siteContent.seo.siteUrl}/#organization` },
+      url: siteContent.seo.siteUrl,
+    },
+  ],
 };
 
 export default function HomePage() {
@@ -27,6 +56,10 @@ export default function HomePage() {
       <Approach />
       <Capabilities />
       <FaqSection />
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(identityJsonLd).replace(/</g, "\\u003c") }}
+        type="application/ld+json"
+      />
     </main>
   );
 }

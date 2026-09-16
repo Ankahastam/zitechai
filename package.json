@@ -4,25 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
-    "build": "tinacms build -c \"next build\"",
-    "build:local": "tinacms build --local --skip-cloud-checks -c \"next build\"",
+    "build": "tinacms build && next build",
+    "build:local": "tinacms build --local --skip-cloud-checks && next build",
     "check:content": "node scripts/check-content.mjs",
+    "check:seo": "node scripts/check-seo.mjs",
     "check:lead": "node scripts/check-lead-input.mjs",
     "check:voice": "node scripts/check-voice-agent.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "lighthouse": "lhci autorun",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@tinacms/cli": "^2.7.0",
     "gsap": "^3.15.0",
-    "next": "16.3.2",
+    "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "tinacms": "^3.13.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "26.2.0",
     "@types/react": "19.2.18",

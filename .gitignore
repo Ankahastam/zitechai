@@ -10,6 +10,7 @@
 # Production and test output
 /build/
 /coverage/
+/.lighthouseci/
 
 # Local environment files
 .env*

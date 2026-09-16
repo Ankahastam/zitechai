@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     url: voiceAgentContent.seo.canonical,
   },
+  twitter: { card: "summary_large_image", description: DESCRIPTION, images: [siteContent.seo.ogImage.url], title: TITLE },
 };
 
 const faqJsonLd = {

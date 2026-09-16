@@ -80,6 +80,14 @@ const singleDocumentUi = {
   global: true,
 };
 
+const blogCategories = [
+  { label: "هوش مصنوعی", value: "هوش مصنوعی" },
+  { label: "ایجنت‌های هوشمند", value: "ایجنت‌های هوشمند" },
+  { label: "اتوماسیون", value: "اتوماسیون" },
+  { label: "داده و تحلیل", value: "داده و تحلیل" },
+  { label: "مهندسی نرم‌افزار", value: "مهندسی نرم‌افزار" },
+];
+
 export default defineConfig({
   branch,
   build: {
@@ -147,6 +155,48 @@ export default defineConfig({
         name: "site",
         path: "content",
         ui: singleDocumentUi,
+      },
+      {
+        fields: [
+          { label: "عنوان", name: "title", type: "string", required: true, isTitle: true },
+          { description: "شناسهٔ کوتاه و یکتای URL؛ ترجیحاً انگلیسی و خط‌تیره‌دار", label: "Slug", name: "slug", type: "string", required: true },
+          { label: "خلاصه", name: "excerpt", type: "string", required: true, ui: { component: "textarea" } },
+          { description: "برای خروجی سریع، WebP یا AVIF با نسبت ۱۶:۱۰ بارگذاری کنید.", label: "تصویر شاخص", name: "coverImage", type: "image", required: true },
+          { label: "دسته‌بندی", name: "category", options: blogCategories, type: "string", required: true },
+          { label: "نویسنده", name: "author", type: "string", required: true },
+          { label: "تاریخ انتشار", name: "publishedDate", type: "datetime", required: true },
+          { label: "تاریخ آخرین ویرایش", name: "updatedDate", type: "datetime" },
+          { label: "زمان مطالعه (دقیقه)", name: "readingTime", type: "number", required: true },
+          { label: "برچسب‌ها", list: true, name: "tags", type: "string", required: true },
+          { label: "عنوان SEO", name: "seoTitle", type: "string", required: true },
+          { label: "توضیحات SEO", name: "seoDescription", type: "string", required: true, ui: { component: "textarea" } },
+          { description: "اختیاری؛ در صورت خالی‌بودن، URL مقاله استفاده می‌شود", label: "Canonical URL", name: "canonicalUrl", type: "string" },
+          object("cta", "دعوت به اقدام", [text("label", "متن CTA"), text("href", "لینک صفحهٔ مرتبط")]),
+          {
+            label: "محتوای مقاله",
+            name: "content",
+            type: "rich-text",
+            required: true,
+            overrides: { headingLevels: ["h2", "h3", "h4"] },
+          },
+        ],
+        format: "json",
+        label: "Blog / مقالات",
+        name: "blog",
+        path: "content/blog",
+        ui: {
+          allowedActions: { create: true, delete: true },
+          filename: {
+            description: "همان slug مقاله را وارد کنید.",
+            showFirst: true,
+            slugify: (values) => String(values.slug || values.title || "article")
+              .trim()
+              .toLowerCase()
+              .replace(/\s+/g, "-")
+              .replace(/[^a-z0-9\u0600-\u06ff-]/g, ""),
+          },
+          router: ({ document }) => `/blog/${document._sys.filename}`,
+        },
       },
       {
         fields: [
