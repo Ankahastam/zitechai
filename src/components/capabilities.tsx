@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Icon, type IconName } from "@/components/ui/icon";
+import { MorphingTabs, type MorphingTabsItem } from "@/components/ui/morphing-tabs";
 import { homeContent } from "@/content";
 import agentNetwork from "../../public/images/home/ai-agent-network.png";
 import { CapabilityFigure, type CapabilityFigureId } from "./capability-figure";
@@ -13,6 +14,34 @@ const capabilityIcons: Record<CapabilityFigureId, IconName> = {
 };
 
 const capabilities = homeContent.capabilities;
+
+function CapabilityContent({ capability, index }: { capability: (typeof capabilities.items)[number]; index: number }) {
+  return (
+    <article className="caps__product" id={`capability-${capability.id}`} aria-labelledby={`capability-title-${capability.id}`}>
+      <header className="caps__product-heading">
+        <p className="caps__product-latin" lang="en" dir="ltr"><span>0{index + 1} /</span> {capability.latin}</p>
+        <h3 id={`capability-title-${capability.id}`}>{capability.label}</h3>
+      </header>
+      <CapabilityFigure id={capability.id as CapabilityFigureId} />
+      <div className="caps__description">
+        <p className="caps__headline">{capability.headline}</p>
+        <p className="caps__copy">{capability.body}</p>
+        <ul className="caps__features">{capability.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
+        <details className="caps__more">
+          <summary>{capabilities.moreLabel} <span aria-hidden="true">+</span></summary>
+          <p>{capability.more}</p>
+        </details>
+      </div>
+    </article>
+  );
+}
+
+const serviceItems: MorphingTabsItem[] = capabilities.items.map((capability, index) => ({
+  id: capability.id,
+  label: capability.short,
+  icon: <><Icon name={capabilityIcons[capability.id as CapabilityFigureId]} /><span className="caps__option-number">{String(index + 1).padStart(2, "0")}</span></>,
+  content: <CapabilityContent capability={capability} index={index} />,
+}));
 
 export function Capabilities() {
   return (
@@ -30,38 +59,21 @@ export function Capabilities() {
           <Image className="caps__intro-image" src={agentNetwork} alt="نمایی انتزاعی از یک ایجنت هوشمند با شبکه‌ای از نودهای ارتباطی" sizes="(min-width: 64rem) 38rem, 100vw" />
         </header>
 
-        {/* Native controls keep the entire showcase usable without JavaScript. */}
         <div className="caps__stage">
-          <fieldset className="caps__selector">
-            <legend className="sr-only">{capabilities.selectorLabel}</legend>
-            {capabilities.items.map((capability, index) => (
-              <label className="caps__option" key={capability.id}>
-                <input aria-controls={`capability-${capability.id}`} defaultChecked={index === 0} name="capability" type="radio" value={capability.id} />
-                <span className="caps__option-face"><Icon name={capabilityIcons[capability.id as CapabilityFigureId]} /><span>{capability.short}</span><span className="caps__option-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span></span>
-              </label>
-            ))}
-          </fieldset>
-
-          <div className="caps__panels">
-            {capabilities.items.map((capability, index) => (
-              <article className="caps__product" id={`capability-${capability.id}`} aria-labelledby={`capability-title-${capability.id}`} key={capability.id}>
-                <header className="caps__product-heading">
-                  <p className="caps__product-latin" lang="en" dir="ltr"><span>0{index + 1} /</span> {capability.latin}</p>
-                  <h3 id={`capability-title-${capability.id}`}>{capability.label}</h3>
-                </header>
-                <CapabilityFigure id={capability.id as CapabilityFigureId} />
-                <div className="caps__description">
-                  <p className="caps__headline">{capability.headline}</p>
-                  <p className="caps__copy">{capability.body}</p>
-                  <ul className="caps__features">{capability.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-                  <details className="caps__more">
-                    <summary>{capabilities.moreLabel} <span aria-hidden="true">+</span></summary>
-                    <p>{capability.more}</p>
-                  </details>
-                </div>
-              </article>
-            ))}
-          </div>
+          <MorphingTabs
+            ariaLabel={capabilities.selectorLabel}
+            defaultValue={serviceItems[0]?.id}
+            items={serviceItems}
+            classNames={{
+              root: "caps__morph-tabs",
+              rail: "caps__morph-rail",
+              tab: "caps__morph-tab",
+              activeTab: "caps__morph-surface",
+              icon: "caps__morph-icon",
+              label: "caps__morph-label",
+              content: "caps__morph-content",
+            }}
+          />
         </div>
 
         <footer className="caps__connection">
