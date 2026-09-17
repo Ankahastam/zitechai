@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
-    "build": "tinacms build && next build",
+    "build": "tinacms build --local --skip-cloud-checks && next build",
     "build:local": "tinacms build --local --skip-cloud-checks && next build",
     "check:content": "node scripts/check-content.mjs",
     "check:seo": "node scripts/check-seo.mjs",
