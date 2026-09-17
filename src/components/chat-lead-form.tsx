@@ -55,10 +55,6 @@ export function ChatLeadForm({ content }: { content: ChatLeadFormCopy }) {
           <input autoComplete="name" maxLength={80} name="name" required type="text" />
         </label>
         <label>
-          <span>{content.businessLabel}</span>
-          <input autoComplete="organization" maxLength={100} name="business" required type="text" />
-        </label>
-        <label>
           <span>{content.mobileLabel}</span>
           <input
             autoComplete="tel"
@@ -71,29 +67,11 @@ export function ChatLeadForm({ content }: { content: ChatLeadFormCopy }) {
             type="tel"
           />
         </label>
+        <label>
+          <span>{content.businessLabel}</span>
+          <input autoComplete="organization-title" maxLength={100} name="business" required type="text" />
+        </label>
       </div>
-
-      <fieldset className="ca-form__channels">
-        <legend>{content.channelsLabel}</legend>
-        <div className="ca-form__chips">
-          {content.channels.map((channel) => (
-            <label className="ca-chip" key={channel}>
-              <input name="channels" type="checkbox" value={channel} />
-              <span>{channel}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <label className="ca-form__note">
-        <span>{content.noteLabel}</span>
-        <textarea
-          maxLength={600}
-          name="note"
-          placeholder={content.notePlaceholder}
-          rows={4}
-        />
-      </label>
 
       <label aria-hidden="true" className="ca-form__honeypot">
         وب‌سایت

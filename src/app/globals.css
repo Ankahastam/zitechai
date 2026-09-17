@@ -4318,6 +4318,23 @@ html.contact-open body {
   }
 }
 
+.ca-panel-preview {
+  overflow: hidden;
+  margin: clamp(var(--space-8), 5vw, var(--space-16)) 0 0;
+  padding: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: var(--radius-card);
+  background: rgb(255 255 255 / 8%);
+  box-shadow: var(--shadow-card);
+}
+
+.ca-panel-preview img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: calc(var(--radius-card) - 0.5rem);
+}
+
 .ca-plans {
   display: grid;
   gap: var(--space-4);
@@ -4346,8 +4363,9 @@ html.contact-open body {
 .ca-plan__amount {
   margin: var(--space-5) 0 0;
   color: var(--color-accent);
-  font-size: var(--text-small);
+  font-size: clamp(2.25rem, 6vw, 4rem);
   font-weight: var(--font-weight-medium);
+  line-height: 1.15;
 }
 
 .ca-plan__kind {
@@ -4358,12 +4376,6 @@ html.contact-open body {
 
 .ca-plans__action {
   margin: clamp(var(--space-8), 4vw, var(--space-10)) 0 0;
-}
-
-@media (width >= 48rem) {
-  .ca-plans {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 .ca-form {
@@ -4378,8 +4390,7 @@ html.contact-open body {
   gap: var(--space-4);
 }
 
-.ca-form__grid label,
-.ca-form__note {
+.ca-form__grid label {
   display: grid;
   gap: 0.375rem;
   color: var(--color-muted);
@@ -4387,8 +4398,7 @@ html.contact-open body {
   font-weight: var(--font-weight-medium);
 }
 
-.ca-form__grid input,
-.ca-form textarea {
+.ca-form__grid input {
   inline-size: 100%;
   border: 1px solid rgb(25 23 28 / 10%);
   background: rgb(255 255 255 / 64%);
@@ -4404,21 +4414,11 @@ html.contact-open body {
   border-radius: var(--radius-input);
 }
 
-.ca-form textarea {
-  min-block-size: 8rem;
-  padding: var(--space-4) 1.125rem;
-  border-radius: var(--radius-control);
-  line-height: var(--leading-body);
-  resize: vertical;
-}
-
-.ca-form__grid input:hover,
-.ca-form textarea:hover {
+.ca-form__grid input:hover {
   background: rgb(255 255 255 / 82%);
 }
 
-.ca-form__grid input:focus,
-.ca-form textarea:focus {
+.ca-form__grid input:focus {
   border-color: rgb(122 64 237 / 48%);
   background: #fff;
 }
@@ -4429,61 +4429,8 @@ html.contact-open body {
 
 @media (width >= 48rem) {
   .ca-form__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
-
-.ca-form__channels {
-  display: grid;
-  gap: var(--space-3);
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.ca-form__channels legend {
-  padding: 0;
-  color: var(--color-muted);
-  font-size: var(--text-small);
-  font-weight: var(--font-weight-medium);
-}
-
-.ca-form__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-/* Native checkbox inside a chip: no JS, no custom control, keyboard behaviour intact. */
-.ca-chip {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  padding: 0.5rem 0.875rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 64%);
-  font-size: var(--text-small);
-  cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
-}
-
-.ca-chip input {
-  inline-size: 1rem;
-  block-size: 1rem;
-  margin: 0;
-  accent-color: var(--color-accent);
-  cursor: pointer;
-}
-
-.ca-chip:hover {
-  background: #fff;
-}
-
-.ca-chip:has(:checked) {
-  border-color: rgb(122 64 237 / 48%);
-  background: rgb(122 64 237 / 8%);
 }
 
 .ca-form__submit {
@@ -4576,9 +4523,7 @@ html.contact-open body {
 @media (prefers-reduced-transparency: reduce) {
   .va-hero__features > li,
   .ca-hero__secondary.ca-hero__secondary,
-  .ca-chip,
-  .ca-form__grid input,
-  .ca-form textarea {
+  .ca-form__grid input {
     background: var(--color-surface);
   }
 
@@ -4600,9 +4545,7 @@ html.contact-open body {
   .va-hero__features > li,
   .va-price__card,
   .ca-plan,
-  .ca-chip,
-  .ca-form__grid input,
-  .ca-form textarea {
+  .ca-form__grid input {
     border-color: var(--color-foreground);
     background: var(--color-surface);
   }

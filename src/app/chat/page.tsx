@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ChatLeadForm } from "@/components/chat-lead-form";
 import { chatAgentFaqItems } from "@/components/faq-data";
 import { FaqSection } from "@/components/faq-section";
@@ -163,6 +164,16 @@ export default function ChatAgentPage() {
               </li>
             ))}
           </ul>
+
+          <figure className="ca-panel-preview">
+            <Image
+              alt="نمای داشبورد پنل مدیریت چت‌بات با آمار فعالیت، ساعات پرترافیک و دسته‌بندی سوالات"
+              height={1490}
+              sizes="(max-width: 80rem) calc(100vw - 2rem), 75rem"
+              src="/images/chat/management-dashboard.png"
+              width={2734}
+            />
+          </figure>
         </Section>
       </div>
 
@@ -194,8 +205,6 @@ export default function ChatAgentPage() {
             </article>
           ))}
         </div>
-
-        <p className="pg-note">{chatContent.pricing.note}</p>
 
         <p className="ca-plans__action">
           <LiquidButtonLink filterId="ca-price-cta-goo" href="#ca-form">

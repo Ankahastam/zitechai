@@ -26,7 +26,7 @@ assert.ok(long.length < 320);
 const form = new FormData();
 form.set("name", "سارا");
 form.set("mobile", "09123456789");
-form.set("job", "کلینیک");
+form.set("business", "کلینیک");
 form.set("cf-turnstile-response", "verified-token");
 
 const realFetch = globalThis.fetch;

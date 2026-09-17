@@ -289,12 +289,11 @@ export default defineConfig({
           object("pricing", "قیمت‌گذاری", [
             ...sectionHeadFields(),
             object("plans", "پلن‌ها", [text("title", "عنوان"), text("amount", "مبلغ"), text("kind", "نوع پرداخت"), strings("items", "موارد")], true),
-            textarea("note", "یادداشت"), text("cta", "CTA"),
+            text("cta", "CTA"),
           ]),
           object("leadForm", "فرم درخواست", [
-            ...sectionHeadFields(), text("nameLabel", "برچسب نام"), text("businessLabel", "برچسب کسب‌وکار"),
-            text("mobileLabel", "برچسب موبایل"), text("channelsLabel", "برچسب کانال‌ها"), strings("channels", "کانال‌ها"),
-            text("noteLabel", "برچسب توضیح"), text("notePlaceholder", "نمونه توضیح"), text("submitLabel", "دکمه ارسال"),
+            ...sectionHeadFields(), text("nameLabel", "برچسب نام"), text("businessLabel", "برچسب صنف"),
+            text("mobileLabel", "برچسب موبایل"), text("submitLabel", "دکمه ارسال"),
             text("pendingLabel", "در حال ارسال"), textarea("unconfiguredMessage", "پیام پیکربندی‌نشده"),
             text("successTitle", "عنوان موفقیت"), textarea("successBody", "متن موفقیت"),
           ]),
