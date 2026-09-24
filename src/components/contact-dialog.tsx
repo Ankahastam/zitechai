@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { getLeadFormData } from "./lead-attribution";
+import { Icon } from "./ui/icon";
 import { TurnstileWidget, resetTurnstile, turnstileSiteKey } from "./turnstile";
 
 type FormState = "idle" | "pending" | "success" | "error";
@@ -131,23 +133,40 @@ export function ContactDialog({ content }: { content: ContactDialogCopy }) {
         ) : (
           <>
             <div className="contact-dialog__intro">
-              <p className="contact-dialog__kicker" dir="ltr">{content.kicker}</p>
-              <h2 id="contact-dialog-title">{content.title}</h2>
-              <p id="contact-dialog-description">{content.description}</p>
+              <div className="contact-dialog__copy">
+                <p className="contact-dialog__kicker" dir="ltr"><Icon name="message-square" /> {content.kicker}</p>
+                <h2 id="contact-dialog-title">{content.title}</h2>
+                <p id="contact-dialog-description">{content.description}</p>
+              </div>
+              <div aria-hidden="true" className="contact-dialog__visual">
+                <Image
+                  alt=""
+                  className="contact-dialog__portrait"
+                  height="1449"
+                  sizes="(max-width: 640px) 8rem, 14rem"
+                  src="/images/contact-advisor.webp"
+                  unoptimized
+                  width="1040"
+                />
+                <span className="contact-dialog__availability"><i /> آنلاین و پاسخ‌گو</span>
+              </div>
             </div>
 
             <form action="/api/lead" className="contact-dialog__form" onSubmit={submit} ref={formRef}>
               <label>
-                <span>{content.nameLabel}</span>
-                <input autoComplete="name" maxLength={80} name="name" required type="text" />
+                <span className="sr-only">{content.nameLabel}</span>
+                <Icon name="user" />
+                <input autoComplete="name" maxLength={80} name="name" placeholder={content.nameLabel} required type="text" />
               </label>
               <label>
-                <span>{content.mobileLabel}</span>
-                <input autoComplete="tel" dir="ltr" inputMode="tel" maxLength={16} name="mobile" placeholder="0912 000 0000" required type="tel" />
+                <span className="sr-only">{content.mobileLabel}</span>
+                <Icon name="phone" />
+                <input aria-label={content.mobileLabel} autoComplete="tel" dir="ltr" inputMode="tel" maxLength={16} name="mobile" placeholder="0912 000 0000" required type="tel" />
               </label>
               <label>
-                <span>{content.jobLabel}</span>
-                <input autoComplete="organization-title" maxLength={100} name="job" required type="text" />
+                <span className="sr-only">{content.jobLabel}</span>
+                <Icon name="briefcase" />
+                <input autoComplete="organization-title" maxLength={100} name="job" placeholder={content.jobLabel} required type="text" />
               </label>
 
               <label aria-hidden="true" className="contact-dialog__honeypot">
@@ -162,7 +181,8 @@ export function ContactDialog({ content }: { content: ContactDialogCopy }) {
               )}
 
               <button className="contact-dialog__submit" disabled={state === "pending" || !turnstileSiteKey} type="submit">
-                {state === "pending" ? content.pendingLabel : content.submitLabel}
+                <span>{state === "pending" ? content.pendingLabel : content.submitLabel}</span>
+                <span aria-hidden="true" className="contact-dialog__submit-icon">←</span>
               </button>
               <p aria-live="polite" className="contact-dialog__message">{state === "error" ? message : ""}</p>
             </form>

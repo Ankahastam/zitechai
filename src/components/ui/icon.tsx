@@ -1,6 +1,7 @@
 export type IconName =
   | "activity"
   | "book"
+  | "briefcase"
   | "camera"
   | "chart"
   | "coffee"
@@ -15,6 +16,7 @@ export type IconName =
   | "search"
   | "send"
   | "shopping-cart"
+  | "user"
   | "users"
   | "waveform";
 
@@ -25,6 +27,7 @@ const iconPaths: Record<IconName, readonly string[]> = {
     "M12 7v14",
     "M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z",
   ],
+  briefcase: ["M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", "M2 8h20", "M2 20h20V6H2v14Z", "M10 12h4"],
   camera: [
     "M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z",
     "M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z",
@@ -64,6 +67,7 @@ const iconPaths: Record<IconName, readonly string[]> = {
     "M19 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z",
     "M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 1.9-1.6L22 6H5",
   ],
+  user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"],
   users: [
     "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
     "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z",
