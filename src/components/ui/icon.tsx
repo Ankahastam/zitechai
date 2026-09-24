@@ -5,6 +5,7 @@ export type IconName =
   | "chart"
   | "coffee"
   | "globe"
+  | "instagram"
   | "link"
   | "map-pin"
   | "message-square"
@@ -34,6 +35,11 @@ const iconPaths: Record<IconName, readonly string[]> = {
     "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z",
     "M2 12h20",
     "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",
+  ],
+  instagram: [
+    "M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z",
+    "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z",
+    "M17.5 6.5h.01",
   ],
   link: ["M9 17H7A5 5 0 0 1 7 7h2", "M15 7h2a5 5 0 1 1 0 10h-2", "M8 12h8"],
   "map-pin": ["M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z", "M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"],

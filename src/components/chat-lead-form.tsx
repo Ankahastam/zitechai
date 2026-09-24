@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import { getLeadFormData } from "./lead-attribution";
 import { Button } from "./ui/button";
 import { TurnstileWidget, resetTurnstile, turnstileSiteKey } from "./turnstile";
 
@@ -20,7 +21,7 @@ export function ChatLeadForm({ content }: { content: ChatLeadFormCopy }) {
     setMessage("");
 
     try {
-      const response = await fetch(form.action, { body: new FormData(form), method: "POST" });
+      const response = await fetch(form.action, { body: getLeadFormData(form, "chat-agent"), method: "POST" });
       const result = (await response.json()) as { message?: string; ok?: boolean };
 
       if (!response.ok || !result.ok) {

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     url: voiceAgentContent.seo.canonical,
   },
-  twitter: { card: "summary_large_image", description: DESCRIPTION, images: [siteContent.seo.ogImage.url], title: TITLE },
+  twitter: { card: "summary", description: DESCRIPTION, images: [siteContent.seo.ogImage.url], title: TITLE },
 };
 
 const faqJsonLd = {
@@ -39,6 +39,25 @@ const faqJsonLd = {
     acceptedAnswer: { "@type": "Answer", text: item.answer },
     name: item.question,
   })),
+};
+
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${siteContent.seo.siteUrl}/voice-agent#service`,
+  description: DESCRIPTION,
+  name: TITLE,
+  provider: { "@id": `${siteContent.seo.siteUrl}/#organization` },
+  url: `${siteContent.seo.siteUrl}/voice-agent`,
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", item: siteContent.seo.siteUrl, name: "زی‌تک", position: 1 },
+    { "@type": "ListItem", item: `${siteContent.seo.siteUrl}/voice-agent`, name: TITLE, position: 2 },
+  ],
 };
 
 type ProcessStep = { icon: IconName; label: string };
@@ -549,7 +568,7 @@ export default function VoiceAgentPage() {
       </Section>
 
       <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([serviceJsonLd, breadcrumbJsonLd, faqJsonLd]).replace(/</g, "\\u003c") }}
         type="application/ld+json"
       />
     </main>

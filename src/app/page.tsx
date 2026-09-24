@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: homeContent.seo.canonical,
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     description: homeContent.seo.description,
     images: [siteContent.seo.ogImage.url],
     title: homeContent.seo.title,

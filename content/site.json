@@ -7,7 +7,7 @@
     "description": "راهکارهای هوش مصنوعی برای عملیات واقعی کسب‌وکار",
     "locale": "fa_IR",
     "ogImage": {
-      "url": "/brand/logo-dark.png",
+      "url": "https://zitechai.com/brand/logo-dark.png",
       "alt": "زی‌تک",
       "width": 192,
       "height": 192
@@ -23,8 +23,8 @@
         "children": [
           { "href": "/voice-agent", "label": "ویس ایجنت منشی تلفنی" },
           { "href": "/chat", "label": "چت ایجنت اختصاصی" },
-          { "href": "/#marketing", "label": "مارکتینگ آتومیشن" },
-          { "href": "/#erp", "label": "سامانه‌های یکپارچه ERP" }
+          { "href": "/marketing-automation", "label": "مارکتینگ اتومیشن" },
+          { "href": "/#services", "label": "سامانه‌های یکپارچه ERP" }
         ]
       },
       { "href": "/blog", "label": "مقالات", "children": [] },

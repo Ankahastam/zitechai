@@ -24,7 +24,16 @@ export const metadata: Metadata = {
     type: "website",
     url: "/blog",
   },
-  twitter: { card: "summary_large_image", description, images: [siteContent.seo.ogImage.url], title },
+  twitter: { card: "summary", description, images: [siteContent.seo.ogImage.url], title },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", item: siteContent.seo.siteUrl, name: "زی‌تک", position: 1 },
+    { "@type": "ListItem", item: `${siteContent.seo.siteUrl}/blog`, name: title, position: 2 },
+  ],
 };
 
 export default function BlogPage() {
@@ -71,6 +80,7 @@ export default function BlogPage() {
           )}
         </Container>
       </section>
+      <script dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }} type="application/ld+json" />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getLeadFormData } from "./lead-attribution";
 import { TurnstileWidget, resetTurnstile, turnstileSiteKey } from "./turnstile";
 
 type FormState = "idle" | "pending" | "success" | "error";
@@ -78,7 +79,7 @@ export function ContactDialog({ content }: { content: ContactDialogCopy }) {
 
     try {
       const response = await fetch(event.currentTarget.action, {
-        body: new FormData(event.currentTarget),
+        body: getLeadFormData(event.currentTarget, "contact"),
         method: "POST",
       });
       const result = await response.json() as { message?: string; ok?: boolean };

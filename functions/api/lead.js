@@ -5,6 +5,11 @@ const API_URL = "https://mydnspanel.com/webservice/server";
 const PHONEBOOK_ID = 64161;
 const NAME_FIELD_ID = "FMjUyMjUz";
 const JOB_FIELD_ID = "FMzQ5NDA2";
+const FORM_NAMES = {
+  "chat-agent": "درخواست چت ایجنت",
+  contact: "گفت‌وگوی عمومی",
+  "footer-callback": "درخواست تماس فوتر",
+};
 const json = (body, status = 200) => new Response(JSON.stringify(body), {
   headers: { "Cache-Control": "no-store", "Content-Type": "application/json; charset=utf-8" },
   status,
@@ -47,6 +52,15 @@ async function callTelegramApi(botToken, chatId, text) {
   return { ok: response.ok && result?.ok === true, result: result?.description ?? "invalid-response" };
 }
 
+function sourcePage(request) {
+  try {
+    const page = new URL(request.headers.get("Referer") || "");
+    return page.origin === new URL(request.url).origin ? page.pathname : "";
+  } catch {
+    return "";
+  }
+}
+
 export async function onRequestPost({ env, request }) {
   if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID || !env.TURNSTILE_SECRET_KEY) {
     console.error(JSON.stringify({ event: "lead_configuration_missing" }));
@@ -80,6 +94,13 @@ export async function onRequestPost({ env, request }) {
   const channels = clean(form.getAll("channels").join("، "));
   const note = clean(form.get("note"));
   const mobile = normalizeMobile(form.get("mobile"));
+  const formId = clean(form.get("form_id"));
+  const currentPage = clean(form.get("current_page"));
+  const landingPage = clean(form.get("landing_page"));
+  const journey = clean(form.get("journey"));
+  const referrer = clean(form.get("referrer"));
+  const campaign = clean(form.get("campaign"));
+  const durationSeconds = Number.parseInt(clean(form.get("duration_seconds")), 10);
   const adminMobile = smsConfigured ? normalizeMobile(env.SMS_ADMIN_MOBILE) : null;
   const turnstileToken = String(form.get("cf-turnstile-response") || "");
 
@@ -88,6 +109,9 @@ export async function onRequestPost({ env, request }) {
   }
   if (channels.length > 200 || note.length > 600) {
     return json({ message: "توضیحات یا کانال‌های انتخابی بیش از حد بلند است.", ok: false }, 400);
+  }
+  if (currentPage.length > 200 || landingPage.length > 200 || journey.length > 500 || referrer.length > 100 || campaign.length > 300) {
+    return json({ message: "اطلاعات منبع فرم معتبر نیست.", ok: false }, 400);
   }
   if (smsConfigured && !adminMobile) {
     console.error(JSON.stringify({ event: "lead_admin_mobile_invalid" }));
@@ -99,9 +123,23 @@ export async function onRequestPost({ env, request }) {
       return json({ message: "تأیید امنیتی انجام نشد. لطفاً دوباره تلاش کنید.", ok: false }, 403);
     }
 
-    const adminMessage = buildAdminSms({ channels, mobile, name, note, profile });
+    const lead = { channels, mobile, name, note, profile };
+    const adminMessage = buildAdminSms(lead);
+    const formName = Object.hasOwn(FORM_NAMES, formId) ? FORM_NAMES[formId] : "";
+    const telegramMessage = formName ? buildAdminSms({
+      ...lead,
+      attribution: {
+        campaign,
+        durationSeconds: Number.isFinite(durationSeconds) ? Math.min(Math.max(durationSeconds, 0), 604_800) : 0,
+        form: formName,
+        journey,
+        landingPage,
+        page: sourcePage(request) || currentPage,
+        referrer,
+      },
+    }) : adminMessage;
     const [telegram, contact, visitorSms, adminSms] = await Promise.all([
-      callTelegramApi(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, adminMessage),
+      callTelegramApi(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, telegramMessage),
       ...(smsConfigured ? [
         callSmsApi(env.SMS_API_KEY, {
           action: "newContact",

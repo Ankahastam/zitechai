@@ -19,6 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
     },
     {
+      url: `${siteContent.seo.siteUrl}/marketing-automation`,
+      changeFrequency: "monthly",
+    },
+    {
       url: `${siteContent.seo.siteUrl}/about`,
       changeFrequency: "monthly",
     },

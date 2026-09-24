@@ -1,4 +1,4 @@
-import { chatContent, homeContent, voiceAgentContent } from "@/content";
+import { chatContent, homeContent, marketingAutomationContent, voiceAgentContent } from "@/content";
 
 export type FaqItem = {
   number: string;
@@ -11,4 +11,5 @@ const numbered = (items: readonly { answer: string; question: string }[]): reado
 
 export const faqItems = numbered(homeContent.faq.items);
 export const chatAgentFaqItems = numbered(chatContent.faq.items);
+export const marketingAutomationFaqItems = numbered(marketingAutomationContent.faq.items);
 export const voiceAgentFaqItems = numbered(voiceAgentContent.faq.items);

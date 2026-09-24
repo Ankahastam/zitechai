@@ -28,6 +28,13 @@ form.set("name", "سارا");
 form.set("mobile", "09123456789");
 form.set("business", "کلینیک");
 form.set("cf-turnstile-response", "verified-token");
+form.set("form_id", "chat-agent");
+form.set("current_page", "/chat");
+form.set("landing_page", "/");
+form.set("journey", "/ ← /chat");
+form.set("referrer", "google.com");
+form.set("campaign", "source: google، medium: cpc");
+form.set("duration_seconds", "90");
 
 const realFetch = globalThis.fetch;
 let telegramPayload = null;
@@ -46,7 +53,7 @@ globalThis.fetch = async (input, init = {}) => {
 try {
   const request = new Request("https://zitech.example/api/lead", {
     body: form,
-    headers: { Origin: "https://zitech.example" },
+    headers: { Origin: "https://zitech.example", Referer: "https://zitech.example/chat" },
     method: "POST",
   });
   const response = await onRequestPost({
@@ -63,7 +70,19 @@ try {
   assert.equal(response.status, 200);
   assert.deepEqual(telegramPayload, {
     chat_id: "12345",
-    text: "لید جدید سایت زی‌تک\nنام: سارا\nشماره: 09123456789\nشغل/کسب‌وکار: کلینیک",
+    text: [
+      "لید جدید سایت زی‌تک",
+      "نام: سارا",
+      "شماره: 09123456789",
+      "شغل/کسب‌وکار: کلینیک",
+      "فرم: درخواست چت ایجنت",
+      "صفحه ثبت: /chat",
+      "صفحه ورود: /",
+      "مسیر نشست: / ← /chat",
+      "زمان تا ثبت: 90 ثانیه",
+      "ارجاع‌دهنده: google.com",
+      "کمپین: source: google، medium: cpc",
+    ].join("\n"),
   });
 
   const telegramOnlyForm = new FormData();

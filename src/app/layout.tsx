@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { ContactDialog } from "@/components/contact-dialog";
+import { LeadAttribution } from "@/components/lead-attribution";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { iranYekanX } from "@/fonts/iran-yekan-x";
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   },
   robots: { follow: true, index: true },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     description: siteContent.seo.description,
     images: [siteContent.seo.ogImage.url],
     title: siteContent.seo.titleDefault,
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html className={iranYekanX.variable} dir="rtl" lang="fa">
       <body>
+        <Suspense fallback={null}><LeadAttribution /></Suspense>
         <SiteHeader />
         {children}
         <SiteFooter />

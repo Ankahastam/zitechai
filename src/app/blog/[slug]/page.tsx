@@ -66,7 +66,7 @@ export default async function BlogPostPage({ params }: Props) {
   const canonical = absoluteUrl(post.canonicalUrl || `/blog/${post.slug}`);
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     author: { "@type": "Organization", name: post.author },
     dateModified: post.updatedDate || post.publishedDate,
     datePublished: post.publishedDate,

@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import { getLeadFormData } from "./lead-attribution";
 import { TurnstileWidget, resetTurnstile, turnstileSiteKey } from "./turnstile";
 
 type FormState = "idle" | "pending" | "success" | "error";
@@ -19,7 +20,7 @@ export function FooterPhoneForm({ content }: { content: FooterCopy }) {
     setMessage("");
 
     try {
-      const response = await fetch(form.action, { body: new FormData(form), method: "POST" });
+      const response = await fetch(form.action, { body: getLeadFormData(form, "footer-callback"), method: "POST" });
       const result = (await response.json()) as { message?: string; ok?: boolean };
       if (!response.ok || !result.ok) throw new Error(result.message || content.phoneFormError);
       form.reset();
