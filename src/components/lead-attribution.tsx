@@ -12,6 +12,7 @@ type LeadSession = {
   pages: string[];
   referrer: string;
   startedAt: number;
+  utm: Record<string, string>;
 };
 
 function currentPage() {
@@ -20,8 +21,9 @@ function currentPage() {
 
 function createSession(): LeadSession {
   const search = new URLSearchParams(window.location.search);
-  const campaign = CAMPAIGN_KEYS
-    .flatMap((key) => search.get(key) ? [`${key.replace("utm_", "")}: ${search.get(key)}`] : [])
+  const utm = Object.fromEntries(CAMPAIGN_KEYS.flatMap((key) => search.get(key) ? [[key, search.get(key) || ""]] : []));
+  const campaign = Object.entries(utm)
+    .map(([key, value]) => `${key.replace("utm_", "")}: ${value}`)
     .join("، ");
   let referrer = "";
 
@@ -32,13 +34,13 @@ function createSession(): LeadSession {
     // Direct visits and invalid referrers intentionally stay empty.
   }
 
-  return { campaign, landingPage: currentPage(), pages: [], referrer, startedAt: Date.now() };
+  return { campaign, landingPage: currentPage(), pages: [], referrer, startedAt: Date.now(), utm };
 }
 
 function readSession(): LeadSession {
   try {
     const stored = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null") as LeadSession | null;
-    if (stored?.startedAt && Array.isArray(stored.pages)) return stored;
+    if (stored?.startedAt && Array.isArray(stored.pages)) return { ...stored, utm: stored.utm || {} };
   } catch {
     // Storage may be disabled; the current page is still attached below.
   }
@@ -73,6 +75,7 @@ export function getLeadFormData(form: HTMLFormElement, formId: string) {
   data.set("referrer", session.referrer);
   data.set("campaign", session.campaign);
   data.set("duration_seconds", String(Math.max(0, Math.round((Date.now() - session.startedAt) / 1000))));
+  for (const [key, value] of Object.entries(session.utm)) data.set(key, value);
 
   return data;
 }

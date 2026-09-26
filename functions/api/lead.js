@@ -1,5 +1,11 @@
 import { buildAdminSms } from "../lib/lead-message.mjs";
 import { normalizeMobile } from "../lib/normalize-mobile.mjs";
+import {
+  hasPartialZohoConfiguration,
+  hasZohoConfiguration,
+  logZohoError,
+  syncWebsiteLeadToZoho,
+} from "../lib/zoho.mjs";
 
 const API_URL = "https://mydnspanel.com/webservice/server";
 const PHONEBOOK_ID = 64161;
@@ -61,7 +67,14 @@ function sourcePage(request) {
   }
 }
 
-export async function onRequestPost({ env, request }) {
+function campaignValue(campaign, key) {
+  const prefix = `${key}:`;
+  return campaign.split("،").map((part) => part.trim())
+    .find((part) => part.toLowerCase().startsWith(prefix))?.slice(prefix.length).trim() || "";
+}
+
+export async function onRequestPost(context) {
+  const { env, request } = context;
   if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID || !env.TURNSTILE_SECRET_KEY) {
     console.error(JSON.stringify({ event: "lead_configuration_missing" }));
     return json({ message: "فرم در حال حاضر در دسترس نیست.", ok: false }, 503);
@@ -93,13 +106,19 @@ export async function onRequestPost({ env, request }) {
   /* The chat form posts one entry per checked channel, so all of them are kept. */
   const channels = clean(form.getAll("channels").join("، "));
   const note = clean(form.get("note"));
-  const mobile = normalizeMobile(form.get("mobile"));
+  const mobileInput = clean(form.get("mobile"));
+  const mobile = normalizeMobile(mobileInput);
   const formId = clean(form.get("form_id"));
   const currentPage = clean(form.get("current_page"));
   const landingPage = clean(form.get("landing_page"));
   const journey = clean(form.get("journey"));
   const referrer = clean(form.get("referrer"));
   const campaign = clean(form.get("campaign"));
+  const utmSource = clean(form.get("utm_source")) || campaignValue(campaign, "source");
+  const utmMedium = clean(form.get("utm_medium")) || campaignValue(campaign, "medium");
+  const utmCampaign = clean(form.get("utm_campaign")) || campaignValue(campaign, "campaign");
+  const utmContent = clean(form.get("utm_content")) || campaignValue(campaign, "content");
+  const utmTerm = clean(form.get("utm_term")) || campaignValue(campaign, "term");
   const durationSeconds = Number.parseInt(clean(form.get("duration_seconds")), 10);
   const adminMobile = smsConfigured ? normalizeMobile(env.SMS_ADMIN_MOBILE) : null;
   const turnstileToken = String(form.get("cf-turnstile-response") || "");
@@ -110,7 +129,8 @@ export async function onRequestPost({ env, request }) {
   if (channels.length > 200 || note.length > 600) {
     return json({ message: "توضیحات یا کانال‌های انتخابی بیش از حد بلند است.", ok: false }, 400);
   }
-  if (currentPage.length > 200 || landingPage.length > 200 || journey.length > 500 || referrer.length > 100 || campaign.length > 300) {
+  if (formId.length > 80 || currentPage.length > 200 || landingPage.length > 200 || journey.length > 500 || referrer.length > 100 || campaign.length > 300
+    || [utmSource, utmMedium, utmCampaign, utmContent, utmTerm].some((value) => value.length > 200)) {
     return json({ message: "اطلاعات منبع فرم معتبر نیست.", ok: false }, 400);
   }
   if (smsConfigured && !adminMobile) {
@@ -126,18 +146,58 @@ export async function onRequestPost({ env, request }) {
     const lead = { channels, mobile, name, note, profile };
     const adminMessage = buildAdminSms(lead);
     const formName = Object.hasOwn(FORM_NAMES, formId) ? FORM_NAMES[formId] : "";
+    const page = sourcePage(request) || currentPage;
+    const safeDuration = Number.isFinite(durationSeconds) ? Math.min(Math.max(durationSeconds, 0), 604_800) : 0;
     const telegramMessage = formName ? buildAdminSms({
       ...lead,
       attribution: {
         campaign,
-        durationSeconds: Number.isFinite(durationSeconds) ? Math.min(Math.max(durationSeconds, 0), 604_800) : 0,
+        durationSeconds: safeDuration,
         form: formName,
         journey,
         landingPage,
-        page: sourcePage(request) || currentPage,
+        page,
         referrer,
       },
     }) : adminMessage;
+
+    if (hasZohoConfiguration(env)) {
+      const ignoredFields = new Set([
+        "business", "campaign", "cf-turnstile-response", "current_page", "duration_seconds", "form_id",
+        "job", "landing_page", "mobile", "name", "note", "referrer", "utm_campaign", "utm_content",
+        "utm_medium", "utm_source", "utm_term", "website", "journey", "channels",
+      ]);
+      const extraFields = {};
+      for (const key of new Set(form.keys())) {
+        if (!ignoredFields.has(key)) extraFields[key] = clean(form.getAll(key).join("، "));
+      }
+      if (channels) extraFields.channels = channels;
+      if (note) extraFields.note = note;
+
+      // ponytail: waitUntil isolates form UX but is not a durable queue; add one if guaranteed eventual CRM delivery is required.
+      context.waitUntil(syncWebsiteLeadToZoho(env, {
+        business: profile,
+        extraFields,
+        formName: formName || formId || "فرم وب‌سایت",
+        landingPage,
+        name,
+        originalPhone: mobileInput,
+        phone: mobileInput,
+        referrer,
+        sessionPath: journey.split("←").map((item) => item.trim()).filter(Boolean),
+        submittedAt: new Date().toISOString(),
+        submittedFrom: page,
+        timeToSubmitSeconds: safeDuration,
+        utmCampaign,
+        utmContent,
+        utmMedium,
+        utmSource,
+        utmTerm,
+      }).catch(logZohoError));
+    } else if (hasPartialZohoConfiguration(env)) {
+      console.error("[ZOHO] Error syncing lead: INCOMPLETE_CONFIGURATION");
+    }
+
     const [telegram, contact, visitorSms, adminSms] = await Promise.all([
       callTelegramApi(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, telegramMessage),
       ...(smsConfigured ? [

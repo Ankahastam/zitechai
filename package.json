@@ -9,6 +9,7 @@
     "check:content": "node scripts/check-content.mjs",
     "check:seo": "node scripts/check-seo.mjs",
     "check:lead": "node scripts/check-lead-input.mjs",
+    "check:zoho": "node scripts/check-zoho.mjs",
     "check:voice": "node scripts/check-voice-agent.mjs",
     "start": "next start",
     "lint": "eslint .",
