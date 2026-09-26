@@ -85,22 +85,32 @@ const capabilities: readonly { icon: IconName; title: string; body: string }[] =
   { icon: "activity", title: "استقرار و بهینه‌سازی", body: "آزمون در محیط واقعی و بهبود مستمر راهکار" },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  name: "درباره زی‌تک",
-  url: "https://zitechai.com/about",
-  description:
-    "معرفی رویکرد زی‌تک برای کشف، ساخت، یکپارچه‌سازی و استقرار راهکارهای هوش مصنوعی در کسب‌وکار.",
-  inLanguage: "fa-IR",
-  mainEntity: {
-    "@type": "Organization",
-    name: "زی‌تک",
-    alternateName: "Z-Tech",
-    url: "https://zitechai.com",
-    logo: "https://zitechai.com/brand/logo-dark.png",
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "درباره زی‌تک",
+    url: "https://zitechai.com/about",
+    description:
+      "معرفی رویکرد زی‌تک برای کشف، ساخت، یکپارچه‌سازی و استقرار راهکارهای هوش مصنوعی در کسب‌وکار.",
+    inLanguage: "fa-IR",
+    mainEntity: {
+      "@type": "Organization",
+      name: "زی‌تک",
+      alternateName: "Z-Tech",
+      url: "https://zitechai.com",
+      logo: "https://zitechai.com/brand/logo-dark.png",
+    },
   },
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", item: "https://zitechai.com", name: "زی‌تک", position: 1 },
+      { "@type": "ListItem", item: "https://zitechai.com/about", name: "درباره ما", position: 2 },
+    ],
+  },
+];
 
 export default function AboutPage() {
   return (

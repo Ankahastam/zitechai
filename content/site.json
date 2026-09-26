@@ -24,7 +24,7 @@
           { "href": "/voice-agent", "label": "ویس ایجنت منشی تلفنی" },
           { "href": "/chat", "label": "چت ایجنت اختصاصی" },
           { "href": "/marketing-automation", "label": "مارکتینگ اتومیشن" },
-          { "href": "/#services", "label": "سامانه‌های یکپارچه ERP" }
+          { "href": "/erp", "label": "سامانه‌های یکپارچه ERP" }
         ]
       },
       { "href": "/blog", "label": "مقالات", "children": [] },

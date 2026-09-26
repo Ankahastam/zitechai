@@ -66,9 +66,9 @@ export function ContactDialog({ content }: { content: ContactDialogCopy }) {
       window.setTimeout(open, target.closest("dialog") ? 230 : 0);
     };
 
-    document.addEventListener("click", handleContactClick);
+    document.addEventListener("click", handleContactClick, true);
     return () => {
-      document.removeEventListener("click", handleContactClick);
+      document.removeEventListener("click", handleContactClick, true);
       window.clearTimeout(closeTimerRef.current ?? undefined);
       document.documentElement.classList.remove("contact-open");
     };

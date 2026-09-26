@@ -23,6 +23,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
     },
     {
+      url: `${siteContent.seo.siteUrl}/erp`,
+      changeFrequency: "monthly",
+    },
+    {
       url: `${siteContent.seo.siteUrl}/about`,
       changeFrequency: "monthly",
     },

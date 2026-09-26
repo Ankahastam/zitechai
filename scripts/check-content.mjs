@@ -5,6 +5,7 @@ const contracts = {
   "site.json": ["seo", "navigation", "footer"],
   "home.json": ["seo", "hero", "approach", "capabilities", "faq"],
   "chat.json": ["seo", "hero", "channels", "features", "pricing", "faq", "finalCta"],
+  "erp.json": ["seo", "hero", "problems", "modules", "flow", "reporting", "approach", "useCases", "faq", "finalCta"],
   "voice-agent.json": ["seo", "hero", "pairs", "features", "industries", "useCases", "pricing", "integrations", "faq", "finalCta"],
 };
 
