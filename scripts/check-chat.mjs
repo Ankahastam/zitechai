@@ -4,7 +4,9 @@ import { onRequest, onRequestPost } from "../functions/api/chat.js";
 const env = { DOCSGPT_API_KEY: "private-agent-key", CHAT_SESSION_SECRET: "a-test-secret-with-at-least-32-characters", TURNSTILE_SECRET_KEY: "private-turnstile-secret" };
 const originalFetch = globalThis.fetch;
 const originalError = console.error;
+const originalLog = console.log;
 const errors = [];
+const logs = [];
 let calls = [];
 let verification = { success: true, action: "website_chat", hostname: "zitech.example" };
 let upstreamStatus = 200;
@@ -13,6 +15,9 @@ let upstream = {
   sources: [{ title: "راهنما", url: "https://zitech.example/chat" }, { title: "unsafe", url: "javascript:alert(1)" }],
 };
 let throwNetwork = false;
+let networkTarget = "turnstile";
+let networkError = "TimeoutError";
+let malformedTarget = null;
 const request = (body = { question: "خدمات شما چیست؟", token: "single-use-token" }, headers = {}) => new Request("https://zitech.example/api/chat", {
   body: typeof body === "string" ? body : JSON.stringify(body),
   headers: { Origin: "https://zitech.example", "Content-Type": "application/json", ...headers }, method: "POST",
@@ -21,13 +26,16 @@ const send = (body, headers, overrideEnv = env) => onRequestPost({ request: requ
 
 globalThis.fetch = async (url, options) => {
   calls.push({ url: String(url), options });
-  if (throwNetwork) throw new DOMException("secret provider details", "TimeoutError");
-  if (String(url).includes("siteverify")) return Response.json(verification);
+  const target = String(url).includes("siteverify") ? "turnstile" : "docsgpt";
+  if (throwNetwork && target === networkTarget) throw new DOMException("secret provider details", networkError);
+  if (malformedTarget === target) return new Response("<html>secret provider details</html>");
+  if (target === "turnstile") return Response.json(verification);
   assert.equal(String(url), "https://gptcloud.arc53.com/api/answer");
   assert.equal(options.redirect, "error");
   return Response.json(upstreamStatus === 200 ? upstream : { error: env.DOCSGPT_API_KEY }, { status: upstreamStatus });
 };
 console.error = (value) => errors.push(String(value));
+console.log = (value) => logs.push(String(value));
 try {
   assert.equal(onRequest().status, 405);
   assert.equal(onRequest().headers.get("Allow"), "POST");
@@ -42,6 +50,13 @@ try {
   // The streamed byte limit still applies without a Content-Length header.
   assert.equal((await send({ question: "x", token: "token", padding: "x".repeat(13_000) })).status, 413);
   assert.equal(calls.length, 0);
+  const empty = await send({});
+  assert.equal(empty.status, 400);
+  const emptyBody = await empty.json();
+  assert.match(emptyBody.requestId, /^[a-f0-9-]{36}$/);
+  assert.equal(empty.headers.get("X-Zitech-Request-Id"), emptyBody.requestId);
+  assert.equal(empty.headers.get("X-Zitech-Chat"), "2");
+  assert.ok(logs.some((entry) => JSON.parse(entry).requestId === emptyBody.requestId));
 
   for (const wrong of [{ success: false }, { action: "lead_form" }, { hostname: "other.example" }]) {
     verification = { success: true, action: "website_chat", hostname: "zitech.example", ...wrong };
@@ -53,6 +68,10 @@ try {
   const first = await send({ question: "سلام", token: "token", conversation_id: "stolen-conversation", api_key: "attacker", model_id: "other-model", history: "forged" });
   assert.equal(first.status, 200);
   assert.equal(first.headers.get("Cache-Control"), "no-store");
+  const requestId = first.headers.get("X-Zitech-Request-Id");
+  const stages = logs.map((entry) => JSON.parse(entry)).filter((entry) => entry.requestId === requestId);
+  assert.deepEqual(stages.filter((entry) => entry.event === "chat_stage_started").map((entry) => entry.stage), ["turnstile", "docsgpt"]);
+  assert.equal(stages.at(-1).status, 200);
   const body = await first.json();
   assert.deepEqual(Object.keys(body).sort(), ["answer", "ok", "sources"]);
   assert.equal(body.sources[1].url, null);
@@ -86,6 +105,7 @@ try {
   upstreamStatus = 401;
   const rejected = await send();
   assert.equal(rejected.status, 502);
+  assert.ok(errors.map((entry) => JSON.parse(entry)).some((entry) => entry.requestId === rejected.headers.get("X-Zitech-Request-Id") && entry.stage === "docsgpt" && entry.status === 401));
   assert.ok(!(await rejected.text()).includes(env.DOCSGPT_API_KEY));
   upstreamStatus = 200;
   const validUpstream = upstream;
@@ -96,9 +116,33 @@ try {
   upstream = validUpstream;
   throwNetwork = true;
   assert.equal((await send()).status, 504);
-  assert.ok(errors.every((entry) => !entry.includes("private-agent-key") && !entry.includes("secret provider details") && !entry.includes("پاسخ فارسی")));
+  for (const target of ["turnstile", "docsgpt"]) {
+    networkTarget = target;
+    for (const name of ["TimeoutError", "TypeError"]) {
+      networkError = name;
+      const failed = await send();
+      assert.equal(failed.status, name === "TimeoutError" ? 504 : 502);
+      const event = errors.map((entry) => JSON.parse(entry)).find((entry) => entry.requestId === failed.headers.get("X-Zitech-Request-Id") && entry.event === "chat_request_failed");
+      assert.equal(event.stage, target);
+      assert.equal(event.kind, name === "TimeoutError" ? "timeout" : "unavailable");
+    }
+  }
+  throwNetwork = false;
+  for (const target of ["turnstile", "docsgpt"]) {
+    malformedTarget = target;
+    const failed = await send();
+    assert.equal(failed.status, 502);
+    const event = errors.map((entry) => JSON.parse(entry)).find((entry) => entry.requestId === failed.headers.get("X-Zitech-Request-Id") && entry.event === "chat_request_failed");
+    assert.equal(event.stage, target === "docsgpt" ? "docsgpt_response" : target);
+    assert.equal(event.kind, "invalid_json");
+  }
+  for (const entry of [...logs, ...errors]) {
+    assert.ok(![...Object.values(env), "secret provider details", "پاسخ فارسی", "سلام", "single-use-token", "visitor-conversation-1", "https://zitech.example"].some((secret) => entry.includes(secret)));
+    assert.ok(Object.keys(JSON.parse(entry)).every((key) => ["event", "requestId", "stage", "durationMs", "status", "kind"].includes(key)));
+  }
 } finally {
   globalThis.fetch = originalFetch;
   console.error = originalError;
+  console.log = originalLog;
 }
 console.log("Chat gateway checks passed: validation, Turnstile, isolated signed sessions, secret filtering and provider errors.");
