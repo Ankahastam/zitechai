@@ -145,7 +145,7 @@ POST با بدنهٔ خالی نیز روی دامنهٔ اصلی JSON با وض
 موفقیت تماس با Turnstile و DocsGPT را ثابت نمی‌کنند. درخواست واقعی کاربر
 صفحهٔ HTML خطای 502 Cloudflare برگردانده و علت آن هنوز تأیید نشده است.
 
-پاسخ‌های نسخهٔ تشخیصی هدر `X-Zitech-Chat: 2` دارند. هر POST یک شناسهٔ
+پاسخ‌های نسخهٔ فعلی هدر `X-Zitech-Chat: 3` دارند. هر POST یک شناسهٔ
 تصادفی `requestId` دارد که در هدر `X-Zitech-Request-Id`، پاسخ JSON خطا و
 لاگ‌های همان درخواست دیده می‌شود. در Functions استقرار فعال، لاگ زنده را
 باز نگه دار و یک پیام آزمایشی بفرست. رویدادهای `chat_stage_started` و
@@ -157,6 +157,14 @@ POST با بدنهٔ خالی نیز روی دامنهٔ اصلی JSON با وض
 لاگ‌ها شامل متن سؤال، پاسخ، توکن Turnstile، کلید، Cookie، IP یا شناسهٔ
 گفتگوی DocsGPT نیستند. این تغییر برای تشخیص است و به‌معنای رفع علت 502
 نیست. لاگ زندهٔ Pages به‌صورت خودکار تاریخچهٔ پایدار ایجاد نمی‌کند.
+
+لاگ بعدی کاربر نشان داد Turnstile موفق است و تماس DocsGPT فوراً و بدون
+دریافت وضعیت HTTP شکست می‌خورد. یک ناسازگاری قطعی در کد پیدا شد:
+`redirect: "error"` در Node پذیرفته می‌شود، اما runtime کلادفلر (workerd)
+آن را هنگام ساخت درخواست رد می‌کند. مقدار به `manual` تغییر یافت؛ پاسخ
+3xx همچنان رد می‌شود و کلید به مقصد redirect فرستاده نمی‌شود. تست‌ها رفتار
+workerd و رد پاسخ‌های 301، 302، 303، 307 و 308 را پوشش می‌دهند. موفقیت کامل
+پاسخ‌گویی زنده پس از این اصلاح باید در استقرار جدید تأیید شود.
 
 ## استقرار
 
@@ -232,6 +240,7 @@ DocsGPT با Containers، حساب Cloudflare و ارتباط زنده با مد
 - [گفتگوهای API و visibility](https://docs.docsgpt.cloud/API/agent-api)
 - [خواندن گفتگوها و Logs](https://docs.docsgpt.cloud/Using/analytics-and-logs)
 - [تنظیمات Pages و Wrangler](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
+- [رفتار redirect در منبع workerd](https://github.com/cloudflare/workerd/blob/main/src/workerd/api/http.c%2B%2B)
 - [Oracle Always Free](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)
 - [شرایط ثبت‌نام Oracle](https://www.oracle.com/middleeast/cloud/free/faq/)
 - [محدودیت‌های Render Free](https://render.com/docs/free)

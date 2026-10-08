@@ -3,7 +3,7 @@ const COOKIE = "zitech_chat";
 const SESSION_SECONDS = 3_600;
 const encoder = new TextEncoder();
 const json = (body, status = 200, headers = {}) => Response.json(body, {
-  headers: { "Cache-Control": "no-store", "X-Zitech-Chat": "2", ...headers }, status,
+  headers: { "Cache-Control": "no-store", "X-Zitech-Chat": "3", ...headers }, status,
 });
 const base64url = (bytes) => btoa(String.fromCharCode(...bytes))
   .replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
@@ -118,7 +118,8 @@ export async function onRequestPost({ request, env }) {
     log("chat_stage_started");
     const upstream = await fetch(API_URL, {
       body: JSON.stringify({ question, api_key: env.DOCSGPT_API_KEY, ...(session ? { conversation_id: session.id } : {}), visibility: "hidden" }),
-      headers: { "Content-Type": "application/json" }, method: "POST", redirect: "error", signal: AbortSignal.timeout(55_000),
+      // workerd accepts manual/follow; reject redirects below without forwarding the Agent key.
+      headers: { "Content-Type": "application/json" }, method: "POST", redirect: "manual", signal: AbortSignal.timeout(55_000),
     });
     log("chat_stage_response", { status: upstream.status });
     if (!upstream.ok) {

@@ -26,13 +26,18 @@ const send = (body, headers, overrideEnv = env) => onRequestPost({ request: requ
 
 globalThis.fetch = async (url, options) => {
   calls.push({ url: String(url), options });
+  // Node accepts "error", but Cloudflare's workerd rejects it before sending a request.
+  assert.ok([undefined, "follow", "manual"].includes(options.redirect));
   const target = String(url).includes("siteverify") ? "turnstile" : "docsgpt";
   if (throwNetwork && target === networkTarget) throw new DOMException("secret provider details", networkError);
   if (malformedTarget === target) return new Response("<html>secret provider details</html>");
   if (target === "turnstile") return Response.json(verification);
   assert.equal(String(url), "https://gptcloud.arc53.com/api/answer");
-  assert.equal(options.redirect, "error");
-  return Response.json(upstreamStatus === 200 ? upstream : { error: env.DOCSGPT_API_KEY }, { status: upstreamStatus });
+  assert.equal(options.redirect, "manual");
+  return Response.json(upstreamStatus === 200 ? upstream : { error: env.DOCSGPT_API_KEY }, {
+    status: upstreamStatus,
+    headers: upstreamStatus >= 300 && upstreamStatus < 400 ? { Location: "https://other.example/collect-key" } : {},
+  });
 };
 console.error = (value) => errors.push(String(value));
 console.log = (value) => logs.push(String(value));
@@ -55,7 +60,7 @@ try {
   const emptyBody = await empty.json();
   assert.match(emptyBody.requestId, /^[a-f0-9-]{36}$/);
   assert.equal(empty.headers.get("X-Zitech-Request-Id"), emptyBody.requestId);
-  assert.equal(empty.headers.get("X-Zitech-Chat"), "2");
+  assert.equal(empty.headers.get("X-Zitech-Chat"), "3");
   assert.ok(logs.some((entry) => JSON.parse(entry).requestId === emptyBody.requestId));
 
   for (const wrong of [{ success: false }, { action: "lead_form" }, { hostname: "other.example" }]) {
@@ -100,6 +105,15 @@ try {
     Date.now = () => later;
     assert.equal((await send(undefined, { Cookie: cookiePair })).status, 403);
   } finally { Date.now = originalNow; }
+  for (const status of [301, 302, 303, 307, 308]) {
+    calls = [];
+    upstreamStatus = status;
+    const redirected = await send();
+    assert.equal(redirected.status, 502);
+    assert.equal(calls.length, 2);
+    assert.equal(calls[1].url, "https://gptcloud.arc53.com/api/answer");
+    assert.ok(!(await redirected.text()).includes(env.DOCSGPT_API_KEY));
+  }
   upstreamStatus = 429;
   assert.equal((await send()).status, 429);
   upstreamStatus = 401;
