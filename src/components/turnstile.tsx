@@ -4,7 +4,11 @@ import Script from "next/script";
 
 declare global {
   interface Window {
-    turnstile?: { reset: (container?: string | HTMLElement) => void };
+    turnstile?: {
+      reset: (container?: string | HTMLElement) => void;
+      render: (container: HTMLElement, options: Record<string, unknown>) => string;
+      remove: (widgetId: string) => void;
+    };
   }
 }
 

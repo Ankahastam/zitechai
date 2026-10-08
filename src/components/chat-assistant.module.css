@@ -1,0 +1,74 @@
+.launcher, .loading {
+  position: fixed;
+  inset-inline-end: 1.5rem;
+  inset-block-end: max(1.5rem, env(safe-area-inset-bottom));
+  z-index: 60;
+}
+.launcher {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-block-size: 3.5rem;
+  padding: .75rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-foreground);
+  color: var(--color-surface);
+  box-shadow: 0 8px 28px rgb(25 23 28 / 16%);
+  cursor: pointer;
+}
+.launcher:active, .submit:active { transform: scale(.98); }
+.loading { inset-block-end: 6rem; padding: 1rem; border-radius: var(--radius-control); background: var(--color-surface); }
+.panel {
+  position: fixed;
+  inset: auto;
+  inset-inline-end: 1.5rem;
+  inset-block-end: max(1.5rem, env(safe-area-inset-bottom));
+  inline-size: min(26rem, calc(100vw - 3rem));
+  max-inline-size: none;
+  max-block-size: calc(100dvb - 3rem);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-foreground);
+  box-shadow: var(--shadow-card);
+}
+.panel::backdrop { background: rgb(25 23 28 / 24%); }
+.surface { display: flex; flex-direction: column; block-size: min(43rem, calc(100dvb - 3rem)); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; border-block-end: 1px solid var(--color-border); }
+.header h2, .header p { margin: 0; }
+.header h2 { font-size: 1.25rem; font-weight: 500; }
+.kicker { font-size: .75rem; color: var(--color-muted); }
+.close { flex-shrink: 0; inline-size: 2.75rem; block-size: 2.75rem; border: 0; border-radius: 50%; background: var(--color-background); color: var(--color-foreground); font-size: 1.5rem; cursor: pointer; }
+.transcript { flex: 1; min-block-size: 6rem; overflow-y: auto; overscroll-behavior: contain; padding: 1.25rem 1.5rem; }
+.welcome { display: grid; align-content: center; gap: .75rem; min-block-size: 100%; }
+.welcome > svg { inline-size: 2rem; block-size: 2rem; color: var(--color-accent); }
+.welcome h3 { margin: 0; font-size: 1.5rem; font-weight: 500; }
+.welcome p { margin: 0; color: var(--color-muted); }
+.user, .answer { margin-block-end: 1.25rem; overflow-wrap: anywhere; }
+.user { margin-inline-start: 1.75rem; padding: .75rem 1rem; border-radius: var(--radius-control); background: var(--color-background); }
+.answer { padding-inline-end: 1rem; }
+.author { font-size: .75rem; color: var(--color-muted); }
+.user p, .answer p { margin: .25rem 0 0; white-space: pre-wrap; font-size: .9375rem; }
+.sources { margin-block: .75rem 0; padding-inline-start: 1rem; font-size: .75rem; }
+.sources a { color: var(--color-foreground); text-underline-offset: .2em; }
+.waiting { margin: 0; font-size: .875rem; color: var(--color-muted); }
+.form { flex-shrink: 0; display: grid; gap: .65rem; padding: 1rem 1.5rem 1.25rem; border-block-start: 1px solid var(--color-border); }
+.disclosure { margin: 0; font-size: .6875rem; line-height: 1.8; color: var(--color-muted); }
+.input { inline-size: 100%; min-block-size: 5rem; max-block-size: 8rem; padding: .75rem 1rem; resize: vertical; border: 1px solid var(--color-border); border-radius: var(--radius-input); background: var(--color-background); color: var(--color-foreground); font-size: 1rem; }
+.input::placeholder { color: var(--color-muted); }
+.actions { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.submit { display: flex; align-items: center; gap: .5rem; min-block-size: 2.75rem; padding: .5rem 1rem; border: 0; border-radius: var(--radius-pill); background: var(--color-foreground); color: var(--color-surface); cursor: pointer; }
+.restart { min-block-size: 2.75rem; padding-inline: .5rem; border: 0; background: transparent; color: var(--color-muted); font-size: .8125rem; cursor: pointer; }
+.submit:disabled, .restart:disabled { opacity: .5; cursor: default; }
+.error { margin: 0; font-size: .8125rem; }
+@media (max-width: 30rem) {
+  .launcher { inset-inline-end: 1rem; inset-block-end: max(1rem, env(safe-area-inset-bottom)); }
+  .panel { inset-inline-end: .5rem; inset-block-end: .5rem; inline-size: calc(100vw - 1rem); max-block-size: calc(100dvb - 1rem); border-radius: 2rem; }
+  .surface { block-size: calc(100dvb - 1rem); padding-block-end: env(safe-area-inset-bottom); }
+  .header, .transcript, .form { padding-inline: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) { .launcher:active, .submit:active { transform: none; } }

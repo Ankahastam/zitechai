@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense, type ReactNode } from "react";
 import { ContactDialog } from "@/components/contact-dialog";
+import { ChatAssistant } from "@/components/chat-assistant";
 import { LeadAttribution } from "@/components/lead-attribution";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         {children}
         <SiteFooter />
         <ContactDialog content={siteContent.contactDialog} />
+        {process.env.NEXT_PUBLIC_CHAT_ENABLED === "true" ? <ChatAssistant /> : null}
       </body>
     </html>
   );
