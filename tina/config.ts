@@ -278,6 +278,33 @@ export default defineConfig({
         fields: [
           object("seo", "SEO صفحه", seoFields()),
           object("hero", "هرو", [
+            text("name", "نام محصول"), text("title", "عنوان"), strings("paragraphs", "متن"),
+            text("primaryCta", "درخواست دمو"), text("secondaryCta", "مشاهده امکانات"),
+          ]),
+          ...[
+            ["problem", "مسئله"], ["workflow", "از داده تا اقدام"], ["dashboard", "داشبورد"],
+            ["opportunities", "فرصت‌های رشد"], ["technical", "سئوی فنی"], ["research", "تحقیق"],
+            ["studio", "استودیوی محتوا"], ["visibility", "دیده‌شدن در هوش مصنوعی"], ["rank", "پایش رتبه"],
+            ["wordpress", "وردپرس"], ["competitors", "رقبا"], ["alerts", "هشدارها"], ["reports", "گزارش‌ها"],
+            ["audiences", "مخاطبان"], ["system", "معرفی سیستم"], ["localization", "فارسی و استقرار اختصاصی"],
+            ["finalCta", "درخواست دمو پایانی"],
+          ].map(([name, label]) => object(name, label, [
+            text("title", "عنوان"), strings("paragraphs", "پاراگراف‌ها به ترتیب نمایش"), strings("points", "موارد"),
+            object("features", "قابلیت‌ها", [text("title", "عنوان"), strings("body", "توضیحات")], true),
+            ...(name === "finalCta" ? [text("cta", "متن دکمه دمو")] : []),
+          ])),
+        ],
+        format: "json",
+        label: "صفحه سئو ایجنت",
+        match: { include: "seo-agent" },
+        name: "seoAgent",
+        path: "content",
+        ui: singleDocumentUi,
+      },
+      {
+        fields: [
+          object("seo", "SEO صفحه", seoFields()),
+          object("hero", "هرو", [
             text("badge", "برچسب"), text("title", "عنوان"), textarea("lede", "توضیح"),
             text("primaryCta", "CTA اصلی"), text("secondaryCta", "CTA دوم"), strings("trust", "نکات اعتماد"),
           ]),

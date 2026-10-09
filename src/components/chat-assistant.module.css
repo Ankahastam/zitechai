@@ -1,74 +1,177 @@
-.launcher, .loading {
+.dock {
+  --chat-ink: var(--color-foreground);
+  --chat-paper: 255 255 255;
+  --chat-muted: #626168;
   position: fixed;
-  inset-inline-end: 1.5rem;
-  inset-block-end: max(1.5rem, env(safe-area-inset-bottom));
+  inset-inline: 0;
+  inset-block-end: calc(28px + env(safe-area-inset-bottom) + var(--chat-keyboard, 0px));
+  inline-size: min(calc(560px - var(--chat-scroll-progress, 0) * 80px), calc(100% - 32px - var(--chat-scroll-progress, 0) * 16px));
+  margin-inline: auto;
   z-index: 60;
+  color: var(--chat-ink);
+  pointer-events: none;
 }
-.launcher {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  min-block-size: 3.5rem;
-  padding: .75rem 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-foreground);
-  color: var(--color-surface);
-  box-shadow: 0 8px 28px rgb(25 23 28 / 16%);
-  cursor: pointer;
-}
-.launcher:active, .submit:active { transform: scale(.98); }
-.loading { inset-block-end: 6rem; padding: 1rem; border-radius: var(--radius-control); background: var(--color-surface); }
-.panel {
+.stack { position: relative; }
+.atmosphere {
+  --chat-paper: 255 255 255;
   position: fixed;
-  inset: auto;
-  inset-inline-end: 1.5rem;
-  inset-block-end: max(1.5rem, env(safe-area-inset-bottom));
-  inline-size: min(26rem, calc(100vw - 3rem));
-  max-inline-size: none;
-  max-block-size: calc(100dvb - 3rem);
-  margin: 0;
+  z-index: 59;
+  inset: auto 0 var(--chat-keyboard, 0px);
+  block-size: calc(var(--chat-viewport, 100dvh) * .62);
+  visibility: hidden;
+  transition: visibility 350ms;
+  pointer-events: none;
+}
+.atmosphere[data-active="true"] { visibility: visible; }
+.atmosphere[data-active="true"] i { opacity: 1; }
+.atmosphere i {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 350ms ease;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(transparent, #000 48%);
+  -webkit-mask-image: linear-gradient(transparent, #000 48%);
+}
+.atmosphere i:nth-child(2) { inset-block-start: 18%; -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+.atmosphere i:nth-child(3) {
+  inset-block-start: 40%;
+  background: linear-gradient(transparent, rgb(var(--chat-paper) / 24%));
+  -webkit-backdrop-filter: blur(36px);
+  backdrop-filter: blur(36px);
+}
+.composer {
+  position: relative;
+  padding: 10px;
+  border: 0;
+  border-radius: 26px;
+  background: rgb(var(--chat-paper) / 92%);
+  box-shadow: 0 6px 14px rgb(0 0 0 / 9%), 0 18px 42px rgb(0 0 0 / 16%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  pointer-events: auto;
+  transition: box-shadow 250ms ease;
+  animation: arrive 450ms var(--ease-out) both;
+}
+.composer:focus-within { box-shadow: 0 8px 20px rgb(0 0 0 / 12%), 0 24px 60px rgb(0 0 0 / 22%); }
+.inputRow { position: relative; display: flex; align-items: flex-end; gap: 12px; }
+.suggestions { position: absolute; inset-block-start: 10px; inset-inline: 12px 68px; overflow: hidden; color: var(--chat-muted); font-size: 16px; line-height: 24px; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; }
+.suggestions::after { content: ""; display: inline-block; inline-size: 1px; block-size: 1em; margin-inline-start: 3px; background: currentColor; vertical-align: -.15em; animation: cursor 1s step-end infinite; }
+.input {
+  flex: 1;
+  min-inline-size: 0;
+  inline-size: 100%;
+  block-size: 44px;
+  max-block-size: min(144px, calc(var(--chat-viewport, 100dvh) * .25));
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  resize: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  text-align: start;
+}
+.input::placeholder { color: var(--chat-muted); }
+.input:focus-visible { outline: none; box-shadow: none; }
+.send:focus-visible, .collapse:focus-visible, .restart:focus-visible { outline: 2px solid var(--chat-muted); outline-offset: 3px; box-shadow: none; }
+.send, .collapse {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 44px;
+  block-size: 44px;
   padding: 0;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-  color: var(--color-foreground);
-  box-shadow: var(--shadow-card);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 120ms ease, opacity 180ms ease, background-color 180ms ease;
 }
-.panel::backdrop { background: rgb(25 23 28 / 24%); }
-.surface { display: flex; flex-direction: column; block-size: min(43rem, calc(100dvb - 3rem)); }
-.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; border-block-end: 1px solid var(--color-border); }
-.header h2, .header p { margin: 0; }
-.header h2 { font-size: 1.25rem; font-weight: 500; }
-.kicker { font-size: .75rem; color: var(--color-muted); }
-.close { flex-shrink: 0; inline-size: 2.75rem; block-size: 2.75rem; border: 0; border-radius: 50%; background: var(--color-background); color: var(--color-foreground); font-size: 1.5rem; cursor: pointer; }
-.transcript { flex: 1; min-block-size: 6rem; overflow-y: auto; overscroll-behavior: contain; padding: 1.25rem 1.5rem; }
-.welcome { display: grid; align-content: center; gap: .75rem; min-block-size: 100%; }
-.welcome > svg { inline-size: 2rem; block-size: 2rem; color: var(--color-accent); }
-.welcome h3 { margin: 0; font-size: 1.5rem; font-weight: 500; }
-.welcome p { margin: 0; color: var(--color-muted); }
-.user, .answer { margin-block-end: 1.25rem; overflow-wrap: anywhere; }
-.user { margin-inline-start: 1.75rem; padding: .75rem 1rem; border-radius: var(--radius-control); background: var(--color-background); }
-.answer { padding-inline-end: 1rem; }
-.author { font-size: .75rem; color: var(--color-muted); }
-.user p, .answer p { margin: .25rem 0 0; white-space: pre-wrap; font-size: .9375rem; }
-.sources { margin-block: .75rem 0; padding-inline-start: 1rem; font-size: .75rem; }
-.sources a { color: var(--color-foreground); text-underline-offset: .2em; }
-.waiting { margin: 0; font-size: .875rem; color: var(--color-muted); }
-.form { flex-shrink: 0; display: grid; gap: .65rem; padding: 1rem 1.5rem 1.25rem; border-block-start: 1px solid var(--color-border); }
-.disclosure { margin: 0; font-size: .6875rem; line-height: 1.8; color: var(--color-muted); }
-.input { inline-size: 100%; min-block-size: 5rem; max-block-size: 8rem; padding: .75rem 1rem; resize: vertical; border: 1px solid var(--color-border); border-radius: var(--radius-input); background: var(--color-background); color: var(--color-foreground); font-size: 1rem; }
-.input::placeholder { color: var(--color-muted); }
-.actions { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.submit { display: flex; align-items: center; gap: .5rem; min-block-size: 2.75rem; padding: .5rem 1rem; border: 0; border-radius: var(--radius-pill); background: var(--color-foreground); color: var(--color-surface); cursor: pointer; }
-.restart { min-block-size: 2.75rem; padding-inline: .5rem; border: 0; background: transparent; color: var(--color-muted); font-size: .8125rem; cursor: pointer; }
-.submit:disabled, .restart:disabled { opacity: .5; cursor: default; }
-.error { margin: 0; font-size: .8125rem; }
-@media (max-width: 30rem) {
-  .launcher { inset-inline-end: 1rem; inset-block-end: max(1rem, env(safe-area-inset-bottom)); }
-  .panel { inset-inline-end: .5rem; inset-block-end: .5rem; inline-size: calc(100vw - 1rem); max-block-size: calc(100dvb - 1rem); border-radius: 2rem; }
-  .surface { block-size: calc(100dvb - 1rem); padding-block-end: env(safe-area-inset-bottom); }
-  .header, .transcript, .form { padding-inline: 1.25rem; }
+.send { background: var(--chat-ink); color: rgb(var(--chat-paper)); }
+.send:disabled { background: rgb(110 110 115 / 12%); color: var(--chat-muted); cursor: default; }
+.send svg, .collapse svg { inline-size: 20px; block-size: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.send:not(:disabled):active, .collapse:active { transform: scale(.94); }
+.details { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows 300ms var(--ease-out), opacity 250ms ease, visibility 300ms; }
+.details > div { min-block-size: 0; overflow: hidden; }
+.dock:is([data-state="focused"], [data-state="conversing"], [data-state="generating"]) .details { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+.error { margin: 8px 12px 4px; color: #a83232; font-size: 13px; line-height: 1.8; }
+.challenge { max-inline-size: 100%; overflow: hidden; }
+.dock[data-state="collapsed"] .challenge { display: none; }
+.conversation {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(100% + 14px);
+  display: flex;
+  flex-direction: column;
+  max-block-size: max(44px, min(48dvh, calc(var(--chat-viewport, 100dvh) - 250px)));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 280ms ease, transform 350ms var(--ease-out), visibility 350ms;
+  pointer-events: none;
 }
-@media (prefers-reduced-motion: reduce) { .launcher:active, .submit:active { transform: none; } }
+.dock:is([data-state="focused"], [data-state="conversing"], [data-state="generating"]) .conversation { opacity: 1; visibility: visible; transform: translateY(0); }
+.toolbar { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 8px; padding-inline: 14px 2px; }
+.toolbar > div { display: flex; align-items: center; gap: 4px; pointer-events: auto; }
+.identity { font-size: 12px; color: var(--chat-muted); padding: 5px 10px; border-radius: 12px; background: rgb(var(--chat-paper) / 92%); }
+.collapse { background: rgb(var(--chat-paper) / 92%); color: var(--chat-ink); }
+.restart { min-block-size: 44px; padding: 8px 12px; border: 0; border-radius: 16px; background: rgb(var(--chat-paper) / 92%); color: var(--chat-muted); font-size: 12px; cursor: pointer; }
+.restart:disabled { opacity: .55; cursor: default; }
+.transcript { min-block-size: 0; padding: 12px 10px 4px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(110 110 115 / 35%) transparent; pointer-events: auto; }
+.transcript:empty { display: none; }
+.user, .answer { inline-size: fit-content; max-inline-size: 100%; margin-block: 0 18px; overflow-wrap: anywhere; animation: message-in 250ms var(--ease-out) both; }
+.user { max-inline-size: 85%; margin-inline-end: auto; padding: 10px 16px; border: 1px solid rgb(150 147 156 / 16%); border-radius: 20px 20px 6px 20px; background: rgb(239 238 241 / 98%); font-size: 14px; }
+.user p { margin: 0; white-space: pre-wrap; }
+.answer { inline-size: 100%; padding: 14px 16px; border-radius: 16px; background: rgb(var(--chat-paper) / 96%); font-size: 15px; line-height: 1.95; }
+.markdown > :first-child { margin-block-start: 0; }
+.markdown > :last-child { margin-block-end: 0; }
+.markdown p { margin-block: 0 12px; }
+.markdown ul, .markdown ol { padding-inline-start: 22px; margin-block: 12px; }
+.markdown ul { list-style: disc; }
+.markdown ol { list-style: decimal; }
+.markdown li + li { margin-block-start: 6px; }
+.markdown h1, .markdown h2, .markdown h3 { margin-block: 16px 8px; font-size: 1em; font-weight: 500; }
+.markdown strong { font-weight: 500; }
+.markdown a, .sources a { text-decoration: underline; text-underline-offset: 3px; }
+.markdown code { padding: 2px 4px; border-radius: 4px; background: rgb(110 110 115 / 9%); font-family: var(--font-latin); font-size: .88em; unicode-bidi: isolate; direction: ltr; }
+.markdown pre { max-inline-size: 100%; overflow-x: auto; padding: 12px; border-radius: 10px; background: rgb(110 110 115 / 8%); direction: ltr; text-align: left; overscroll-behavior-x: contain; }
+.markdown pre code { padding: 0; background: none; white-space: pre; }
+.markdown blockquote { margin-inline: 0; padding-inline-start: 12px; border-inline-start: 2px solid var(--color-border); }
+.sources { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 12px 0 0; padding: 10px 0 0; list-style: none; border-block-start: 1px solid rgb(110 110 115 / 12%); color: var(--chat-muted); font-size: 11px; }
+.thinking { display: flex; align-items: center; gap: 10px; inline-size: fit-content; padding: 10px 16px; border-radius: 16px; background: rgb(var(--chat-paper) / 96%); color: var(--chat-muted); font-size: 12px; }
+.dots { display: flex; align-items: center; gap: 4px; block-size: 20px; }
+.dots i { inline-size: 4px; block-size: 4px; border-radius: 50%; background: currentColor; animation: breathe 1.4s ease-in-out infinite; }
+.dots i:nth-child(2) { animation-delay: 140ms; }
+.dots i:nth-child(3) { animation-delay: 280ms; }
+@keyframes breathe { 0%, 80%, 100% { opacity: .35; } 40% { opacity: 1; } }
+@keyframes cursor { 50% { opacity: 0; } }
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes message-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 40rem) {
+  .dock { inline-size: min(calc(560px - var(--chat-scroll-progress, 0) * 80px), calc(100% - 24px - var(--chat-scroll-progress, 0) * 16px)); inset-block-end: calc(12px + env(safe-area-inset-bottom) + var(--chat-keyboard, 0px)); }
+  .composer { border-radius: 24px; padding: 8px; }
+  .inputRow { gap: 8px; }
+  .input { padding-inline: 10px; }
+  .conversation { max-block-size: max(44px, min(50dvh, calc(var(--chat-viewport, 100dvh) - 240px))); inset-block-end: calc(100% + 10px); }
+  .transcript { padding-inline: 2px; }
+  .answer { padding: 12px 14px; font-size: 14px; }
+  .suggestions { inset-inline: 10px 62px; }
+  .atmosphere i:first-child { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .atmosphere i:nth-child(2) { -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+  .atmosphere i:nth-child(3) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .composer { background: rgb(var(--chat-paper)); }
+  .atmosphere { mask-image: linear-gradient(transparent, #000); background: rgb(var(--chat-paper) / 75%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .suggestions::after { display: none; }
+  .composer, .user, .answer, .dots i { animation: none; }
+  .atmosphere, .atmosphere i, .conversation, .details, .send, .collapse, .composer { transition: none; }
+  .conversation, .send:active, .collapse:active { transform: none; }
+}

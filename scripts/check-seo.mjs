@@ -49,6 +49,7 @@ const requiredSchemas = new Map([
   ["/chat", ["Service", "BreadcrumbList", "FAQPage"]],
   ["/erp", ["Service", "BreadcrumbList", "FAQPage"]],
   ["/marketing-automation", ["Service", "BreadcrumbList", "FAQPage"]],
+  ["/seo-agent", ["Service", "BreadcrumbList"]],
   ["/voice-agent", ["Service", "BreadcrumbList", "FAQPage"]],
 ]);
 

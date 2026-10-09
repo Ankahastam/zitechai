@@ -97,7 +97,6 @@
 }
 
 html {
-  min-inline-size: 20rem;
   background: var(--color-background);
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
@@ -288,11 +287,7 @@ body {
 .hero-chatgpt__mark svg {
   inline-size: 1.65rem;
   block-size: 1.65rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.55;
+  fill: currentColor;
 }
 
 .hero-chatgpt__copy {
@@ -348,6 +343,7 @@ body {
 @media (min-width: 64rem) {
   .hero-chatgpt {
     position: absolute;
+    inline-size: min(100%, 21rem);
     inset-block-end: var(--space-6);
     inset-inline-start: max(var(--page-gutter), calc((100vw - var(--container-page)) / 2));
     margin: 0;
@@ -1087,6 +1083,8 @@ body {
 
 .site-header__bar {
   display: grid;
+  inline-size: 100%;
+  margin-inline: auto;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   min-block-size: var(--header-bar-expanded);
@@ -1112,6 +1110,18 @@ body {
     animation-timeline: scroll(root block);
     animation-range: 0 6rem;
   }
+
+  @media (min-width: 64rem) {
+    .site-header__bar {
+      animation-name: site-header-bar-compact, site-header-width-compact;
+      animation-timeline: scroll(root block), scroll(root block);
+      animation-range: 0 6rem, 0 70vh;
+    }
+  }
+}
+
+@keyframes site-header-width-compact {
+  to { inline-size: calc(100% - clamp(0px, (100vw - 64rem) * .25, 6rem)); }
 }
 
 @keyframes site-header-compact {
@@ -1857,7 +1867,7 @@ html.menu-open body {
 
 .site-footer__eyebrow {
   margin: 0 0 var(--space-4);
-  color: rgb(255 255 255 / 38%);
+  color: var(--footer-muted);
   font-size: 0.78rem;
   font-weight: var(--font-weight-semibold);
 }
@@ -2003,7 +2013,7 @@ html.menu-open body {
   display: inline-flex;
   gap: 0.65rem;
   align-items: center;
-  color: rgb(255 255 255 / 36%);
+  color: var(--footer-muted);
   font-size: 0.72rem;
 }
 
@@ -2080,7 +2090,7 @@ html.menu-open body {
 
 .site-footer__copyright {
   margin: 0;
-  color: rgb(255 255 255 / 42%);
+  color: var(--footer-muted);
   font-size: 0.78rem;
   white-space: nowrap;
 }

@@ -23,6 +23,7 @@
         "children": [
           { "href": "/voice-agent", "label": "ویس ایجنت منشی تلفنی" },
           { "href": "/chat", "label": "چت ایجنت اختصاصی" },
+          { "href": "/seo-agent", "label": "سئو ایجنت" },
           { "href": "/marketing-automation", "label": "مارکتینگ اتومیشن" },
           { "href": "/erp", "label": "سامانه‌های یکپارچه ERP" }
         ]
@@ -64,6 +65,7 @@
       { "href": "/#services", "label": "راهکارها" },
       { "href": "/blog", "label": "مقالات" },
       { "href": "/voice-agent", "label": "منشی تلفنی هوشمند" },
+      { "href": "/seo-agent", "label": "سئو ایجنت" },
       { "href": "/#faq", "label": "سؤالات متداول" }
     ],
     "copyrightLatin": "© 2026 Z-Tech.",
