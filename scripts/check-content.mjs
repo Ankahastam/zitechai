@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 
 const contracts = {
   "site.json": ["seo", "navigation", "footer"],
-  "home.json": ["seo", "hero", "approach", "capabilities", "faq"],
+  "home.json": ["seo", "hero", "approach", "partners", "capabilities", "faq"],
   "chat.json": ["seo", "hero", "channels", "features", "pricing", "faq", "finalCta"],
   "erp.json": ["seo", "hero", "problems", "modules", "flow", "reporting", "approach", "useCases", "faq", "finalCta"],
   "seo-agent.json": ["seo", "hero", "problem", "workflow", "dashboard", "opportunities", "technical", "research", "studio", "visibility", "rank", "wordpress", "competitors", "alerts", "reports", "audiences", "system", "localization", "finalCta"],

@@ -47,6 +47,64 @@
       "loopLabel": "کار روزمره"
     }
   },
+  "partners": {
+    "kicker": "بخشی از پروژه‌های زی‌تک",
+    "title": "همکاری‌هایی که به اجرا رسیدند.",
+    "previousLabel": "نمایش مجموعه‌های قبلی",
+    "nextLabel": "نمایش مجموعه‌های بعدی",
+    "railLabel": "مجموعه‌های همکار و خلاصهٔ پروژه‌ها؛ با کلیدهای جهت‌نما مرور کنید",
+    "items": [
+      {
+        "id": "bodyescort",
+        "name": "هما مهر فروهر · بادی اسکورت",
+        "logo": "/images/partners/bodyescort.webp",
+        "url": "",
+        "description": "ERP جامع و اتوماسیون خط تولید لوازم ارتوپدی پزشکی."
+      },
+      {
+        "id": "iran-dh",
+        "name": "ایران دی اچ",
+        "logo": "/images/partners/iran-dh.webp",
+        "url": "https://www.irandh.ir/",
+        "description": "منشی هوش مصنوعی برای پاسخ‌گویی تلفنی ۲۴ ساعته."
+      },
+      {
+        "id": "sorrad",
+        "name": "بازرگانی عطر و ادکلن سوراد",
+        "logo": "/images/partners/sorrad.webp",
+        "url": "https://sorrad.ir/",
+        "description": "ایجنت مدیر فروش برای تحلیل عملکرد کل تیم فروش."
+      },
+      {
+        "id": "kaman",
+        "name": "استودیوهای ورزشی درمانی کمان",
+        "logo": "/images/partners/kaman.webp",
+        "url": "",
+        "description": "پیاده‌سازی سیستم جامع کمان ۳۶۰."
+      },
+      {
+        "id": "amn-ertebat",
+        "name": "امن ارتباط",
+        "logo": "/images/partners/amn-ertebat.webp",
+        "url": "https://amn-ertebat.ir/",
+        "description": "هوشمندسازی فروش با CRM ایجنت‌محور، منشی تلفنی و مدیر فروش AI."
+      },
+      {
+        "id": "delta-panel",
+        "name": "دلتا آذر پانل تبریز",
+        "logo": "/images/partners/delta-panel.webp",
+        "url": "",
+        "description": "ویس ایجنت و تحلیلگر مکالمات موبایل تیم فروش تولیدکنندهٔ ساندویچ پانل."
+      },
+      {
+        "id": "behin-tejarat",
+        "name": "بهین تجارت",
+        "logo": "/images/partners/behin-tejarat.webp",
+        "url": "",
+        "description": "هوشمندسازی CRM دیدار و پیاده‌سازی ایجنت فروش."
+      }
+    ]
+  },
   "capabilities": {
     "kickerPersian": "آنچه می‌سازیم",
     "kickerLatin": "WHAT WE BUILD",

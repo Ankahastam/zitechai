@@ -3,6 +3,7 @@ import { Approach } from "@/components/approach";
 import { Capabilities } from "@/components/capabilities";
 import { FaqSection } from "@/components/faq-section";
 import { Hero } from "@/components/hero";
+import { Partners } from "@/components/partners";
 import { homeContent, siteContent } from "@/content";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function HomePage() {
     <main>
       <Hero />
       <Approach />
+      <Partners />
       <Capabilities />
       <FaqSection />
       <script

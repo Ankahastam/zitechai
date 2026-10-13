@@ -232,6 +232,16 @@ export default defineConfig({
               strings("sourceLabels", "منابع"), text("coreLabel", "لایه مرکزی"), text("loopLabel", "چرخه"),
             ]),
           ]),
+          object("partners", "مجموعه‌های همکار", [
+            text("kicker", "عنوان کوچک"), text("title", "عنوان بخش"),
+            text("previousLabel", "عنوان دکمه قبلی"), text("nextLabel", "عنوان دکمه بعدی"),
+            text("railLabel", "راهنمای دسترس‌پذیری"),
+            object("items", "مجموعه‌ها", [
+              hidden("id"), text("name", "نام مجموعه"),
+              { name: "logo", label: "لوگو", type: "image" },
+              text("url", "وب‌سایت مجموعه"), textarea("description", "خلاصهٔ همکاری"),
+            ], true),
+          ]),
           object("capabilities", "خدمات", [
             text("kickerPersian", "عنوان کوچک فارسی"), text("kickerLatin", "عنوان کوچک انگلیسی"),
             text("titleBeforeBreak", "عنوان، سطر اول"), text("titleAfterBreak", "عنوان، سطر دوم"),
