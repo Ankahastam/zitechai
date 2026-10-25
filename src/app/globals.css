@@ -4799,6 +4799,10 @@ html.contact-open body {
 .partners__controls svg { inline-size: 1.125rem; block-size: 1.125rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .partners__rail { display: flex; gap: var(--space-8); margin: 0; padding: var(--space-2) var(--space-1) var(--space-6); list-style: none; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--space-1); scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
 .partners__rail:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: var(--radius-control); }
+.partners__rail[data-looping="true"] { scroll-snap-type: none; scroll-behavior: auto; scrollbar-width: none; }
+.partners__rail[data-looping="true"]::-webkit-scrollbar { display: none; }
+.partners__rail:not([data-looping="true"]) > [aria-hidden="true"] { display: none; }
+@media (prefers-reduced-motion: reduce) { .partners__pause { display: none !important; } }
 .partners__item { flex: 0 0 calc((100% - 3 * var(--space-8)) / 4); min-inline-size: 0; scroll-snap-align: start; text-align: center; }
 .partners__logo { display: grid; place-items: center; aspect-ratio: 8 / 5; }
 .partners__logo img { display: block; inline-size: 100%; block-size: auto; object-fit: contain; }
