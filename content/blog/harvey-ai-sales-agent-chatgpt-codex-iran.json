@@ -1,0 +1,1225 @@
+{
+  "title": "آموزش Harvey؛ ساخت ایجنت فروش هوش مصنوعی با ChatGPT و Codex",
+  "slug": "harvey-ai-sales-agent-chatgpt-codex-iran",
+  "excerpt": "آموزش نصب Harvey و اتصال آن به ChatGPT با Codex، بدون API جداگانه؛ همراه با تنظیمات فارسی، جذب لید در ایران و نکات امنیتی ارسال ایمیل.",
+  "coverImage": "/images/blog/harvey/harvey-ai-sales-agent-iran-cover.webp",
+  "category": "ایجنت‌های هوشمند",
+  "author": "تیم زی‌تک",
+  "publishedDate": "2026-10-28T08:00:00.000Z",
+  "updatedDate": "2026-10-28T08:00:00.000Z",
+  "readingTime": 7,
+  "tags": [
+    "Harvey",
+    "Codex",
+    "ChatGPT",
+    "ایجنت فروش هوش مصنوعی",
+    "اتوماسیون فروش",
+    "جذب مشتری B2B"
+  ],
+  "seoTitle": "آموزش Harvey؛ ساخت ایجنت فروش هوش مصنوعی با اشتراک ChatGPT و Codex",
+  "seoDescription": "آموزش نصب Harvey و اتصال آن به ChatGPT با Codex، بدون API جداگانه؛ همراه با تنظیمات فارسی، جذب لید در ایران و نکات امنیتی ارسال ایمیل.",
+  "canonicalUrl": "/blog/harvey-ai-sales-agent-chatgpt-codex-iran",
+  "content": {
+    "type": "root",
+    "children": [
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "اگر می‌خواهید شناسایی مشتری بالقوه، تحلیل وب‌سایت‌ها و آماده‌سازی ایمیل‌های فروش را تا حدی خودکار کنید، ",
+            "bold": true
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "Harvey",
+                "bold": true
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " یک پروژه متن‌باز است که ارزش امتحان کردن دارد.",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " ویژگی جالب آن امکان استفاده از "
+          },
+          {
+            "type": "text",
+            "text": "اشتراک ChatGPT دارای دسترسی Codex",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " برای کارهای مدل زبانی، بدون نیاز به پرداخت جداگانه بابت هر توکن API است؛ البته محدودیت مصرف اشتراک و هزینه سرویس‌های جانبی همچنان وجود دارد."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "در این راهنمای کوتاه، نصب Harvey، اجرای آزمایشی و روش بومی‌سازی آن برای بازار ایران را مرور می‌کنیم."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "Harvey چیست و چه کار می‌کند؟"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "Harvey یک "
+          },
+          {
+            "type": "text",
+            "text": "AI Sales Agent",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " با مجوز MIT است که می‌تواند کسب‌وکارهای بالقوه را پیدا کند، سایتشان را بررسی کند، سیگنال‌هایی مانند نبود اسکیما یا محتوای قدیمی را تشخیص دهد، ایمیل شخصی‌سازی‌شده پیشنهاد کند و پاسخ‌ها را در مسیر فروش پیگیری کند. در حالت پیش‌فرض "
+          },
+          {
+            "type": "text",
+            "text": "ارسال ایمیل نیاز به تأیید انسان دارد",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": "؛ پس بهتر است ابتدا خروجی‌ها را بررسی کنید، نه اینکه ارسال خودکار را فعال کنید."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "نصب Harvey با اشتراک ChatGPT؛ قدم‌به‌قدم"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "پیش‌نیازها:",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " macOS یا Linux، پایتون ۳.۱۱ به بالا (دستورات زیر از Python 3.13 استفاده می‌کنند)، Node.js و یک حساب ChatGPT با دسترسی Codex. طبق مستندات فعلی پروژه، حالت Codex روی ویندوز و نسخه Docker آن پشتیبانی نمی‌شود و نسخه CLI باید "
+          },
+          {
+            "type": "text",
+            "text": "دقیقاً ",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": "0.159.3",
+            "code": true,
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " باشد."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۱. دانلود و نصب"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "در ترمینال macOS یا Linux اجرا کنید (Python 3.13 باید از قبل نصب شده باشد):"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "bash",
+        "value": "git clone https://github.com/ethanplusai/harvey.git\ncd harvey\npython3.13 -m venv .venv\nsource .venv/bin/activate\npip install -e .\ncp .env.example .env",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "git clone https://github.com/ethanplusai/harvey.git"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "cd harvey"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "python3.13 -m venv .venv"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "source .venv/bin/activate"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "pip install -e ."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "cp .env.example .env"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "فایل "
+          },
+          {
+            "type": "text",
+            "text": ".env",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " را طبق توضیحات داخل آن ویرایش کنید؛ "
+          },
+          {
+            "type": "text",
+            "text": "کلیدها و اطلاعات ورود را در Git منتشر نکنید.",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " برای مرحله ارسال واقعی، به صندوق ایمیل و تنظیمات احراز هویت آن هم نیاز دارید."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۲. اتصال Codex به اشتراک ChatGPT"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "bash",
+        "value": "npm install -g @openai/codex@0.159.3\ncodex login",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "npm install -g @openai/codex@0.159.3"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "codex login"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "در صفحه ورود، "
+          },
+          {
+            "type": "text",
+            "text": "Sign in with ChatGPT",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " را انتخاب کنید؛ Harvey در این حالت ورود با API Key را قبول نمی‌کند. سپس با دستور زیر، Harvey را با محتوای سایت کسب‌وکارتان آموزش دهید:"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "bash",
+        "value": "harvey train https://example.com --provider codex --model gpt-5.5",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey train https://example.com --provider codex --model gpt-5.5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "https://example.com",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " را با آدرس واقعی سایت خود جایگزین کنید. "
+          },
+          {
+            "type": "text",
+            "text": "gpt-5.5",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " پیشنهاد README است؛ اگر در فهرست مدل‌های حساب شما وجود نداشت، باید شناسه مدل قابل‌دسترس را انتخاب کنید. روش جایگزین، اجرای "
+          },
+          {
+            "type": "text",
+            "text": "harvey setup",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " و انتخاب "
+          },
+          {
+            "type": "text",
+            "text": "codex",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " در راه‌اندازی است."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۳. کشف لید و بررسی خروجی، بدون ارسال خودکار"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "bash",
+        "value": "harvey signals --confirm free\nharvey discover --providers\nharvey discover --estimate\nharvey discover\nharvey profile\nharvey sending pause\nharvey dashboard",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey signals --confirm free"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey discover --providers"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey discover --estimate"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey discover"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey profile"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey sending pause"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "harvey dashboard"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "در داشبورد، لیدها و متن‌های آماده‌شده را بررسی کنید. برای فعال شدن چرخه پردازش، در ترمینال جداگانه و با همان محیط مجازی "
+          },
+          {
+            "type": "text",
+            "text": "harvey run",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " را اجرا کنید. دستور "
+          },
+          {
+            "type": "text",
+            "text": "harvey sending pause",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " نقش کلید توقف ارسال را دارد؛ بعد از تنظیم صندوق ایمیل، تأیید پیام‌ها و بررسی قواعد ارسال، با "
+          },
+          {
+            "type": "text",
+            "text": "harvey sending resume",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " می‌توان آن را باز کرد. برای دریافت فهرست مخاطبان مجاز و قابل‌تحویل، دستور "
+          },
+          {
+            "type": "text",
+            "text": "harvey export",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " فایل CSV خروجی می‌سازد."
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "children": [
+          {
+            "type": "text",
+            "text": "نکته:",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " منبع پیش‌فرض کشف لید، OpenStreetMap است. کیفیت داده، پوشش کسب‌وکارهای ایرانی و صحت ایمیل‌ها را مستقل بررسی کنید؛ کشف خودکار مشتری در ایران تضمین‌شده نیست."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "چطور Harvey را برای بازار ایران شخصی‌سازی کنیم؟"
+          }
+        ]
+      },
+      {
+        "type": "img",
+        "url": "/images/blog/harvey/harvey-iran-sales-automation-workflow.webp",
+        "alt": "نمودار مفهومی بومی‌سازی جریان جذب مشتری، تحلیل نیاز، تأیید پیام و مدیریت فرصت فروش",
+        "caption": null,
+        "children": [
+          {
+            "type": "text",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "این تصویر معماری پیشنهادی برای بازار ایران را نشان می‌دهد؛ اسکرین‌شات واقعی نرم‌افزار Harvey نیست.",
+            "italic": true
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۱. تنظیم شهر، مخاطب و ساعت تهران"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "بعد از "
+          },
+          {
+            "type": "text",
+            "text": "harvey train",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": "، فایل "
+          },
+          {
+            "type": "text",
+            "text": "harvey.local.yaml",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " ایجاد می‌شود. "
+          },
+          {
+            "type": "text",
+            "text": "فقط بخش‌های مربوطه را در همان فایل تغییر دهید؛ کل فایل را با قطعه زیر جایگزین نکنید",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " تا تنظیمات محصول و صندوق ایمیل حذف نشوند:"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "yaml",
+        "value": "brain:\n  provider: codex\n  model: \"\"  # انتخاب خودکار مدل سازگار از فهرست حساب\n\nicp:\n  industries: [\"فروشگاه اینترنتی\", \"کلینیک زیبایی\"]\n  titles: [\"مدیرعامل\", \"مدیر بازاریابی\", \"مدیر فروش\"]\n  geography: [\"Tehran, Iran\", \"Karaj, Iran\"]\n\nchannels:\n  email:\n    require_approval: true\n    max_daily_sends: 10\n    send_window:\n      start: \"09:00\"\n      end: \"17:00\"\n      weekdays_only: true  # در نسخه فعلی: دوشنبه تا جمعه، نه هفته کاری ایران\n      recipient_timezone: false\n\nusage:\n  quiet_hours:\n    start: \"21:00\"\n    end: \"08:00\"\n    timezone: \"Asia/Tehran\"",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "brain:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  provider: codex"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  model: \"\"  # انتخاب خودکار مدل سازگار از فهرست حساب"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "icp:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  industries: [\"فروشگاه اینترنتی\", \"کلینیک زیبایی\"]"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  titles: [\"مدیرعامل\", \"مدیر بازاریابی\", \"مدیر فروش\"]"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  geography: [\"Tehran, Iran\", \"Karaj, Iran\"]"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "channels:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  email:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    require_approval: true"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    max_daily_sends: 10"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    send_window:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "      start: \"09:00\""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "      end: \"17:00\""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "      weekdays_only: true  # در نسخه فعلی: دوشنبه تا جمعه، نه هفته کاری ایران"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "      recipient_timezone: false"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "usage:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "  quiet_hours:"
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    start: \"21:00\""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    end: \"08:00\""
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "    timezone: \"Asia/Tehran\""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "این تنظیمات "
+          },
+          {
+            "type": "text",
+            "text": "نمونه‌ای برای ادغام با پیکربندی تولیدشده",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " هستند، نه یک فایل مستقل آماده اجرا. مهم: گزینه "
+          },
+          {
+            "type": "text",
+            "text": "weekdays_only",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " در Harvey دوشنبه تا جمعه را در نظر می‌گیرد؛ برای تعطیلی جمعه، پنجشنبه و مناسبت‌های تقویم ایران باید منطق زمان‌بندی اصلاح شود. تا آن زمان، تأیید دستی ارسال را حفظ کنید. تشخیص عنوان‌های شغلی فارسی و جست‌وجوی صنعت‌های ایرانی هم به تست و احتمالاً اصلاح کد نیاز دارد."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۲. فارسی‌کردن ایمیل‌ها با پرامپت فروش"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "قوانین تولید پیام در فایل‌های "
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey/blob/main/prompts/writer.md",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "prompts/writer.md",
+                "code": true
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " و "
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey/blob/main/skills/email_frameworks.md",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "skills/email_frameworks.md",
+                "code": true
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " قابل تنظیم‌اند. می‌توانید قاعده زیر را برای نگارش متن اضافه کنید:"
+          }
+        ]
+      },
+      {
+        "type": "code_block",
+        "lang": "text",
+        "value": "Write outbound sales emails in natural Persian (fa-IR).\nUse a concise, respectful B2B tone. Maximum 75 Persian words.\nMention only verified facts found on the prospect's own website.\nDo not invent customer pain points, statistics or prior relationships.\nOffer one specific benefit and end with one low-pressure question.\nKeep all drafts pending human approval.",
+        "children": [
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Write outbound sales emails in natural Persian (fa-IR)."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Use a concise, respectful B2B tone. Maximum 75 Persian words."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Mention only verified facts found on the prospect's own website."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Do not invent customer pain points, statistics or prior relationships."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Offer one specific benefit and end with one low-pressure question."
+              }
+            ]
+          },
+          {
+            "type": "code_line",
+            "children": [
+              {
+                "text": "Keep all drafts pending human approval."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "نمونه پیام هدف:",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " «سلام، در وب‌سایت مجموعه شما امکان ثبت درخواست خارج از ساعت کاری دیده نمی‌شود. ما در زی‌تک راهکارهای پاسخ‌گویی هوشمند طراحی می‌کنیم. آیا بررسی یک نمونه متناسب با کسب‌وکارتان برایتان مفید است؟» این پیام فقط زمانی مناسب است که نبود این قابلیت واقعاً بررسی و تأیید شده باشد."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "۳. اتصال به کانال‌های فروش رایج ایران"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "Harvey ذاتاً ایمیل‌محور است. برای "
+          },
+          {
+            "type": "text",
+            "text": "تماس تلفنی، CRM فارسی یا پیام‌رسان‌ها",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " باید یک لایه سفارشی بسازید: لیدهای مجاز را با "
+          },
+          {
+            "type": "text",
+            "text": "harvey export",
+            "code": true
+          },
+          {
+            "type": "text",
+            "text": " به CSV بگیرید، پس از پاک‌سازی و رفع تکراری‌ها در CRM ثبت کنید و پیام یا تسک تماس را با تأیید کارشناس فروش ایجاد کنید. "
+          },
+          {
+            "type": "text",
+            "text": "اتصال مستقیم به واتساپ، پیامک یا CRM ایرانی قابلیت آماده و تضمین‌شده Harvey نیست.",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " برای این کانال‌ها از API رسمی و اجازه معتبر مخاطب استفاده کنید؛ شماره تلفن و اطلاعات اشخاص را بدون مجوز جمع‌آوری یا برای ارسال انبوه استفاده نکنید."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "محدودیت‌های مهم قبل از استفاده واقعی"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "children": [
+          {
+            "type": "li",
+            "children": [
+              {
+                "type": "lic",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "اشتراک ChatGPT رایگانِ نامحدود نیست:",
+                    "bold": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " سهمیه Codex، دسترسی منطقه‌ای و شرایط سرویس اعمال می‌شود؛ سرویس ارسال ایمیل یا منبع لید پولی ممکن است هزینه مستقل داشته باشد."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "li",
+            "children": [
+              {
+                "type": "lic",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "کیفیت زبان فارسی نیازمند ارزیابی است:",
+                    "bold": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " تشخیص نام فارسی، ساختار سایت‌های ایرانی، نیم‌فاصله، لحن مکاتبه و تشخیص پاسخ‌هایی مانند «لغو» یا «تمایلی ندارم» را با نمونه واقعی تست کنید."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "li",
+            "children": [
+              {
+                "type": "lic",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "ارسال بدون کنترل ریسک دارد:",
+                    "bold": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " "
+                  },
+                  {
+                    "type": "text",
+                    "text": "require_approval: true",
+                    "code": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " را نگه دارید، مخاطب انصراف‌داده را حذف کنید، SPF/DKIM/DMARC را تنظیم کنید و با حجم کم شروع کنید."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "li",
+            "children": [
+              {
+                "type": "lic",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "نسخه نرم‌افزار ممکن است تغییر کند:",
+                    "bold": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " اگر Codex متوقف شد، "
+                  },
+                  {
+                    "type": "text",
+                    "text": "harvey status --check",
+                    "code": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " و "
+                  },
+                  {
+                    "type": "text",
+                    "text": "codex login",
+                    "code": true
+                  },
+                  {
+                    "type": "text",
+                    "text": " را بررسی کنید؛ از حذف محافظت‌های امنیتی پروژه خودداری کنید."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "جمع‌بندی"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "Harvey برای ساخت نمونه اولیه "
+          },
+          {
+            "type": "text",
+            "text": "اتوماسیون فروش B2B با هوش مصنوعی",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " گزینه‌ای قابل‌بررسی است؛ به‌ویژه اگر می‌خواهید بدون توسعه صفر تا صد یک ایجنت، جریان کشف لید، تحلیل سایت و پیش‌نویس فروش را آزمایش کنید. برای ایران بهتر است آن را "
+          },
+          {
+            "type": "text",
+            "text": "دستیار تحقیق و آماده‌سازی پیام تیم فروش",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " در نظر بگیرید و بومی‌سازی داده، فارسی‌نویسی و اتصال به CRM را به‌تدریج انجام دهید. زی‌تک نیز می‌تواند از همین الگو برای طراحی فرایندهای فروش متناسب با کسب‌وکارهای ایرانی استفاده کند."
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "children": [
+          {
+            "type": "text",
+            "text": "پرسش‌های متداول"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "آیا Harvey با ChatGPT Plus کار می‌کند؟",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": "  اگر حساب شما به Codex دسترسی داشته باشد، طبق README می‌توانید با ورود ChatGPT به Codex CLI از Harvey استفاده کنید؛ سهمیه استفاده همچنان محدود است."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "آیا بدون API Key مدل می‌شود Harvey را اجرا کرد؟",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " بله، در حالت Codex نیازی به API Key مدل نیست؛ اما سرویس‌های ارسال ایمیل یا کشف لید ممکن است کلید و هزینه جدا داشته باشند."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "آیا Harvey خودش پیام واتساپ فارسی می‌فرستد؟",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " خیر؛ این کار در نسخه اصلی، یک اتصال آماده برای بازار ایران نیست و باید جداگانه، با مسیر رسمی و رضایت مخاطب توسعه داده شود."
+          }
+        ]
+      },
+      {
+        "type": "hr",
+        "children": [
+          {
+            "type": "text",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "منابع و تاریخ بررسی (۲۸ اکتبر ۲۰۲۶):",
+            "bold": true
+          },
+          {
+            "type": "text",
+            "text": " "
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "مخزن اصلی Harvey"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "، "
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey#using-a-chatgpt-plan-instead-codex",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "راهنمای استفاده از ChatGPT با Codex در README"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "، "
+          },
+          {
+            "type": "a",
+            "url": "https://github.com/ethanplusai/harvey/blob/main/harvey.yaml",
+            "title": null,
+            "children": [
+              {
+                "type": "text",
+                "text": "تنظیمات نمونه Harvey"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": ". این مطلب آموزشی مستقل از توسعه‌دهنده پروژه است."
+          }
+        ]
+      }
+    ]
+  }
+}
