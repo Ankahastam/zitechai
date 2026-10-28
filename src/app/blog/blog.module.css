@@ -31,6 +31,7 @@
 .cover{position:relative;aspect-ratio:16/8;overflow:hidden;border-radius:clamp(2rem,5vw,4rem);background:var(--color-border);box-shadow:var(--shadow-card)}
 .cover img{object-fit:cover}
 .articleLayout{display:grid;gap:var(--space-10);padding-block:clamp(var(--space-16),9vw,var(--space-24))}
+.articleLayout>div{min-inline-size:0}
 .toc{align-self:start;padding:var(--space-5);border:1px solid rgb(255 255 255/72%);border-radius:1.75rem;background:rgb(255 255 255/58%);-webkit-backdrop-filter:blur(1rem);backdrop-filter:blur(1rem)}
 .toc strong{font-size:.9rem;font-weight:var(--font-weight-medium)}
 .toc ol{display:grid;gap:.5rem;margin:var(--space-4) 0 0;padding:0;list-style:none}
