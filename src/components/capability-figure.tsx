@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { Icon } from "@/components/ui/icon";
 import { homeContent } from "@/content";
 
-export type CapabilityFigureId = "voice" | "sales" | "chat" | "systems";
+export type CapabilityFigureId = "voice" | "sales" | "outbound" | "crm";
 
 const waveform = [12, 22, 15, 34, 46, 28, 54, 38, 64, 43, 30, 51, 68, 42, 25, 48, 60, 36, 22, 42, 28, 17, 30, 12];
 const copy = homeContent.capabilityPreviews;
@@ -33,6 +33,7 @@ function SalesPreview() {
     <div className="cap-demo__workspace">
       <div className="cap-demo__toolbar"><span><Icon name="waveform" /> {copy.sales.toolbar}</span><span className="cap-demo__pill">{copy.sales.pill}</span></div>
       <div className="cap-demo__recording"><Waveform /><span>{copy.sales.recording}</span></div>
+      <div className="cap-demo__criteria">{copy.sales.criteria.map((criterion, index) => <div key={criterion}><span>{criterion}</span><span className="cap-demo__assessment">{index === 2 ? "نیاز به بهبود" : "نقطهٔ قوت"}</span></div>)}</div>
       <blockquote className="cap-demo__quote">{copy.sales.quote}<cite>{copy.sales.cite}</cite></blockquote>
       <details className="cap-demo__action">
         <summary><span className="cap-demo__before">{copy.sales.open}</span><span className="cap-demo__after">{copy.sales.close}</span><Icon name="chart" /></summary>
@@ -45,44 +46,41 @@ function SalesPreview() {
   );
 }
 
-function ChatPreview() {
+function OutboundPreview() {
   return (
     <div className="cap-demo__workspace">
-      <div className="cap-demo__channels">{copy.chat.channels.map((channel) => <span key={channel}>{channel}</span>)}</div>
-      <div className="cap-demo__toolbar"><span><Icon name="message-square" /> {copy.chat.toolbar}</span></div>
-      <div className="cap-demo__messages"><p className="cap-demo__bubble cap-demo__bubble--customer">{copy.chat.customer}</p><p className="cap-demo__bubble">{copy.chat.agent}</p></div>
+      <div className="cap-demo__toolbar"><span><Icon name="phone-outgoing" /> {copy.outbound.toolbar}</span></div>
+      <div className="cap-demo__file"><Icon name="users" /><bdi>{copy.outbound.file}</bdi></div>
+      <ol className="cap-demo__journey">{copy.outbound.steps.map((step) => <li key={step}>{step}</li>)}</ol>
       <details className="cap-demo__action">
-        <summary><span className="cap-demo__before">{copy.chat.open}</span><span className="cap-demo__after">{copy.chat.close}</span><Icon name="users" /></summary>
-        <div className="cap-demo__result"><span className="cap-demo__handoff"><Icon name="users" /> {copy.chat.team}</span><p>{copy.chat.topic}</p><p>{copy.chat.history}</p></div>
+        <summary><span className="cap-demo__before">{copy.outbound.open}</span><span className="cap-demo__after">{copy.outbound.close}</span><span aria-hidden="true">+</span></summary>
+        <div className="cap-demo__result"><ul className="cap-demo__steps">{copy.outbound.rules.map((rule) => <li key={rule}>{rule}</li>)}</ul><p>{copy.outbound.result}</p></div>
       </details>
     </div>
   );
 }
 
-function SystemsPreview() {
+function CrmPreview() {
   return (
-    <div className="cap-demo__systems">
-      <div className="cap-demo__system-request"><Icon name="message-square" /><span>{copy.systems.request}</span></div>
-      <div className="cap-demo__connector" aria-hidden="true" />
-      <div className="cap-demo__core"><Icon name="activity" /><span>{copy.systems.core}</span><small>{copy.systems.coreNote}</small></div>
-      <div className="cap-demo__branches" aria-hidden="true"><span /><span /><span /></div>
-      <div className="cap-demo__nodes"><span><Icon name="users" /><bdi>{copy.systems.nodes[0]}</bdi></span><span><Icon name="shopping-cart" />{copy.systems.nodes[1]}</span><span><Icon name="chart" />{copy.systems.nodes[2]}</span></div>
+    <div className="cap-demo__workspace">
+      <div className="cap-demo__toolbar"><span><Icon name="users" /> {copy.crm.toolbar}</span><span lang="en" dir="ltr">CRM</span></div>
+      <ol className="cap-demo__journey">{copy.crm.steps.map((step) => <li key={step}>{step}</li>)}</ol>
       <details className="cap-demo__action">
-        <summary><span className="cap-demo__before">{copy.systems.open}</span><span className="cap-demo__after">{copy.systems.close}</span><Icon name="link" /></summary>
-        <div className="cap-demo__result"><ol className="cap-demo__steps">{copy.systems.steps.map((step) => <li key={step}>{step}</li>)}</ol></div>
+        <summary><span className="cap-demo__before">{copy.crm.open}</span><span className="cap-demo__after">{copy.crm.close}</span><Icon name="link" /></summary>
+        <div className="cap-demo__result"><p>{copy.crm.result}</p></div>
       </details>
     </div>
   );
 }
 
-const previews = { voice: VoicePreview, sales: SalesPreview, chat: ChatPreview, systems: SystemsPreview };
+const previews = { voice: VoicePreview, sales: SalesPreview, outbound: OutboundPreview, crm: CrmPreview };
 
 export function CapabilityFigure({ id }: { id: CapabilityFigureId }) {
   const Preview = previews[id];
   return (
     <figure className={`cap-demo cap-demo--${id}`}>
       <figcaption className="cap-demo__caption"><span>{copy.caption}</span><span>{copy.captionNote}</span></figcaption>
-      <div className="cap-demo__scene"><Preview /></div>
+      <div className="cap-demo__scene" data-ui><Preview /></div>
     </figure>
   );
 }

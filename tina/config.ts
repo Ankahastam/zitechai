@@ -263,16 +263,15 @@ export default defineConfig({
             object("sales", "مدیر فروش", [
               text("toolbar", "نوار ابزار"), text("pill", "برچسب"), text("recording", "ضبط"), textarea("quote", "نقل‌قول"),
               text("cite", "منبع نقل‌قول"), text("open", "باز کردن"), text("close", "بستن"), text("concernLabel", "عنوان دغدغه"),
-              text("concern", "دغدغه"), text("nextLabel", "عنوان اقدام"), text("next", "اقدام"), text("result", "نتیجه"),
+              text("concern", "دغدغه"), text("nextLabel", "عنوان اقدام"), text("next", "اقدام"), text("result", "نتیجه"), strings("criteria", "معیارهای ارزیابی"),
             ]),
-            object("chat", "ایجنت پیام‌رسان", [
-              strings("channels", "کانال‌ها"), text("toolbar", "نوار ابزار"), textarea("customer", "پیام مشتری"),
-              textarea("agent", "پاسخ ایجنت"), text("open", "باز کردن"), text("close", "بستن"), text("team", "تیم"),
-              text("topic", "موضوع"), text("history", "تاریخچه"),
+            object("outbound", "ایجنت فروشنده", [
+              text("toolbar", "عنوان"), text("file", "نام فایل نمونه"), strings("steps", "مراحل"),
+              text("open", "باز کردن"), text("close", "بستن"), strings("rules", "قواعد تماس"), text("result", "نتیجه"),
             ]),
-            object("systems", "زیرساخت", [
-              text("request", "درخواست"), text("core", "مرکز"), text("coreNote", "توضیح مرکز"), strings("nodes", "سیستم‌ها"),
-              text("open", "باز کردن"), text("close", "بستن"), strings("steps", "مراحل"),
+            object("crm", "ایجنت CRM", [
+              text("toolbar", "عنوان"), strings("steps", "مراحل"), text("open", "باز کردن"),
+              text("close", "بستن"), text("result", "توضیح"),
             ]),
           ]),
           object("faq", "پرسش‌های متداول", faqFields()),

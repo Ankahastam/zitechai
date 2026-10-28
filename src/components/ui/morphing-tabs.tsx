@@ -216,7 +216,7 @@ export function MorphingTabs({
   if (!items.length) return null;
 
   return (
-    <div ref={rootRef} className={classes("morphing-tabs", classNames?.root, className)}>
+    <div ref={rootRef} data-measured={surfaceWidth > SURFACE_INSET * 2} className={classes("morphing-tabs", classNames?.root, className)}>
       <div className={classes("morphing-tabs__rail", classNames?.rail)} role="tablist" aria-label={ariaLabel} aria-orientation="horizontal">
         {surfaceWidth > SURFACE_INSET * 2 ? (
           <svg
