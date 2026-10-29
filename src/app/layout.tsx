@@ -5,7 +5,7 @@ import { ChatAssistant } from "@/components/chat-assistant";
 import { LeadAttribution } from "@/components/lead-attribution";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { iranYekanX } from "@/fonts/iran-yekan-x";
+import { iranSansX, pinar } from "@/fonts/site-fonts";
 import { siteContent } from "@/content";
 import "./globals.css";
 
@@ -44,7 +44,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html className={iranYekanX.variable} dir="rtl" lang="fa">
+    <html className={`${iranSansX.variable} ${pinar.variable}`} dir="rtl" lang="fa">
       <body>
         <Suspense fallback={null}><LeadAttribution /></Suspense>
         <SiteHeader />
