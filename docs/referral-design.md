@@ -4,7 +4,7 @@
 
 THESIS: Invite business partners to introduce Zitech services, then submit one short request. Extend the existing site rather than introduce a new visual identity.
 
-OWN-WORLD: Pinar Bold headings and IRANSansX Medium copy (user-approved site typography), off-white canvas, ink text, white rounded form surface and a single violet submit action. Inherit global focus and reduced-motion rules.
+OWN-WORLD: Lahzeh SemiBold headings and IRANSansX Medium copy (user-approved site typography), off-white canvas, ink text, white rounded form surface and a single violet submit action. Inherit global focus and reduced-motion rules.
 
 STORY: Visitors recognize their profession among software providers, consultants, trainers and agencies. No commission rates or commercial guarantees are asserted. They provide their name, activity and approved callback number.
 
