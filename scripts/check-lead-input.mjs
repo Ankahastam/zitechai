@@ -103,6 +103,28 @@ try {
     }),
   });
   assert.equal(telegramOnlyResponse.status, 200, "Telegram must work when optional SMS settings are absent");
+
+  form.set("form_id", "referral");
+  form.set("current_page", "/referral");
+  form.set("job", "مشاور کسب‌وکار");
+  const referralRequest = () => new Request("https://zitech.example/api/lead", {
+    body: form,
+    headers: { Origin: "https://zitech.example", Referer: "https://zitech.example/referral" },
+    method: "POST",
+  });
+  const referralEnv = {
+    TELEGRAM_BOT_TOKEN: "telegram-test-token",
+    TELEGRAM_CHAT_ID: "12345",
+    TURNSTILE_SECRET_KEY: "turnstile-test-key",
+  };
+  const referralResponse = await onRequestPost({ env: referralEnv, request: referralRequest() });
+  assert.equal(referralResponse.status, 200);
+  assert.ok(telegramPayload.text.includes("فرم: همکاری در فروش"));
+  assert.ok(telegramPayload.text.includes("صفحه ثبت: /referral"));
+  assert.ok(telegramPayload.text.includes("شغل/کسب‌وکار: مشاور کسب‌وکار"));
+  form.set("mobile", "123");
+  const invalidReferral = await onRequestPost({ env: referralEnv, request: referralRequest() });
+  assert.equal(invalidReferral.status, 400, "Referral requests must validate the callback number");
 } finally {
   globalThis.fetch = realFetch;
 }

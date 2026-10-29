@@ -12,6 +12,7 @@ const PHONEBOOK_ID = 64161;
 const NAME_FIELD_ID = "FMjUyMjUz";
 const JOB_FIELD_ID = "FMzQ5NDA2";
 const FORM_NAMES = {
+  referral: "همکاری در فروش",
   "chat-agent": "درخواست چت ایجنت",
   contact: "گفت‌وگوی عمومی",
   "footer-callback": "درخواست تماس فوتر",

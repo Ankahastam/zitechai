@@ -162,7 +162,7 @@ export function MobileNavigation({
             </ul>
           </nav>
 
-          <Link className="mobile-nav__cta" href="#contact" onClick={close}>
+          <Link className="mobile-nav__cta" href="/referral" onClick={close}>
             {cta}
           </Link>
         </div>

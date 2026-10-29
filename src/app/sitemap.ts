@@ -7,6 +7,10 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     {
+      url: `${siteContent.seo.siteUrl}/referral`,
+      changeFrequency: "monthly",
+    },
+    {
       url: siteContent.seo.siteUrl,
       changeFrequency: "monthly",
     },

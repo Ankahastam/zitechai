@@ -56,7 +56,7 @@ export function SiteHeader() {
             </NavigationList>
           </Navigation>
 
-          <ButtonLink className="site-header__cta" href="#contact">
+          <ButtonLink className="site-header__cta" href="/referral">
             {siteContent.navigation.cta}
           </ButtonLink>
 

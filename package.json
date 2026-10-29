@@ -9,6 +9,7 @@
     "check:content": "node scripts/check-content.mjs",
     "check:seo": "node scripts/check-seo.mjs",
     "check:lead": "node scripts/check-lead-input.mjs",
+    "check:referral-ui": "node scripts/check-referral-ui.mjs",
     "check:zoho": "node scripts/check-zoho.mjs",
     "check:chat": "node scripts/check-chat.mjs",
     "check:chat-ui": "node scripts/check-chat-ui.mjs",
